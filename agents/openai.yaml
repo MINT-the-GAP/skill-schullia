@@ -1,0 +1,4 @@
+interface:
+  display_name: "SchulLia Knowledge"
+  short_description: "SchulLia-Aufgaben und LiaScript-Quizwissen"
+  default_prompt: "Nutze $schullia-knowledge, um eine passende SchulLia-Aufgabe mit belegter Quizstruktur und Operatorzuordnung zu erstellen."

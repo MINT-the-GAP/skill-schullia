@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "organizations": [
+    {
+      "login": "MINT-the-GAP",
+      "collection": "mint-the-gap",
+      "include_forks": true,
+      "include_archived": true,
+      "fallback_repositories": [
+        {"name": "Aufgabensammlung", "default_branch": "main"},
+        {"name": "Demo-2025", "default_branch": "main"},
+        {"name": "Wochenaufgabe", "default_branch": "main"},
+        {"name": "lia-DynFlex", "default_branch": "main"},
+        {"name": "lia-Mathe", "default_branch": "main"},
+        {"name": "lia-annotation", "default_branch": "main"},
+        {"name": "lia-board-mode", "default_branch": "main"},
+        {"name": "lia-canvas-ocr", "default_branch": "main"},
+        {"name": "lia-coordinate", "default_branch": "main"},
+        {"name": "lia-freeze-v2", "default_branch": "main"},
+        {"name": "lia-kachel", "default_branch": "main"},
+        {"name": "lia-marker", "default_branch": "main"},
+        {"name": "lia-mathpath", "default_branch": "master"},
+        {"name": "lia-navigation", "default_branch": "main"},
+        {"name": "lia-orthography", "default_branch": "main"},
+        {"name": "lia-timer", "default_branch": "main"}
+      ]
+    }
+  ],
+  "files": [
+    {
+      "id": "ghfile:liascript/docs:README.md",
+      "collection": "liascript-reference",
+      "owner": "LiaScript",
+      "repo": "docs",
+      "ref": "master",
+      "path": "README.md",
+      "requested_url": "https://raw.githubusercontent.com/liaScript/docs/master/README.md"
+    },
+    {
+      "id": "ghfile:liatemplates/algebrite:README.md",
+      "collection": "template-reference",
+      "owner": "liaTemplates",
+      "repo": "algebrite",
+      "ref": "master",
+      "path": "README.md",
+      "requested_url": "https://raw.githubusercontent.com/liaTemplates/algebrite/master/README.md"
+    },
+    {
+      "id": "ghfile:liatemplates/jsxgraph:README.md",
+      "collection": "template-reference",
+      "owner": "liaTemplates",
+      "repo": "JSXGraph",
+      "ref": "main",
+      "path": "README.md",
+      "requested_url": "https://raw.githubusercontent.com/liaTemplates/JSXGraph/main/README.md"
+    },
+    {
+      "id": "ghfile:liatemplates/speech-recognition-quiz:README.md",
+      "collection": "template-reference",
+      "owner": "LiaTemplates",
+      "repo": "Speech-Recognition-Quiz",
+      "ref": "main",
+      "path": "README.md",
+      "requested_url": "https://raw.githubusercontent.com/LiaTemplates/Speech-Recognition-Quiz/refs/heads/main/README.md"
+    },
+    {
+      "id": "ghfile:liatemplates/abcjs:README.md",
+      "collection": "template-reference",
+      "owner": "liaTemplates",
+      "repo": "ABCjs",
+      "ref": "main",
+      "path": "README.md",
+      "requested_url": "https://raw.githubusercontent.com/liaTemplates/ABCjs/main/README.md"
+    },
+    {
+      "id": "ghfile:liatemplates/avr8js:README.md",
+      "collection": "template-reference",
+      "owner": "liaTemplates",
+      "repo": "AVR8js",
+      "ref": "main",
+      "path": "README.md",
+      "requested_url": "https://raw.githubusercontent.com/liaTemplates/AVR8js/main/README.md"
+    }
+  ],
+  "limits": {
+    "max_archive_bytes": 536870912,
+    "max_extracted_bytes": 1073741824,
+    "max_entries": 100000,
+    "max_index_file_bytes": 10485760
+  }
+}

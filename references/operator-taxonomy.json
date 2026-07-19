@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "policy": "Normalize linguistic forms only. Do not assign an Anforderungsbereich without an explicit cited source.",
+  "operators": [
+    {
+      "id": "angeben",
+      "lemma": "angeben",
+      "aliases": ["Angeben"],
+      "prompt_patterns": ["\\bgib\\b[^.!?\\n]{0,220}\\ban\\b", "\\bgeben\\s+sie\\b[^.!?\\n]{0,220}\\ban\\b"]
+    },
+    {
+      "id": "auffuellen",
+      "lemma": "auffüllen",
+      "aliases": ["Auffüllen", "Ausfüllen"],
+      "prompt_patterns": ["\\b(?:fülle|füllen\\s+sie)\\b[^.!?\\n]{0,220}\\b(?:auf|aus)\\b"]
+    },
+    {
+      "id": "auswaehlen",
+      "lemma": "auswählen",
+      "aliases": ["Auswählen"],
+      "prompt_patterns": ["\\b(?:wähle|wählen\\s+sie)\\b[^.!?\\n]{0,220}\\baus\\b"]
+    },
+    {
+      "id": "begründen",
+      "lemma": "begründen",
+      "aliases": ["Begründen"],
+      "prompt_patterns": ["\\b(?:begründe|begründen\\s+sie)\\b"]
+    },
+    {
+      "id": "berechnen",
+      "lemma": "berechnen",
+      "aliases": ["Berechnen"],
+      "prompt_patterns": ["\\b(?:berechne|berechnen\\s+sie)\\b"]
+    },
+    {
+      "id": "beschreiben",
+      "lemma": "beschreiben",
+      "aliases": ["Beschreiben"],
+      "prompt_patterns": ["\\b(?:beschreibe|beschreiben\\s+sie)\\b"]
+    },
+    {
+      "id": "bestimmen",
+      "lemma": "bestimmen",
+      "aliases": ["Bestimmen"],
+      "prompt_patterns": ["\\b(?:bestimme|bestimmen\\s+sie)\\b"]
+    },
+    {
+      "id": "beurteilen",
+      "lemma": "beurteilen",
+      "aliases": ["Beurteilen"],
+      "prompt_patterns": ["\\b(?:beurteile|beurteilen\\s+sie)\\b"]
+    },
+    {
+      "id": "bewerten",
+      "lemma": "bewerten",
+      "aliases": ["Bewerten"],
+      "prompt_patterns": ["\\b(?:bewerte|bewerten\\s+sie)\\b"]
+    },
+    {
+      "id": "darstellen",
+      "lemma": "darstellen",
+      "aliases": ["Darstellen"],
+      "prompt_patterns": ["\\b(?:stelle|stellen\\s+sie)\\b[^.!?\\n]{0,220}\\bdar\\b"]
+    },
+    {
+      "id": "entscheiden",
+      "lemma": "entscheiden",
+      "aliases": ["Entscheiden"],
+      "prompt_patterns": ["\\b(?:entscheide|entscheiden\\s+sie)\\b"]
+    },
+    {
+      "id": "ergaenzen",
+      "lemma": "ergänzen",
+      "aliases": ["Ergänzen"],
+      "prompt_patterns": ["\\b(?:ergänze|ergänzen\\s+sie)\\b"]
+    },
+    {
+      "id": "erklaeren",
+      "lemma": "erklären",
+      "aliases": ["Erklären"],
+      "prompt_patterns": ["\\b(?:erkläre|erklären\\s+sie)\\b"]
+    },
+    {
+      "id": "ermitteln",
+      "lemma": "ermitteln",
+      "aliases": ["Ermitteln"],
+      "prompt_patterns": ["\\b(?:ermittle|ermitteln\\s+sie)\\b"]
+    },
+    {
+      "id": "erstellen",
+      "lemma": "erstellen",
+      "aliases": ["Erstellen"],
+      "prompt_patterns": ["\\b(?:erstelle|erstellen\\s+sie)\\b"]
+    },
+    {
+      "id": "formulieren",
+      "lemma": "formulieren",
+      "aliases": ["Formulieren"],
+      "prompt_patterns": ["\\b(?:formuliere|formulieren\\s+sie)\\b"]
+    },
+    {
+      "id": "interpretieren",
+      "lemma": "interpretieren",
+      "aliases": ["Interpretieren"],
+      "prompt_patterns": ["\\b(?:interpretiere|interpretieren\\s+sie)\\b"]
+    },
+    {
+      "id": "konstruieren",
+      "lemma": "konstruieren",
+      "aliases": ["Konstruieren"],
+      "prompt_patterns": ["\\b(?:konstruiere|konstruieren\\s+sie)\\b"]
+    },
+    {
+      "id": "loesen",
+      "lemma": "lösen",
+      "aliases": ["Lösen"],
+      "prompt_patterns": ["\\b(?:löse|lösen\\s+sie)\\b"]
+    },
+    {
+      "id": "markieren",
+      "lemma": "markieren",
+      "aliases": ["Markieren"],
+      "prompt_patterns": ["\\b(?:markiere|markieren\\s+sie)\\b"]
+    },
+    {
+      "id": "nennen",
+      "lemma": "nennen",
+      "aliases": ["Nennen"],
+      "prompt_patterns": ["\\b(?:nenne|nennen\\s+sie)\\b"]
+    },
+    {
+      "id": "pruefen",
+      "lemma": "prüfen",
+      "aliases": ["Prüfen", "Überprüfen"],
+      "prompt_patterns": ["\\b(?:überprüfe|prüfe|überprüfen\\s+sie|prüfen\\s+sie)\\b"]
+    },
+    {
+      "id": "skizzieren",
+      "lemma": "skizzieren",
+      "aliases": ["Skizzieren"],
+      "prompt_patterns": ["\\b(?:skizziere|skizzieren\\s+sie)\\b"]
+    },
+    {
+      "id": "untersuchen",
+      "lemma": "untersuchen",
+      "aliases": ["Untersuchen"],
+      "prompt_patterns": ["\\b(?:untersuche|untersuchen\\s+sie)\\b"]
+    },
+    {
+      "id": "vergleichen",
+      "lemma": "vergleichen",
+      "aliases": ["Vergleichen"],
+      "prompt_patterns": ["\\b(?:vergleiche|vergleichen\\s+sie)\\b"]
+    },
+    {
+      "id": "zeigen",
+      "lemma": "zeigen",
+      "aliases": ["Zeigen", "Nachweisen"],
+      "prompt_patterns": ["\\b(?:zeige|zeigen\\s+sie)\\b", "\\b(?:weise|weisen\\s+sie)\\b[^.!?\\n]{0,220}\\bnach\\b"]
+    },
+    {
+      "id": "zeichnen",
+      "lemma": "zeichnen",
+      "aliases": ["Zeichnen"],
+      "prompt_patterns": ["\\b(?:zeichne|zeichnen\\s+sie)\\b"]
+    },
+    {
+      "id": "zuordnen",
+      "lemma": "zuordnen",
+      "aliases": ["Zuordnen", "Ordnen"],
+      "prompt_patterns": ["\\b(?:ordne|ordnen\\s+sie)\\b[^.!?\\n]{0,220}\\bzu\\b"]
+    }
+  ]
+}
