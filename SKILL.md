@@ -1,6 +1,6 @@
 ---
 name: schullia-knowledge
-description: Synchronisiert, indexiert und durchsucht die öffentlichen Repositories von MINT-the-GAP, die offizielle LiaScript-Dokumentation sowie ausgewählte LiaTemplates-READMEs. Verwende diesen Skill, wenn Codex SchulLia- oder LiaScript-Aufgaben oder Kurse erstellen, überarbeiten, erklären, vergleichen oder klassifizieren soll; LiaScript-Dokumentköpfe, Grundsyntax, Quizsyntax, Makros, Aufgabenarten, Metadaten, Fach- und Klassenstufenzuordnungen oder imperative Operatoren untersuchen soll; oder belegte Beispiele aus Aufgabensammlung, Wochenaufgabe, lia-marker, lia-kachel, lia-Mathe, lia-orthography, den LiaScript-Docs, Algebrite, JSXGraph, Speech-Recognition-Quiz, ABCjs oder AVR8js benötigt.
+description: Synchronisiert, indexiert und durchsucht die öffentlichen Repositories von MINT-the-GAP, die offizielle LiaScript-Dokumentation sowie ausgewählte LiaTemplates-READMEs. Verwende diesen Skill, wenn ein KI-Agent SchulLia- oder LiaScript-Aufgaben oder Kurse erstellen, überarbeiten, erklären, vergleichen oder klassifizieren soll; LiaScript-Dokumentköpfe, Grundsyntax, Quizsyntax, Makros, Aufgabenarten, Metadaten, Fach- und Klassenstufenzuordnungen oder imperative Operatoren untersuchen soll; oder belegte Beispiele aus Aufgabensammlung, Wochenaufgabe, lia-marker, lia-kachel, lia-Mathe, lia-orthography, den LiaScript-Docs, Algebrite, JSXGraph, Speech-Recognition-Quiz, ABCjs oder AVR8js benötigt.
 ---
 
 # SchulLia Knowledge
@@ -15,9 +15,19 @@ Verwende den Ordner dieser `SKILL.md` als Skill-Verzeichnis. Führe Skripte mit
 diesem Ordner als Arbeitsverzeichnis oder über absolute Pfade aus. Lege den
 generierten Korpus ausschließlich unter `corpus/` dieses Skills ab.
 
+## Agentenumgebung prüfen
+
+- Verwende die Datei-, Shell- und Netzwerkwerkzeuge der jeweiligen
+  Agentenumgebung; setze keine anbieterspezifischen Werkzeugnamen voraus.
+- Verwende Python 3.10 oder neuer. Falls `python` nicht verfügbar ist, versuche
+  den plattformüblichen Python-3-Befehl wie `python3`.
+- Benenne die Einschränkung ausdrücklich, wenn die Agentenumgebung keinen
+  Dateisystem-, Python- oder Netzwerkzugriff bietet. Behaupte in diesem Fall
+  nicht, der Korpus sei aktualisiert oder eine lokale Originalquelle geprüft.
+
 ## Dateiköpfe unterscheiden
 
-- Behalte in dieser `SKILL.md` ausschließlich das Codex-YAML-Frontmatter
+- Behalte in dieser `SKILL.md` ausschließlich das Agent-Skills-YAML-Frontmatter
   zwischen `---` mit `name` und `description`. Ersetze es niemals durch einen
   HTML-Kommentar und füge dort kein `author`-Feld hinzu.
 - Setze den Hauptkopf eines neu erzeugten vollständigen LiaScript-Dokuments an

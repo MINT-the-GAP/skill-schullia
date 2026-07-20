@@ -17,7 +17,7 @@ ausdrückliche Vorgabe des Ziel-Repositories.
 
 ## Drei verschiedene Kopf- und Kommentarformen
 
-1. Behalte in `SKILL.md` das Codex-YAML-Frontmatter zwischen `---`. Dort sind nur
+1. Behalte in `SKILL.md` das Agent-Skills-YAML-Frontmatter zwischen `---`. Dort sind nur
    `name` und `description` zulässig.
 2. Setze den LiaScript-Hauptkopf eines vollständigen Kurses an den Dateianfang
    zwischen `<!--` und `-->`. Dort stehen Metadaten, Importe und globale Makros.
