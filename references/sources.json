@@ -18,6 +18,7 @@
         {"name": "lia-coordinate", "default_branch": "main"},
         {"name": "lia-freeze-v2", "default_branch": "main"},
         {"name": "lia-kachel", "default_branch": "main"},
+        {"name": "lia-loot", "default_branch": "main"},
         {"name": "lia-marker", "default_branch": "main"},
         {"name": "lia-mathpath", "default_branch": "master"},
         {"name": "lia-navigation", "default_branch": "main"},

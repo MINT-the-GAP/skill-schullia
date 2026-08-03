@@ -1,6 +1,6 @@
 ---
 name: schullia-knowledge
-description: Synchronisiert, indexiert und durchsucht die öffentlichen Repositories von MINT-the-GAP, die offizielle LiaScript-Dokumentation sowie ausgewählte LiaTemplates-READMEs. Verwende diesen Skill, wenn ein KI-Agent SchulLia- oder LiaScript-Aufgaben oder Kurse erstellen, überarbeiten, erklären, vergleichen oder klassifizieren soll; LiaScript-Dokumentköpfe, Grundsyntax, Quizsyntax, Makros, Aufgabenarten, Metadaten, Fach- und Klassenstufenzuordnungen oder imperative Operatoren untersuchen soll; oder belegte Beispiele aus Aufgabensammlung, Wochenaufgabe, lia-marker, lia-kachel, lia-Mathe, lia-orthography, den LiaScript-Docs, Algebrite, JSXGraph, Speech-Recognition-Quiz, ABCjs oder AVR8js benötigt.
+description: Synchronisiert, indexiert und durchsucht die öffentlichen Repositories von MINT-the-GAP, die offizielle LiaScript-Dokumentation sowie ausgewählte LiaTemplates-READMEs. Verwende diesen Skill, wenn ein KI-Agent SchulLia- oder LiaScript-Aufgaben oder Kurse erstellen, überarbeiten, erklären, vergleichen oder klassifizieren soll; LiaScript-Dokumentköpfe, Grundsyntax, Quizsyntax, Makros, Aufgabenarten, Metadaten, Fach- und Klassenstufenzuordnungen oder imperative Operatoren untersuchen soll; mit lia-loot abwechslungsreiche, erreichbare Gamification aus Ressourcen, Funden, Werkzeugen, Freigabeschichten, bedingten Bereichen, Schlüsseln, Schlössern, Lupen, Portalen, Geheimfolien, Highscore oder Erfolgen planen soll; oder belegte Beispiele aus Aufgabensammlung, Wochenaufgabe, lia-loot, lia-marker, lia-kachel, lia-Mathe, lia-orthography, den LiaScript-Docs, Algebrite, JSXGraph, Speech-Recognition-Quiz, ABCjs oder AVR8js benötigt.
 ---
 
 # SchulLia Knowledge
@@ -86,6 +86,82 @@ generierten Korpus ausschließlich unter `corpus/` dieses Skills ab.
 9. Entferne alle Vorlagenplatzhalter vor der Ausgabe. Gib einen fehlenden Autor
    als offene Angabe an statt einen Namen zu erfinden.
 
+### Kurs mit lia-loot gamifizieren
+
+Führe diese Route zusätzlich zu „Aufgabe erstellen oder überarbeiten“ aus.
+
+1. Lies [liascript-basics.md](references/liascript-basics.md),
+   [quiz-structures.md](references/quiz-structures.md) und die vollständige
+   [lia-loot-Referenz](references/lia-loot.md). Lade den maschinenlesbaren
+   [Optionskatalog](references/lia-loot-options.json), wenn Makros, Ziele oder
+   Kombinationsregeln erzeugt oder geprüft werden.
+2. Öffne zusätzlich die aktuelle commit-gepinnte lia-loot-README vollständig.
+   Suche sie gezielt, ohne fälschlich `usage_context=documentation` zu setzen:
+
+   ```text
+   python scripts/search_knowledge.py search Gamification --type document --source lia-loot --path README.md --limit 2 --json
+   ```
+
+   Verwende die README als API-Quelle, `TemplateTargets.md` als
+   Kompatibilitätsbeleg und `EscapeRoom.md` nur als einen End-to-End-Testfall.
+   Übernimm weder dessen knappe Ökonomie noch die extreme Schlossdichte von
+   `StressTest.md` als Standardrezept.
+3. Inventarisiere zuerst die fachliche Kursstruktur sowie jede zugängliche
+   frühere Gamification im Zielprojekt und im Gespräch. Bilde für jeden Vergleich
+   einen Fingerabdruck aus Primärmechanik, Pfadtopologie, Ressourcenmodell,
+   Fundplatzierung, Verbergung und Freigabeschichten, bedingten Spawn-Triggern,
+   Umweltbedingungen, Portalnutzung, Schlossdichte und -zielklassen,
+   Feedbackform, Pacing, visueller Inszenierung und Narrativ.
+4. Erzeuge mehrere Kandidaten und vergleiche sie mit allen verfügbaren früheren
+   Fingerabdrücken. Wiederhole keinen Fingerabdruck. Der gewählte Entwurf
+   unterscheidet sich vom ähnlichsten früheren Kurs in mindestens drei
+   strukturellen Dimensionen; darunter liegt mindestens Primärmechanik,
+   Pfadtopologie oder Ressourcenmodell. Gegenüber dem unmittelbar vorherigen
+   Entwurf wechselt zusätzlich Primärmechanik oder Topologie. Farben, Zahlen,
+   Titel, Bildaustausch und umbenannte Schlossgeschichten zählen allein nicht als
+   strukturelle Variation. Ohne zugängliche Vergleichshistorie behaupte keine
+   absolute Neuheit, sondern dokumentiere den neuen Fingerabdruck für den
+   nächsten Vergleich.
+5. Verwende Schlüssel und Schlösser nie automatisch als Primärmechanik. Ein Kurs
+   darf schlossfrei sein. Wenn Schlösser fachlich passen, verteile sie über
+   sinnvolle Zielklassen und sperre nicht schematisch jedes Quiz oder immer nur
+   `check`.
+6. Plane vor dem Schreiben einen Zustands- und Abhängigkeitsgraphen. Erfasse
+   Folien, normale Navigation, Portale, Geheimfolien, Quizze, Lupe, Schaufel,
+   Gießkanne, Erd- und Pflanzenzustände, Funde, Umweltbedingungen,
+   `@lootif`-Trigger und Spawn-Zustände, Schlösser, direkte Template-Imports
+   sowie Gold, Diamanten, Energie und das Schlüssel-Multiset. Expandiere
+   verschachtelte Bereiche, direkte Schichten und jedes tatsächliche Ziel.
+7. Finde und protokolliere einen konkreten Vollständigkeitspfad vom Kursstart bis
+   zum korrekt gelösten Abschlussquiz. Simuliere jede Aktion in Reihenfolge und
+   prüfe nach jedem Präfix Ressourcen- und Schlüsselbestände. Derselbe Pfad muss
+   alle verpflichtenden Lerninhalte, alle gültigen bedingten Bereiche und alle
+   katalogisierten Truhen, Verbergungsinstanzen, Erd- und Pflanzenebenen,
+   gültigen Schlösser sowie vorgesehenen Geheimfolien erreichen. Ist
+   `@achievements` aktiv, muss er jede nichtleere Erfolgskategorie
+   vervollständigen; andernfalls mindestens alle ausdrücklich versprochenen
+   Erfolge.
+8. Verwirf Selbstsperren und Zyklen: kein Pflichtschlüssel hinter seinem eigenen
+   Schloss, keine Pflichtressource hinter ihrer eigenen Kostenaktion, keine
+   einzige Schaufel hinter ihrer eigenen Erde, keine einzige Gießkanne hinter
+   ihrer eigenen Pflanze, keine Lupe hinter einer ohne frühere Lupe
+   unauffindbaren Pflichtverbergung und kein `@lootif`-Prärequisit
+   ausschließlich im eigenen noch verborgenen Bereich. Jeder für einen
+   Pflichtfund verlangte Theme-, Modus- oder Annotationszustand muss erreichbar
+   einstellbar sein. Ein Reload, Browser-Zurück, Quelltexteinsicht oder ein neuer
+   Tab ist kein gültiger Lösungsweg.
+9. Erzeuge das LiaScript erst nach diesem Nachweis. Prüfe anschließend erneut die
+   tatsächlich geschriebene Makroreihenfolge, korrekt geschlossene
+   Bereichsmakros, Spawn-Trigger, Werkzeug-vor-Schicht-Abhängigkeiten,
+   Umweltzustände, Mehrziel-Truhen, vollständige Achievement-Kataloge, globale
+   Schlösser, Portalnummern, eindeutige Geheimfolientitel und das letzte native
+   Quiz auf der letzten erreichbaren Kursfolie gegen denselben Pfad. Plane
+   standardmäßig eine kleine Fehlerreserve oder einen erreichbaren Reparaturpfad
+   ein; messerscharfe Ressourcenbilanzen nur auf ausdrücklichen Wunsch.
+10. Nenne bei der Übergabe knapp den verwendeten Gamification-Fingerabdruck, den
+    geprüften Vollständigkeitspfad und die Endbestände. Verschweige Grenzen der
+    statischen Prüfung nicht.
+
 ### Operator oder Aufgabenart klassifizieren
 
 1. Suche mit `--type task --operator <id>` oder `--quiz-type <typ>`.
@@ -99,12 +175,16 @@ generierten Korpus ausschließlich unter `corpus/` dieses Skills ab.
 
 1. Lies bei LiaScript-Grundsyntax zuerst
    [liascript-basics.md](references/liascript-basics.md).
-2. Suche Makronamen zunächst als `macro`, dann als `document`.
-3. Begrenze bei offiziellen Docs und externen Templates auf
+2. Lies bei lia-loot zusätzlich [lia-loot.md](references/lia-loot.md) und die
+   vollständige aktuelle lia-loot-README; verwende deren öffentliche Makros und
+   erfinde keine frei definierbaren Quest-, Item-, Skin-, Trigger- oder
+   Achievement-APIs zusätzlich zu den dokumentierten eingebauten Mechaniken.
+3. Suche Makronamen zunächst als `macro`, dann als `document`.
+4. Begrenze bei offiziellen Docs und externen Templates auf
    `usage_context=documentation`.
-4. Lies die vollständig gespeicherte README, wenn Argumente, Backticks,
+5. Lies die vollständig gespeicherte README, wenn Argumente, Backticks,
    Validatoren oder asynchrone Abläufe beteiligt sind.
-5. Trenne authored Syntax von intern durch ein Makro erzeugter Quizsyntax.
+6. Trenne authored Syntax von intern durch ein Makro erzeugter Quizsyntax.
 
 ### Sammlung auswerten
 
@@ -188,6 +268,9 @@ python scripts/validate_corpus.py --deep
 - LiaScript-Grundlagen und Dokumentkopf:
   [liascript-basics.md](references/liascript-basics.md)
 - Quizsyntax und Makrofamilien: [quiz-structures.md](references/quiz-structures.md)
+- lia-loot-API, Variation und Lösbarkeit:
+  [lia-loot.md](references/lia-loot.md) und
+  [lia-loot-options.json](references/lia-loot-options.json)
 - Operatoren und Vertrauensstufen:
   [operator-taxonomy.md](references/operator-taxonomy.md)
 - Datenmodell und Kontextregeln: [corpus-schema.md](references/corpus-schema.md)
