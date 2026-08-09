@@ -11,8 +11,8 @@ python scripts/search_knowledge.py search Gamification --type document --source 
 ```
 
 Diese Referenz und [lia-loot-options.json](lia-loot-options.json) wurden gegen
-Revision `05d7c365f963623aca56313b2e26a84ca41632a9` und den README-SHA-256
-`afdf7b44e46e8950d5d8f9dfa5224e4e3760ea65ea26332c4466f085f4f77a4b`
+Revision `8411dbbb99a2975eae7fb52470e785065189e65d` und den README-SHA-256
+`51d87ab5368a0d4cfdb92285a249e22b67c7b428c6c6463b6571269db9b447c9`
 geprüft. Weicht der aktuelle Snapshot ab, lies README, Quellcode und Tests erneut
 und aktualisiere beide Referenzen, bevor du neue Syntax behauptest.
 
@@ -38,16 +38,23 @@ Importiere Loot direkt im LiaScript-Hauptkopf:
 import: https://raw.githubusercontent.com/MINT-the-GAP/lia-loot/main/README.md
 ```
 
-Importiere jedes verwendete Fremdtemplate ebenfalls direkt im Hauptkopf des
-Kurses. Verlasse dich nicht auf verschachtelte Template-Importe.
+Verwende für neu entworfene Gamification ausschließlich die öffentlichen
+Makros aus lia-loot. Führe dafür weder Makros anderer Templates noch eigene
+Makro-, Skript- oder HTML-Ersatzmechaniken ein. Native LiaScript-Strukturen
+bleiben zulässig. Bereits vorhandene fachliche Fremdtemplates dürfen im Zielkurs
+erhalten bleiben; wenn ein bestehendes Loot-Ziel darauf verweist, muss der
+zugehörige direkte Import im Hauptkopf bestehen bleiben. Verlasse dich nicht auf
+verschachtelte Template-Importe.
 
 Loot besitzt öffentlich:
 
-- Highscore und elf feste Erfolge,
+- Highscore und zwölf feste Erfolge,
 - Gold, Diamanten und optionale Energie,
 - Gold-, Diamant- und Energietruhen,
-- sechs Schlüsselfarben sowie Lupe, Schaufel und Gießkanne,
+- zwölf explizite Schlüsselfarben sowie Lupe, Schaufel und Gießkanne,
+- nummerierte Puzzleteile und höchstens ein Puzzlefortschrittstor je Farbe,
 - sichtbare oder verborgene Erd- und Pflanzenfreigaben,
+- blockweise und einzeilige Erd- und Pflanzenfreigaben,
 - Theme-, Farbmodus- und Annotationsbedingungen für Fundobjekte,
 - monotone bedingte Bereiche mit `@lootif(...; spawn)`,
 - Verbergung, Portale, Schlösser und Geheimfolien.
@@ -70,17 +77,21 @@ sind kein Grund, uneinheitliche Syntax zu erzeugen.
 |---|---|---|
 | `@Highscore` | `@Highscore(max, fehlversuch, hinweis, freiminuten, proMinute)` | genau fünf Zahlen; `max > 0`, alle Abzüge und Zeiten `>= 0` |
 | `@Ressourcen` | `@Ressourcen(gold, diamanten[, energie])` | zwei oder drei nichtnegative Werte; für neue Kurse nur ganze Zahlen verwenden |
-| `@achievements` | ohne Argument | aktiviert elf feste Erfolge; Aliasse `@Achievements`, `@Erfolge` |
+| `@achievements` | ohne Argument | aktiviert zwölf feste Erfolge; Aliasse `@Achievements`, `@Erfolge` |
 | `@lootif` … `@Endelootif` | `@lootif(trigger; spawn)` | dauerhafte bedingte Bereichsfreigabe; drei dokumentierte End-Aliasse |
 | `@Schatztruhe` | `@Schatztruhe([menge;] [ziele...;] [fundoptionen...])` | Default: inline, ein Gold |
 | `@Diamanttruhe` | dieselben Optionen | Default: inline, ein Diamant |
 | `@Energiekiste` | dieselben Optionen | Default: inline, eine Energie; benötigt aktivierte Energie |
 | `@Schluessel` | `@Schluessel([farbe]; [oberflächenziel]; [fundoptionen...])` | höchstens eine Farbe und ein Oberflächenziel |
+| `@Puzzleteil` | `@Puzzleteil(farbe; nummer; [fundoptionen...])` | Farbe und Nummer 1 bis 16 sind Pflicht; kein Oberflächenziel |
+| `@Puzzletor` | `@Puzzletor(farbe; [[matrix]][; anker])` | rechteckige Permutation 1 bis N, höchstens 16 Slots; ohne `anker` Navigationstor |
 | `@Lupe` | `@Lupe([fundoptionen...])` | kursweiter Gesammelt-Zustand |
 | `@Schaufel` | `@Schaufel([fundoptionen...])` | einmaliges Aktionswerkzeug für Erde |
 | `@Giesskanne` | `@Giesskanne([fundoptionen...])` | einmaliges Aktionswerkzeug für Pflanzen |
 | `@Erdhaufen` … `@EndeErdhaufen` | öffnendes Makro optional mit Fundoptionen | blockweiser Inhalt wird durch Schaufeln freigegeben |
+| `@Erdhaufen.inline` | `@Erdhaufen.inline(inhalt[, fundoptionen])` | ungepaarte einzeilige Freigabe im Fließtext |
 | `@Pflanze` … `@EndePflanze` | öffnendes Makro optional mit Fundoptionen | erst gießen, dann Blüte anklicken; Aliasse `@Blume`, `@EndeBlume` |
+| `@Pflanze.inline` | `@Pflanze.inline(inhalt[, fundoptionen])` | ungepaarte einzeilige Pflanzenfreigabe; Alias `@Blume.inline` |
 | `@Unsichtbar` | `@Unsichtbar(einzeiliger Inhalt)` | vollständig verdeckt, nur im Lupenkreis bedienbar |
 | `@Zauberstaub` | `@Zauberstaub(einzeiliger Inhalt)` | schwach funkelnd verdeckt |
 | `@Portal` | `@Portal(foliennummer[; hinundher|einweg])` | Default: Zweiwegportal |
@@ -146,11 +157,13 @@ Bei allen Truhen gilt:
   solche Option nur einmal.
 
 Kanonische Schlüsselfarben sind `rot`, `blau`, `gruen`, `gelb`,
-`lila` und `orange`. Ohne Farbe wird sie stabil aus der Fund-ID bestimmt,
-nicht bei jedem Lauf neu gewürfelt. Verwende automatisch gefärbte Schlüssel nur
-für optionale Überraschungsfunde. Jeder Pflichtschlüssel erhält eine explizite
-Farbe. Ein Schloss verbraucht genau einen passenden Schlüssel; gleiche Farben
-bleiben einzelne Inventareinheiten.
+`lila`, `orange`, `magenta`, `weiss`, `schwarz`, `tuerkis`,
+`grau` und `braun`. Ohne Farbe wird sie stabil aus der Fund-ID und weiterhin
+nur aus der ursprünglichen Sechs-Farben-Palette bestimmt, nicht bei jedem Lauf
+neu gewürfelt. Verwende automatisch gefärbte Schlüssel nur für optionale
+Überraschungsfunde. Jeder Pflichtschlüssel erhält eine explizite Farbe. Ein
+Schloss verbraucht genau einen passenden Schlüssel; gleiche Farben bleiben
+einzelne Inventareinheiten.
 
 Schlüssel funktionieren ohne `@Ressourcen`, dürfen aber nur inline oder an
 höchstens einem der sechs LiaScript-Oberflächenziele liegen. Fremdtemplate-Ziele
@@ -164,10 +177,12 @@ einen Parameter mit Kommas gemäß LiaScript-Makroregeln in Backticks.
 
 ### Gemeinsame Fundoptionen
 
-Schlüssel, alle drei Truhen, Lupe, Schaufel, Gießkanne, Erdhaufen und
-Pflanze/Blume akzeptieren die gemeinsamen Anker-, Zeit- und
-Umweltbedingungen. Portale, Schlösser sowie die Inhaltsmakros
-`@Unsichtbar` und `@Zauberstaub` akzeptieren sie nicht.
+Schlüssel, alle drei Truhen, Puzzleteile, Lupe, Schaufel, Gießkanne,
+Erdhaufen und Pflanze/Blume akzeptieren die gemeinsamen Anker-, Zeit- und
+Umweltbedingungen. Portale, Puzzletore, Schlösser sowie die Inhaltsmakros
+`@Unsichtbar` und `@Zauberstaub` akzeptieren sie nicht. Beim Puzzletor ist
+`anker` ausschließlich die eigene Umschaltung vom Navigationstor zum lokalen
+Inhaltstor und keine allgemeine Fundoption.
 
 | Achse | Kanonische Optionen | Semantik |
 |---|---|---|
@@ -200,8 +215,8 @@ Umweltbedingung als Sichtbarkeitsgate.
 
 ### Direkte Erd- und Pflanzenschichten
 
-Schlüssel, alle Truhen, Lupe, Schaufel und Gießkanne akzeptieren beliebig
-geordnete direkte Schichten:
+Schlüssel, alle Truhen, Puzzleteile, Lupe, Schaufel und Gießkanne akzeptieren
+beliebig geordnete direkte Schichten:
 
 - `erde`, `pflanze` oder der kanonisch nicht zu erzeugende Alias `blume`,
 - je Schicht optional `-unsichtbar` oder `-zauberstaub`,
@@ -242,6 +257,52 @@ bereits genau seine eigene Schicht. Fehlender, falscher oder
 folienübergreifender Abschluss bleibt verborgen und ist kein zulässiger
 Pflichtpfad.
 
+Für kurze Fundstellen im Fließtext stehen `@Erdhaufen.inline`,
+`@Pflanze.inline` und `@Blume.inline` bereit. Das erste Argument ist der
+einzeilige Inhalt, das optionale zweite Argument enthält gemeinsame
+Fundoptionen und wird durch ein Komma abgetrennt. Diese Formen benötigen kein
+Endmakro, werden ansonsten aber wie genau eine Erd- beziehungsweise
+Pflanzeninstanz katalogisiert und benötigen dasselbe vorher erreichbare
+Werkzeug.
+
+## Puzzleteile und Puzzletore
+
+Ein Puzzleteil benötigt zuerst eine der zwölf kanonischen Farben und danach eine
+positive Nummer von 1 bis 16:
+
+```markdown
+@Puzzleteil(rot; 1)
+@Puzzleteil(rot; 2; anker; zauberstaub)
+@Puzzletor(rot; [[2;1]])
+```
+
+Puzzleteile sind echte Sammelobjekte. Sie akzeptieren gemeinsame Fundoptionen,
+Itemverbergung und direkte Erd-/Pflanzenschichten, aber kein Oberflächenziel.
+Jedes Teil verschwindet nach dem Sammeln in die Ressourcenleiste und bleibt dort
+bis zur Belegung eines passenden Tors verfügbar.
+
+Ein Puzzletor benötigt genau eine Farbe und genau eine rechteckige Matrix. Bei
+`N` Slots enthält sie jede Zahl von 1 bis `N` genau einmal; mehr als 16 Slots
+sind unzulässig. Pro Farbe darf höchstens ein Tor existieren. Zu jeder
+Matrixzahl existiert genau ein gleichfarbiges Teil, und alle Teile liegen in
+Quellreihenfolge vor ihrem eigenen Tor. Fehlende, doppelte, verwaiste oder
+hinter dem Tor liegende Teile machen das Tor fail-closed ungültig. Ein
+Puzzletor darf nicht selbst innerhalb von `@lootif`, `@Erdhaufen` oder
+`@Pflanze` stehen.
+
+Ohne `anker` ist das Tor ein Navigationstor. Es blockiert alle späteren
+Folien über normale Navigation, ToC, direkte Hashes, Browserhistorie und Portale,
+bis die Matrix korrekt belegt ist. Das nächste geschlossene Navigationstor setzt
+die folgende Grenze; für Puzzletore gibt es kein Endmakro. Mit `anker` wird
+das Tor zu einem lokalen Inhaltstor und verbirgt nur den Inhalt bis zur nächsten
+Markdown-`#`-Überschrift beziehungsweise bis zum Dateiende.
+
+Der Skill fragt deshalb nie nur nach der Toranzahl, sondern zusätzlich nach
+Teilezahl, Farbe, Zielmatrix und Navigationstor oder lokalem Inhaltstor. Der
+Vollständigkeitspfad sammelt jedes Teil und belegt jedes Tor korrekt. Ein
+geöffnetes Tor darf mit dem festen Trigger `Puzzletor: rot` einen
+`@lootif(...; spawn)`-Bereich auslösen.
+
 ## Zielkatalog
 
 ### LiaScript-Oberflächen und lokale Ziele
@@ -264,6 +325,7 @@ eines. Schlösser unterstützen außerdem:
 |---|---|
 | global | `toc`, `mode`, `menu`, `translator`, `classroom`, `info`, `seitenwechsel` |
 | lokale Quizaktion | `check`, `resolve`, `hint` |
+| vollständiges lokales Fremdquiz | `pentominoquiz`, nur bei bereits direkt importiertem lia-pentominos |
 | Gegenstand | `portal` |
 
 Globale Schlösser werden bereits beim Kursstart registriert und wirken ohne
@@ -276,6 +338,10 @@ fremden Inhalt direkt aufeinander. Ein Portalschloss steht unmittelbar nach dem
 Portal und bezieht sich auf das letzte davor stehende Portal derselben Folie.
 
 ### Direkt importierte Fremdtemplates
+
+Diese Ziele dokumentieren die Kompatibilität für bereits vorhandene Kurse. Unter
+der verbindlichen Generierungsregel „nur lia-loot“ führt der Skill keine
+Fremdtemplate-Makros als neue Gamification ein.
 
 Jedes Ziel benötigt den direkten Template-Import, einen echten Laufzeitmarker und
 eine tatsächlich sichtbare passende Instanz. Gleichnamiges Autoren-HTML genügt
@@ -348,6 +414,7 @@ versionsgebunden im `sessionStorage` des aktuellen Tabs persistent.
 | Ressourcen | `Gold >= 5`, `Diamanten = 2`, `Energie > 0` | nichtnegative Zahl; Ressource muss aktiviert sein |
 | geöffnete Truhen | `Schatztruhen >= 2`, `Diamanttruhen = 1`, `Energiekisten < 4` | je Truhentyp getrennte nichtnegative Ganzzahl |
 | Schlossziel | `Schloss: translator` | normalisierter Zieltyp; irgendein geöffnetes Schloss dieses Targets genügt, nicht eine bestimmte Instanz |
+| Puzzletor | `Puzzletor: rot` | genau ein gültiges Tor der genannten kanonischen Farbe wurde geöffnet |
 | Geheimfolie | `Geheime Folie besucht` | mindestens eine Geheimfolie besucht |
 | Lupe | `Lupe gefunden` | kursweiter Lupenzustand |
 | Markierfarbe | `markiert: gelb` | irgendein Nutzerwort in dieser Farbe |
@@ -390,7 +457,7 @@ aus. Stelle deshalb sicher:
   erreichbar.
 - Keine nachfolgende Quizinstanz verschiebt versehentlich den Abschluss.
 
-`@achievements` aktiviert genau elf feste Erfolge:
+`@achievements` aktiviert genau zwölf feste Erfolge:
 
 | ID | Erfolg | Katalogbedingung |
 |---|---|---|
@@ -404,6 +471,7 @@ aus. Stelle deshalb sicher:
 | `all-soil-dug` | Ausgrabungsprofi | alle Erdcontainer und direkten Erdschichten gegraben |
 | `all-plants-bloomed` | Grüner Daumen | alle Pflanzencontainer und direkten Pflanzenschichten gegossen und zum Blühen gebracht |
 | `all-locks-opened` | Schlossknacker | alle gezählten gültigen Schlösser geöffnet |
+| `all-puzzle-gates-opened` | Puzzlemeister | alle gültig katalogisierten Puzzletore korrekt belegt und geöffnet |
 | `secret-slide-found` | Geheimnis entdeckt | Runtime: Geheimfolie durch exakte Suche oder erlaubten Portalzugang tatsächlich geöffnet; README-Tabelle nennt nur die Suche |
 
 Die drei Truhentypen werden getrennt ausgewertet; jedes tatsächlich erzeugte
@@ -426,9 +494,137 @@ verpflichtende MathPath-Fehlprüfung kann diesem Ziel widersprechen.
 
 Der Hauptzustand bleibt in `sessionStorage` innerhalb desselben Tabs erhalten.
 Ein neuer Tab startet separat; `api.reset()` setzt nur den Highscore zurück.
-Ändert sich die Struktur von Quizzen, Funden, Schlössern oder Routen, erhöhe die
-Kursversion gemäß [liascript-basics.md](liascript-basics.md), damit alter Zustand
-keine neue Route scheinbar lösbar macht.
+Ändert sich die Struktur von Quizzen, Funden, Puzzlen, Schlössern oder Routen,
+erhöhe die Kursversion gemäß [liascript-basics.md](liascript-basics.md), damit
+alter Zustand keine neue Route scheinbar lösbar macht.
+
+## Zweistufige Erzeugung eines neuen Kurses
+
+Erzeuge einen neuen vollständigen Kurs immer zuerst als fachlich und didaktisch
+vollständigen Basiskurs ohne neu eingebaute Gamification. Der Basiskurs enthält
+weder einen `lia-loot`-Import noch `lia-loot`-Makros oder neu entworfene
+Gamification-Ersatzmechaniken aus anderen Templates, Skripten oder HTML. Eine
+bereits im Ausgangsprompt gewünschte Gamification hebt diese Reihenfolge nicht
+auf.
+
+Lies für diesen Basiskurs mindestens drei passende reale vollständige Kurse,
+sofern so viele vorhanden sind, andernfalls alle. Lies außerdem mindestens drei
+reale Aufgabenbeispiele und decke damit jede zentrale geplante Aufgabenfamilie
+ab. Nutze die Originale als Beleg für Gliederung, Lernprogression,
+Aufgabendichte, Schwierigkeitsanstieg, Hinweise, Feedback und Umfang, ohne
+Inhalte zu kopieren. Dokumentation, Definitionen und Test-Fixtures zählen nicht
+als reale Kurs- oder Aufgabenbeispiele.
+
+Prüfe und übergib den Basiskurs, ohne vorher den vollständigen
+Gamification-Klärungsdialog zu führen. Der letzte Satz dieser Übergabe ist genau
+eine Frage: „Möchtest du den fertigen Kurs jetzt mit lia-loot gamifizieren?“
+Erst nach einer bejahenden Antwort beginnt der folgende Klärungsdialog und die
+Gamification wird in einem zweiten Schritt ergänzt. Bei einer Verneinung bleibt
+der Basiskurs unverändert. Die automatische Abschlussfrage gilt nicht für
+einzelne Aufgaben oder Ausschnitte; ein ausdrücklich zur Gamifizierung
+übergebener bestehender Kurs kann unmittelbar in den Klärungsdialog wechseln.
+
+## Verbindlicher Klärungsdialog und Mengeninterpretation
+
+Führe vor Kandidatenwahl, Zustandsgraph und LiaScript-Erzeugung einen
+Klärungsdialog. Berücksichtige alle bereits eindeutigen Angaben aus Prompt,
+Gespräch und übergebenem Zielkurs. Frage die übrigen Punkte gesammelt ab und in
+einer Folgerunde nur noch das, was weiterhin fehlt. `0`, „nein“ und „keine“
+sind vollständige Mengenangaben. Eine qualitative Menge ist ebenfalls eine
+vollständige Antwort und wird nicht erneut als exakte Zahl abgefragt.
+
+| Pflichtpunkt | Zu klärende Anzahl und Details | Öffentliche lia-loot-Abbildung |
+|---|---|---|
+| Achievements | Aktivierung `0` oder `1` | genau ein `@achievements` aktiviert immer alle zwölf festen Erfolge; keine Teilmenge oder eigenen Erfolge |
+| Highscore | Konfiguration `0` oder `1`; bei `1` Maximalpunkte und vier Abzugs-/Zeitwerte | genau ein `@Highscore(max, fehlversuch, hinweis, freiminuten, proMinute)` |
+| Ressourcen | Konfiguration `0` oder `1`; Arten Gold, Diamanten, Energie; Startmenge, Zahl der Belohnungsfunde und Belohnungsmenge je Art | genau ein `@Ressourcen`; feste Truhenmakros |
+| versteckte Inhalte und Items | Anzahl je `unsichtbar` und `zauberstaub`; Inhalt oder Funditem, Ort und Hinweis | `@Unsichtbar`, `@Zauberstaub` oder gleichnamige Fundoption |
+| vergrabene Inhalte | Anzahl der Erdinstanzen | `@Erdhaufen`, `@Erdhaufen.inline` oder direkte Erdschicht; erreichbare Schaufel |
+| Pflanzen | Anzahl der Pflanzeninstanzen | `@Pflanze`, `@Pflanze.inline` oder direkte Pflanzenschicht; erreichbare Gießkanne |
+| Puzzletore | Toranzahl und Teilezahl je Tor; Farbe, Matrix und Navigationstor oder `anker`-Inhaltstor | `@Puzzleteil` und `@Puzzletor`; höchstens 16 Teile und ein Tor je Farbe |
+| Portale | Gesamtzahl und möglichst Aufteilung in Einweg und Zweiweg | `@Portal` oder `@Einwegportal` |
+| Schlüssel | Anzahl sowie passende Schlösser, Ziele und Farben | `@Schluessel` und bei Pflichtgates `@Schloss` |
+| Geheimfolien | Anzahl und fair ableitbarer Such- oder Portalzugang | `@Geheimfolie` |
+| TriggerEvents oder TiggerEvents | Anzahl bedingter Bereiche und gewünschte feste Triggerfamilien | ausschließlich `@lootif(trigger; spawn)` bis `@Endelootif`; kein Makro `@TriggerEvent` |
+
+Bei wiederholbaren Mechaniken genügt ein bloßes „ja“ nicht; frage dann nach
+einer Anzahl. Bei Achievements, Highscore und Ressourcen bedeutet „ja“ genau
+eine kursweite Aktivierung beziehungsweise Konfiguration. „Entscheide du“ oder
+„so viele wie sinnvoll“ delegiert die Konkretisierung ausdrücklich und ist
+keine offene Angabe.
+
+### Bestehende Kurse als Mengengrundlage
+
+Lies vor der Konkretisierung mindestens drei reale, nach Fach, Lerngruppe oder
+Umfang passende lia-loot-Kurse, sofern so viele vorhanden sind. Priorisiere
+Zielprojekt und Gespräch, danach den commit-gepinnten lokalen Korpus. Schließe
+Dokumentation, Definitionen, Browser-Fixtures, `TemplateTargets.md` und
+`StressTest.md` als reale Beispiele aus. Prüfe die Originalausschnitte und
+übernimm nur belegte Muster für Dichte, Platzierung, Pacing und faire Hinweise;
+die aktuelle README bleibt die API-Autorität. Ein vorhandenes Antimuster wird
+nicht dadurch gültig, dass es in einem früheren Kurs steht.
+
+Ordne „wenig“, „ein paar“ und „sparsam“ einer niedrigen, „einige“, „mittel“ und
+„ausgewogen“ einer mittleren sowie „viel“, „viele“ und „häufig“ einer hohen
+Dichte zu. Verwende bevorzugt niedrige, mittlere beziehungsweise hohe
+Vergleichswerte ähnlicher realer Kurse. Fehlt für eine neue Mechanik ein realer
+Praxisbeleg, sei darüber ausdrücklich transparent und verwende bei `S`
+relevanten Lernfolien:
+
+```text
+niedrig = max(1, ceil(S / 4))
+mittel  = max(1, ceil(S / 2))
+hoch    = max(1, S)
+```
+
+Diese Rückfallwerte gelten für wiederholbare Instanzen, nicht für globale
+0/1-Konfigurationen. Begrenze sie durch API-Regeln und sinnvolles Pacing.
+Geheimfolien bleiben auch bei hoher Gesamtdichte seltene Seitenzweige;
+Energiekisten werden aus der Zahl kostenpflichtiger Prüfungen statt pauschal aus
+`S` abgeleitet. Nenne die konkretisierte Sollzahl vor dem Schreiben und bei
+der Übergabe.
+
+### Drei unabhängige Schwierigkeitsachsen
+
+Frage die Schwierigkeit nur, wenn das zugehörige Feature aktiv ist und weder ein
+Label noch konkrete Parameter vorliegen. Exakte Werte haben Vorrang. Widerspricht
+ein Label den Zahlen deutlich, kläre nur diesen Konflikt.
+
+**Itemverstecke**
+
+- Leicht: sichtbarer Inlinefund oder Zauberstaub, eindeutiger Ortshinweis, keine
+  Wartezeit und keine zusätzliche Suchschicht.
+- Mittel: genau eine zusätzliche Hürde, etwa Untermenü, `anker`, kurze
+  lia-loot-Verzögerung, Umweltbedingung oder vollständige Unsichtbarkeit mit
+  explizitem Ortshinweis.
+- Schwer: höchstens zwei abgestimmte zusätzliche Hürden, etwa Geheimfolie plus
+  kurze lia-loot-Verzögerung oder Untermenü plus Unsichtbarkeit. Auch schwer
+  verlangt eine vorher erreichbare Lupe, faire Hinweise und einen
+  deterministischen Pfad.
+
+**Ressourcenökonomie**
+
+Berechne zuerst alle Pflichtkosten präfixgenau. Ein Hinweis kostet fest ein Gold,
+Auflösen ein Diamant und jeder gültige Prüfklick eine Energie. Verteile
+Startbestand und garantiert erreichbare Truhen so, dass ungefähr folgende
+Reserve über den Pflichtkosten bleibt:
+
+- leicht/großzügig: 50 bis 100 Prozent,
+- mittel/ausgewogen: 25 bis 50 Prozent,
+- schwer/knapp: 10 bis 25 Prozent.
+
+Auch „schwer“ behält standardmäßig mindestens die im Lösbarkeitsvertrag
+geforderte Reparaturreserve. Eine messerscharfe Bilanz ohne Reserve ist nur nach
+ausdrücklicher Vorgabe zulässig.
+
+**Highscore**
+
+Frage oder bestimme transparent Maximalpunkte, Fehlprüfungsabzug,
+Hinweisabzug, Freiminuten und Abzug pro weiterer Minute. Leicht gewährt mehr als
+die erwartete Bearbeitungszeit und kleine relative Abzüge, mittel ungefähr die
+erwartete Zeit und mäßige Abzüge, schwer eine knappe Freigrenze und deutlichere
+Abzüge. lia-loot setzt kein hartes Zeitlimit; nach der Freigrenze sinkt nur der
+Score. In jedem Profil bleibt ein abzugsloser perfekter Witness möglich.
 
 ## Variationsvertrag
 
@@ -447,6 +643,7 @@ Ressourcenmodell und Belohnungsmix
 Fundorte und Verbergung
 Werkzeug- und Freigabekette
 Tiefe und Reihenfolge direkter Schichten
+Puzzleteile, Matrix und Torart
 Bedingte Spawn-Strategie
 Theme-/Modus-/Annotationsstrategie
 Portalstruktur
@@ -478,6 +675,7 @@ Mögliche Primärprofile sind beispielsweise:
 - optionale Geheimfolien-Seitenquest,
 - UI-Schatzsuche,
 - Achievement-Sammelkurs,
+- Puzzlefortschritt mit Navigationstoren oder lokalen Inhaltstoren,
 - sparsamer Schlüsselpfad an wenigen Meilensteinen,
 - bedingter Meilensteinpfad mit unterschiedlichen `@lootif`-Triggerfamilien,
 - Grabungs- oder Gartenkette mit Werkzeug-Bootstrap,
@@ -517,7 +715,8 @@ Modelliere mindestens:
 aktuelle und besuchte Folien
 gelöste Quizze
 Gold, Diamanten und Energie
-Schlüssel-Multiset der sechs Farben
+Schlüssel-Multiset der zwölf Farben
+Puzzleteile nach Farbe und Nummer, Slotbelegung und geöffnete Tore
 Lupe vorhanden und aktivierbar
 Schaufel und Gießkanne vorhanden; aktives Aktionswerkzeug
 jede Erdschicht: sichtbar/gefunden/gegraben
@@ -535,7 +734,8 @@ abgelaufene Pflichtverzögerungen
 Vollkatalog und Fortschritt jeder nichtleeren Achievement-Kategorie
 ```
 
-Zulässige Übergänge sind Fund sammeln, Lupe oder Aktionswerkzeug umschalten,
+Zulässige Übergänge sind Fund oder Puzzleteil sammeln, Puzzleteil auswählen,
+Tor-Slot belegen oder zurücknehmen, Lupe oder Aktionswerkzeug umschalten,
 Theme/Modus/Annotationen ändern, eine Verbergungsinstanz mit der Lupe wirklich
 finden, graben, gießen, Blüte öffnen, markieren, bedingten Bereich spawnen,
 Schloss öffnen, korrekt prüfen, Hinweis öffnen, auflösen, manuellen Timer
@@ -551,6 +751,8 @@ Das Zielprädikat umfasst:
 - alle gültig katalogisierten Truhen erreichbar und gesammelt,
 - alle katalogisierten Verbergungsinstanzen gefunden und alle Erd- und
   Pflanzenschichten bis zur nötigen Inhaltsfreigabe bearbeitet,
+- alle gültigen Puzzletore mit ihren vollständig gesammelten Teilen korrekt
+  belegt und geöffnet,
 - alle gültigen Schlösser erreichbar und geöffnet,
 - alle vorgesehenen Geheimfolien besucht,
 - bei aktivem `@achievements` alle nichtleeren Kategorien abgeschlossen,
@@ -625,6 +827,11 @@ Das Zielprädikat umfasst:
     nach einer einzelnen Fehlprüfung, einem optionalen Hinweis oder einem
     angebotenen Seitenzweig noch ein Abschlussweg. Eine absichtlich exakte
     Nullreserve ist nur auf ausdrücklichen Wunsch zulässig und wird offengelegt.
+19. **Puzzlepräfix:** Zu jedem Tor existiert genau ein Teil für jede Matrixzahl,
+    alle Teile liegen vor ihrem eigenen Tor und sind im selben Witness sammelbar.
+    Ein Navigationstor wird weder durch Portal, ToC noch direkten Hash umgangen;
+    ein lokales Inhaltstor endet an der beabsichtigten nächsten
+    Markdown-`#`-Überschrift.
 
 ### Planungsalgorithmus
 
@@ -635,11 +842,12 @@ Das Zielprädikat umfasst:
 3. Wähle den didaktisch passenden Kandidaten mit großem strukturellem Abstand.
 4. Plane zuerst einen öffentlichen Hauptpfad, dann optionale Zweige mit Rückweg
    oder Merge.
-5. Plane vom Ziel rückwärts: Schloss zu Schlüssel, Verbergung zu Lupe, Erde zu
+5. Plane vom Ziel rückwärts: Schloss zu Schlüssel, Puzzletor zu allen
+   gleichfarbigen Teilen und der Zielmatrix, Verbergung zu Lupe, Erde zu
    Schaufel, Pflanze zu Gießkanne und Blütenklick, bedingter Bereich zu
    erreichbarem Trigger, Umweltbedingung zur zugänglichen Steuerung,
    Kostenaktion zu vorheriger Ressource und Ziel zu gültigem Zugang.
-6. Expandiere Mehrziel-Truhen, jede direkte Schicht und
+6. Expandiere Mehrziel-Truhen, Puzzleteile, Tor-Slots, jede direkte Schicht und
    Verbergungsinstanz, Blockbereiche, verschachtelte `@lootif`-Gates,
    gestapelte Schlösser, globale Scopes und jede nichtleere
    Achievement-Kategorie in einzelne Zustandsobjekte.
@@ -692,6 +900,7 @@ Katalog oder Prärequisitenzyklus. Ergänze nicht nur nach Gefühl weitere Truhe
 | `@Schloss(timer, rot)` bei `immediate` | kein sperrbarer manueller Startbutton |
 | Zweiwegziel anderweitig verlassen und später Rückportal erwarten | Rückportal wurde entfernt |
 | Einwegportal in gesperrten Bereich ohne weiteren Ausgang | Abschluss bleibt unerreichbar |
+| Puzzleteil hinter seinem eigenen Navigationstor oder doppelte Teilnummer | Tor bleibt fail-closed und alle späteren Folien unerreichbar |
 | perfekter Highscore verlangt einen kostenpflichtigen Pflichthinweis | Maximalpunktzahl ist im selben Lauf unmöglich |
 | Mehrziel-Truhe nur an einem Ziel geöffnet | Schatzjäger und vollständige Bilanz bleiben unvollständig |
 | Pflanze nur gegossen, Pflichtinhalt aber nicht über die Blüte geöffnet | Blüherfolg kann erreicht sein, der Kurs bleibt trotzdem unvollständig |
