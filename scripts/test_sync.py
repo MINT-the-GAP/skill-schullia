@@ -62,7 +62,7 @@ def test_lia_loot_reference_contract() -> None:
     options_path = ROOT / "references" / "lia-loot-options.json"
     options = json.loads(options_path.read_text(encoding="utf-8"))
 
-    assert options["schema_version"] == 3
+    assert options["schema_version"] == 4
     assert set(options["macros"]) == {
         "Highscore",
         "Ressourcen",
@@ -98,6 +98,8 @@ def test_lia_loot_reference_contract() -> None:
     assert options["macros"]["Pflanze"]["aliases"] == ["Blume"]
     assert options["macros"]["EndePflanze"]["aliases"] == ["EndeBlume"]
     assert options["macros"]["Pflanze.inline"]["aliases"] == ["Blume.inline"]
+    assert options["macros"]["Diamanttruhe"]["aliases"] == ["Diamantentruhe"]
+    assert options["macros"]["Energiekiste"]["aliases"] == ["Energietruhe"]
     assert set(options["public_macro_names_including_aliases"]) == {
         "Highscore",
         "Ressourcen",
@@ -111,7 +113,9 @@ def test_lia_loot_reference_contract() -> None:
         "EndLootIf",
         "Schatztruhe",
         "Diamanttruhe",
+        "Diamantentruhe",
         "Energiekiste",
+        "Energietruhe",
         "Schluessel",
         "Puzzleteil",
         "Puzzletor",
@@ -194,7 +198,9 @@ def test_lia_loot_reference_contract() -> None:
     assert set(shared["applies_to"]) == {
         "Schatztruhe",
         "Diamanttruhe",
+        "Diamantentruhe",
         "Energiekiste",
+        "Energietruhe",
         "Schluessel",
         "Puzzleteil",
         "Lupe",
@@ -230,6 +236,15 @@ def test_lia_loot_reference_contract() -> None:
         "erde", "pflanze",
     }
     assert "Puzzleteil" in shared["direct_layers"]["applies_to"]
+    assert {
+        "Diamantentruhe", "Energietruhe",
+    }.issubset(shared["direct_layers"]["applies_to"])
+    assert (
+        options["option_groups"]["reveal_inline"][
+            "nested_public_macros_with_balanced_parentheses"
+        ]
+        is True
+    )
 
     conditional = options["conditional_spawn"]
     assert conditional["canonical_action"] == "spawn"
@@ -282,6 +297,16 @@ def test_lia_loot_reference_contract() -> None:
         ]
         is True
     )
+    completion = options["automatic_completion"]
+    assert completion["terminal_quiz_states"] == ["solved", "resolved"]
+    assert completion["resolve_can_finish_course"] is True
+    assert completion["all_correct_required_for_all_quizzes_achievement"] is True
+    assert (
+        options["achievement_catalog"][
+            "all_quizzes_solved_requires_every_course_slide_loaded"
+        ]
+        is True
+    )
 
     emission = options["emission_policy"]
     assert emission["gamification_macro_source"] == "public_lia_loot_only"
@@ -290,6 +315,22 @@ def test_lia_loot_reference_contract() -> None:
     assert set(emission["internal_macros_forbidden"]).isdisjoint(
         options["public_macro_names_including_aliases"]
     )
+    text_policy = emission["added_text_policy"]
+    assert text_policy["existing_learner_facing_text"] == (
+        "preserve_word_for_word"
+    )
+    assert text_policy["existing_task_order"] == "preserve_relative_order"
+    assert text_policy["default_new_learner_facing_text"] == "forbidden"
+    assert text_policy["applies_to_hidden_and_visible_text"] is True
+    assert set(text_policy["allowed_purposes"]) == {
+        "puzzle_gate_clue", "secret_slide_access_clue",
+    }
+    assert {
+        "immersion", "narrative", "transition", "reward", "quest",
+        "decorative_heading",
+    }.issubset(text_policy["forbidden_categories"])
+    assert text_policy["each_added_line_requires_targeted_allowed_purpose"] is True
+    assert text_policy["text_delta_outside_allowed_purposes"] == 0
 
     course_workflow = options["course_generation_workflow"]
     assert course_workflow["applies_to"] == "new_complete_course"
@@ -315,6 +356,8 @@ def test_lia_loot_reference_contract() -> None:
     assert staging["base_course_first"] is True
     assert staging["base_course_must_be_pedagogically_complete"] is True
     assert staging["base_course_has_no_new_gamification"] is True
+    assert staging["base_course_has_no_preemptive_puzzle_portal_or_immersion_prose"] is True
+    assert staging["base_course_text_freezes_at_handoff"] is True
     assert staging["lia_loot_import_forbidden_in_base_course"] is True
     assert staging["lia_loot_macros_forbidden_in_base_course"] is True
     assert staging["other_new_gamification_forbidden_in_base_course"] is True
@@ -376,6 +419,17 @@ def test_lia_loot_reference_contract() -> None:
     assert topics["puzzle_gates"]["public_macros"] == [
         "Puzzleteil", "Puzzletor",
     ]
+    assert {
+        "pieces_per_gate", "matrix_shape", "permutation", "piece_locations",
+        "piece_concealment_chains", "clue_locations", "decoding_rule",
+    }.issubset(topics["puzzle_gates"]["required_details"])
+    assert topics["portals"]["public_macros"] == [
+        "Portal", "Einwegportal", "Einbahnportal",
+    ]
+    assert {
+        "source_target_edges", "navigation_lock_interaction", "key_routes",
+        "return_or_merge_paths",
+    }.issubset(topics["portals"]["required_details"])
     assert topics["trigger_events"]["public_macros"] == [
         "lootif", "Endelootif",
     ]
@@ -393,6 +447,7 @@ def test_lia_loot_reference_contract() -> None:
         "surface_or_submenu",
         "slide_binding",
         "concealment_layers",
+        "text_neutral_discoverability",
     }.issubset(difficulty["item_concealment"]["factors"])
     assert {
         "initial_amounts",
@@ -428,10 +483,53 @@ def test_lia_loot_reference_contract() -> None:
         "browser_history",
         "portal",
     }
+    piece_count = puzzle["piece_count_per_gate"]
+    assert piece_count["minimum"] == 1
+    assert piece_count["maximum"] == puzzle["maximum_slots_per_gate"] == 16
+    assert piece_count["fixed_default"] is None
+    assert piece_count["may_vary_between_gates_and_courses"] is True
+    placement = puzzle["piece_placement"]
+    assert placement["surface_target_allowed"] is False
+    assert placement["foreign_template_target_allowed"] is False
+    assert placement["ordered_direct_layers_allowed"] is True
+    assert placement["must_be_collectible_before_own_gate"] is True
+    clue = puzzle["combination_clue"]
+    assert clue["added_text_purpose"] in text_policy["allowed_purposes"]
+    assert clue["must_not_modify_tasks_to_manufacture_code"] is True
+    assert {
+        "unique_matrix_solution",
+        "rule_and_inputs_reachable_before_gate",
+        "no_random_guess",
+        "no_source_inspection",
+        "hidden_clue_has_earlier_magnifier_and_concrete_puzzle_locator",
+    }.issubset(clue["requirements"])
+    portal_route = options["portal_modes"]["route_contract"]
+    assert "portal" in options["lock_targets"]["seitenwechsel_does_not_block"]
+    assert portal_route["portal_guided_key_route_allowed"] is True
+    assert portal_route["portal_only_claim_requires_other_learner_visible_edges_blocked"] is True
+    assert portal_route["seitenwechsel_lock_alone_is_not_portal_exclusive"] is True
+    assert portal_route["navigation_puzzle_gate_disables_crossing_portal_edge_until_open"] is True
+    assert {
+        "source_slide", "target_slide", "mode", "key_color",
+        "matching_lock_target", "return_or_merge_path",
+        "toc_and_navigation_competing_edges", "puzzle_gate_boundaries",
+    }.issubset(portal_route["required_witness_fields"])
+    assert {
+        "portal_locked_by_destination_key",
+        "key_behind_own_lock",
+        "portal_bypass_of_unopened_navigation_puzzle_gate",
+        "required_one_way_dead_end",
+    }.issubset(portal_route["forbidden"])
     variation = options["variation_contract"]
     assert variation["minimum_changed_dimensions_from_nearest_prior"] == 3
     assert variation["minimum_changed_core_dimensions_from_nearest_prior"] == 1
     assert variation["identical_fingerprint_forbidden"] is True
+    assert variation["narrative_generation"] == "preserve_existing_no_added_text"
+    assert "narrative" not in variation["fingerprint_dimensions"]
+    assert {
+        "portal_lock_and_key_routing",
+        "puzzle_clue_distribution_and_decoding",
+    }.issubset(variation["fingerprint_dimensions"])
     assert set(variation["immediate_predecessor_must_change_one_of"]) == {
         "primary_mechanic", "path_topology",
     }
@@ -448,11 +546,16 @@ def test_lia_loot_reference_contract() -> None:
         "SOLV-PUZZLE-PIECES-BEFORE-GATE",
         "SOLV-PUZZLE-MATRIX-COMPLETE",
         "SOLV-PUZZLE-NAVIGATION-BOUNDARY",
+        "SOLV-PUZZLE-CLUE-UNIQUE",
+        "SOLV-PUZZLE-CLUE-BEFORE-GATE",
         "SOLV-NO-SELF-LOCK",
         "SOLV-SINGLETON-TOOLS",
         "SOLV-TOOLS-BEFORE-LAYERS",
         "SOLV-CONDITIONAL-TRIGGERS",
         "SOLV-ENVIRONMENT-STATE",
+        "SOLV-PORTAL-KEY-ROUTE",
+        "SOLV-PORTAL-TEMPORARY-RETURN",
+        "SOLV-TEXT-DELTA-ZERO",
         "SOLV-FULL-CATALOG",
         "SOLV-FINAL-CHECK",
     }.issubset(options["solvability_contract_ids"])
@@ -472,6 +575,10 @@ def test_lia_loot_reference_contract() -> None:
     assert "ausschließlich die dokumentierten öffentlichen" in skill
     assert "TriggerEvents beziehungsweise TiggerEvents" in skill
     assert "Puzzletoren" in skill
+    assert "Text- und Reihenfolgevertrag der Gamificationphase" in skill
+    assert "Textdelta von null" in normalized_skill
+    assert "keine neuen Immersions-" in normalized_skill
+    assert "Portal-Schlüssel- und Rückweggraphen" in normalized_skill
     assert "Schwierigkeitsgrad für drei unabhängige Achsen" in skill
     assert "mindestens drei" in skill
     assert "jede zentrale geplante Aufgabenfamilie" in normalized_skill
@@ -496,6 +603,42 @@ def test_lia_loot_reference_contract() -> None:
     )
     assert "ohne vorher den vollständigen" in normalized_reference
     assert "Gamification-Klärungsdialog zu führen" in normalized_reference
+    assert "Text- und Reihenfolgegrenze der Gamification" in loot_reference
+    assert "seitenwechsel` allein erzwingt keinen Portalweg" in loot_reference
+    assert "Die Teilezahl `N` darf je Tor zwischen 1 und 16 variieren" in loot_reference
+
+    gamification_skill = (
+        ROOT / "skills" / "schullia-gamification" / "SKILL.md"
+    ).read_text(encoding="utf-8")
+    nested_frontmatter = gamification_skill.split("---", 2)[1]
+    nested_fields = {
+        line.split(":", 1)[0].strip(): line.split(":", 1)[1].strip()
+        for line in nested_frontmatter.splitlines()
+        if ":" in line
+    }
+    assert set(nested_fields) == {"name", "description"}
+    assert nested_fields["name"] == "schullia-gamification"
+    assert len(nested_fields["name"]) <= 64
+    assert all(
+        character.islower() or character.isdigit() or character == "-"
+        for character in nested_fields["name"]
+    )
+    assert not nested_fields["name"].startswith("-")
+    assert not nested_fields["name"].endswith("-")
+    assert "--" not in nested_fields["name"]
+    assert 0 < len(nested_fields["description"]) <= 1024
+    assert "<" not in nested_fields["description"]
+    assert ">" not in nested_fields["description"]
+    assert "[TODO:" not in gamification_skill
+    assert "references/puzzle-portal-design.md" in gamification_skill
+    assert "Unveränderlicher Text- und Reihenfolgevertrag" in gamification_skill
+    puzzle_portal_reference = (
+        ROOT / "skills" / "schullia-gamification" / "references"
+        / "puzzle-portal-design.md"
+    ).read_text(encoding="utf-8")
+    assert "Vollständige Puzzleteil-Positionsmatrix" in puzzle_portal_reference
+    assert "Portal-, Schlüssel- und Navigationsgraph" in puzzle_portal_reference
+    assert "Textdelta null" in puzzle_portal_reference
 
     sources = json.loads(
         (ROOT / "references" / "sources.json").read_text(encoding="utf-8")

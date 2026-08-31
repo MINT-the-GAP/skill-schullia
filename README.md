@@ -18,6 +18,8 @@ nicht automatisch verwenden.
 - commit-gepinnte Belege mit Repository, Pfad, Zeilen und Revision
 - automatische Erkennung neuer öffentlicher MINT-the-GAP-Repositories
 - lokale Suche ohne vollständiges Laden des Korpus in den Modellkontext
+- einen im Hauptskill verankerten `schullia-gamification`-Skill mit
+  read-only Positionsmapper für Erde, Pflanzen und importierte Loot-Ziele
 
 ## Unterstützte Agenten
 
@@ -90,7 +92,7 @@ Typische persönliche Zielverzeichnisse sind:
 
 | Agent | Zielverzeichnis |
 | --- | --- |
-| Codex | `~/.codex/skills/` |
+| Codex | `~/.agents/skills/` |
 | Claude Code | `~/.claude/skills/` |
 | GitHub Copilot | `~/.copilot/skills/` oder `~/.agents/skills/` |
 | Gemini CLI | `~/.gemini/skills/` oder `~/.agents/skills/` |
@@ -132,6 +134,8 @@ Weitere Beispiele:
 - „Klassifiziere Operator und Aufgabenart, ohne Widersprüche zu verschweigen.“
 - „Erkläre diese Quizsyntax und zeige passende MINT-the-GAP-Beispiele.“
 - „Erstelle nur einen einfügbaren Aufgabenausschnitt, keinen vollständigen Kurs.“
+- „Kartiere alle technisch möglichen Erde-/Pflanzenpositionen dieses Kurses und
+  entwirf drei strukturell verschiedene Gamification-Varianten.“
 
 ## Quellen
 
@@ -203,6 +207,7 @@ oder bisher falsch erkannte Syntax auftaucht.
 
 ```text
 SKILL.md                         kanonische Agent-Skill-Anweisung
+skills/schullia-gamification/   verankerter Gamification-Skill samt Mapper
 AGENTS.md                        knapper anbieterübergreifender Repo-Einstieg
 CLAUDE.md / GEMINI.md            dünne Imports für Anbieter-Kontextdateien
 .github/copilot-instructions.md  knapper Copilot-Einstieg
@@ -221,6 +226,7 @@ Die Anbieterdateien duplizieren den Skill nicht. `SKILL.md`, `references/`,
 ```text
 python scripts/test_parser.py
 python scripts/test_sync.py
+python skills/schullia-gamification/scripts/test_map_course.py
 python scripts/validate_corpus.py
 python scripts/validate_corpus.py --deep
 ```

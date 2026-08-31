@@ -11,8 +11,8 @@ python scripts/search_knowledge.py search Gamification --type document --source 
 ```
 
 Diese Referenz und [lia-loot-options.json](lia-loot-options.json) wurden gegen
-Revision `8411dbbb99a2975eae7fb52470e785065189e65d` und den README-SHA-256
-`51d87ab5368a0d4cfdb92285a249e22b67c7b428c6c6463b6571269db9b447c9`
+Revision `ae970951fb7304ec9d1dd0f11048ae8a8ee676cb` und den README-SHA-256
+`08087ab78b6183d6ba1f0ea83437f36bdd2ea452d11658c778502abe336978f1`
 geprüft. Weicht der aktuelle Snapshot ab, lies README, Quellcode und Tests erneut
 und aktualisiere beide Referenzen, bevor du neue Syntax behauptest.
 
@@ -63,9 +63,25 @@ Es gibt keine frei definierbare Quest- oder Missions-API, keine frei
 definierbaren Itemtypen, Skins, Achievement-Bedingungen, Trigger oder Aktionen.
 `@lootif` bietet nur die unten katalogisierten festen Trigger und die Aktion
 `spawn`. Insbesondere erzeugt ein korrekt gelöstes Quiz nicht automatisch eine
-Truhe. Modelliere eine narrative Quest durch Kursstruktur, Aufgaben,
-Folienzugang und explizite Loot-Makros. Verwende nie interne
-`@Loot..._`-Makros in einem Kurs.
+Truhe. Modelliere Gamification ausschließlich durch Kursstruktur,
+Folienzugang und explizite Loot-Makros. Verwende nie interne `@Loot..._`-Makros
+in einem Kurs.
+
+### Text- und Reihenfolgegrenze der Gamification
+
+Beim Gamifizieren bleibt der vorhandene lernendenseitige Text einschließlich
+Aufgaben, Überschriften, Lösungen, Hinweise, Feedback und Materialien
+wortgleich; auch die relative Aufgabenreihenfolge bleibt erhalten. Neue
+Immersions-, Erzähl-, Szenen-, Übergangs-, Belohnungs-, Fortschritts-,
+Motivations- oder Questtexte sowie dekorative Überschriften sind unzulässig.
+
+Neue Prosa ist nur als knapper funktionaler Hinweis zu Fundort, Rekonstruktion
+oder Kombination eines konkreten Puzzletors oder zum Auffinden einer konkreten
+Geheimfolie zulässig. Der minimale eindeutige Titel einer ausdrücklich
+geplanten neuen Geheimfolie gehört zur zweiten Ausnahme. Diese Grenze gilt auch
+für verborgene Texte. Portal-, Schlüssel-, Ressourcen-, Werkzeug- und
+Belohnungswege müssen ohne neue Begleitprosa verständlich sein. Außerhalb der
+beiden Ausnahmen beträgt das Textdelta null.
 
 ## Vollständige öffentliche Makrooberfläche
 
@@ -80,8 +96,8 @@ sind kein Grund, uneinheitliche Syntax zu erzeugen.
 | `@achievements` | ohne Argument | aktiviert zwölf feste Erfolge; Aliasse `@Achievements`, `@Erfolge` |
 | `@lootif` … `@Endelootif` | `@lootif(trigger; spawn)` | dauerhafte bedingte Bereichsfreigabe; drei dokumentierte End-Aliasse |
 | `@Schatztruhe` | `@Schatztruhe([menge;] [ziele...;] [fundoptionen...])` | Default: inline, ein Gold |
-| `@Diamanttruhe` | dieselben Optionen | Default: inline, ein Diamant |
-| `@Energiekiste` | dieselben Optionen | Default: inline, eine Energie; benötigt aktivierte Energie |
+| `@Diamanttruhe` | dieselben Optionen | Default: inline, ein Diamant; Alias `@Diamantentruhe` |
+| `@Energiekiste` | dieselben Optionen | Default: inline, eine Energie; Alias `@Energietruhe`; benötigt aktivierte Energie |
 | `@Schluessel` | `@Schluessel([farbe]; [oberflächenziel]; [fundoptionen...])` | höchstens eine Farbe und ein Oberflächenziel |
 | `@Puzzleteil` | `@Puzzleteil(farbe; nummer; [fundoptionen...])` | Farbe und Nummer 1 bis 16 sind Pflicht; kein Oberflächenziel |
 | `@Puzzletor` | `@Puzzletor(farbe; [[matrix]][; anker])` | rechteckige Permutation 1 bis N, höchstens 16 Slots; ohne `anker` Navigationstor |
@@ -263,7 +279,8 @@ einzeilige Inhalt, das optionale zweite Argument enthält gemeinsame
 Fundoptionen und wird durch ein Komma abgetrennt. Diese Formen benötigen kein
 Endmakro, werden ansonsten aber wie genau eine Erd- beziehungsweise
 Pflanzeninstanz katalogisiert und benötigen dasselbe vorher erreichbare
-Werkzeug.
+Werkzeug. Der einzeilige Payload darf browserbelegt verschachtelte öffentliche
+Loot-Makros mit eigenen, korrekt balancierten Klammerargumenten enthalten.
 
 ## Puzzleteile und Puzzletore
 
@@ -302,6 +319,29 @@ Teilezahl, Farbe, Zielmatrix und Navigationstor oder lokalem Inhaltstor. Der
 Vollständigkeitspfad sammelt jedes Teil und belegt jedes Tor korrekt. Ein
 geöffnetes Tor darf mit dem festen Trigger `Puzzletor: rot` einen
 `@lootif(...; spawn)`-Bereich auslösen.
+
+Die Teilezahl `N` darf je Tor zwischen 1 und 16 variieren; es gibt keinen
+Viererstandard. Variiere zusätzlich Matrixform, Permutation, Teilepositionen,
+Verbergungsketten, Hinweisverteilung und Torart. Puzzleteile können allein oder
+inline, mit gemeinsamen Fundoptionen, mit beliebig vielen direkten
+Erd-/Pflanzenschichten, in vollständigen Erd-/Pflanzenblöcken, als
+browserbelegter Inlinepayload, in einem gültigen `@lootif(...; spawn)` oder auf
+einem erreichbaren Portal-/Geheimfolienzweig liegen. Sie besitzen jedoch kein
+Oberflächenziel. Portal, Schloss und Puzzletor selbst tragen keine direkten
+Erd-/Pflanzenschichten.
+
+Die Kombination darf kreativ aus unveränderten vorhandenen
+Teilaufgabenergebnissen, Antwortpositionen, Tabellen, Diagrammen, Markierungen
+oder verteilten Fragmenten abgeleitet werden. Ein knapper neuer Metahinweis ist
+nur als konkreter Puzzletorhinweis zulässig. Regel und Eingabewerte sind vor
+dem Tor erreichbar und ergeben deterministisch genau eine Permutation `1…N`.
+Ein unsichtbarer Pflichthinweis benötigt eine vorherige Lupe und einen
+konkreten Scan-Hinweis; Zufallsraten, Quelltexteinsicht, erzwungene
+Fehlantworten und ein alleiniger kostenpflichtiger nativer Hinweis sind kein
+perfekter Witness. Pro Tor protokolliert der Plan alle Teile, Hinweisquellen,
+Decodierregel, berechnete Matrix und Präfixzustände. Die vollständige
+Positions- und Hinweisprüfung steht in
+`skills/schullia-gamification/references/puzzle-portal-design.md`.
 
 ## Zielkatalog
 
@@ -383,6 +423,24 @@ Einbahnstraße, solange diese Wege offen sind. Portale verbrauchen selbst keine
 Ressourcen oder Schlüssel. Ein `@Schloss(portal, farbe)` ist dagegen ein
 normales Schloss und zählt für den Schlosserfolg.
 
+Inventarisiere jedes Portal als gerichtete Kante mit Quelle, Ziel, Modus,
+unmittelbar folgenden Portalschlössern, vorherigen Schlüsseln und Rückweg oder
+Merge. `seitenwechsel` allein erzwingt keinen Portalweg, weil ToC und Portale
+offen bleiben. Für eine kontrollierte Portalroute müssen alle übrigen
+lernendenseitigen Kanten – insbesondere ToC – separat geschlossen oder im
+Zustandsgraphen ausgeschlossen sein. Globale Schlösser wirken ab Kursstart;
+bei gesperrtem ToC und Seitenwechsel muss bereits von dort ein ungesperrter
+Portal-, Schlüssel- oder Reparaturpfad existieren.
+
+Ein Portal darf gezielt zu einem Schlüssel führen. Der passende Schlüssel
+liegt vor seinem Portalschloss und weder hinter dem selbst gesperrten Portal
+noch in einer von ihm selbst gesperrten Oberfläche. Ein Zweiwegzweig nutzt das
+temporäre Rückportal, bevor die Zielfolie anderweitig verlassen wird. Ein
+Einwegzweig sammelt vorher alle nur am Ursprung erreichbaren Pflichtobjekte und
+besitzt am Ziel eine Folgekante oder einen Merge. Ein Navigationspuzzletor
+blockiert auch Portalquerungen in seinen Nachbereich. Portal- und
+Schlüsselketten erhalten keine neue Begleit- oder Übergangsprosa.
+
 Eine Geheimfolie wird von normaler Navigation übersprungen. Für die
 dokumentierte Suchroute muss ihr vollständiger Titel aus erreichbarem Inhalt
 ableitbar, normalisiert eindeutig und das ToC zugänglich sein. Ein Portal darf
@@ -446,22 +504,25 @@ bewertbaren Aufgabe bleibt falsch und ist kein Bootstrap.
 
 ## Automatik, Abschluss und Erfolge
 
-Das letzte bewertbare native LiaScript-Quiz auf der letzten Kursseite ist die
-automatische Abschlussaufgabe. Ein korrekt beobachteter Prüfen-Erfolg stoppt die
-Zeit und öffnet den Highscore. Bloßes Auflösen löst diesen Finish-Handler nicht
-aus. Stelle deshalb sicher:
+Die automatische Abschlussprüfung besitzt kein festes „letztes Quiz“. Der
+Highscore öffnet sich erst, wenn jede Kursfolie mindestens einmal geladen wurde
+und jedes katalogisierte bewertbare native Quiz den Zustand `solved` oder
+`resolved` erreicht hat. Der jeweils letzte noch offene Quizstatus kann daher
+auch auf einer früheren Folie liegen. Auflösen darf den Kursabschluss
+ermöglichen; für „Aufgaben-Meister“ und den perfekten Witness müssen jedoch alle
+Quizze korrekt gelöst sein. Stelle deshalb sicher:
 
-- Die letzte Kursseite ist erreichbar und nicht als Pflichtabschluss verborgen.
-- Dort existiert das beabsichtigte letzte native Quiz.
-- Antwort, Energie und gegebenenfalls der Schlüssel für `check` sind vorher
-  erreichbar.
-- Keine nachfolgende Quizinstanz verschiebt versehentlich den Abschluss.
+- Jede Kursfolie ist erreichbar und wird im Witness geladen.
+- Jedes katalogisierte bewertbare native Quiz ist erreichbar.
+- Antwort, Energie und gegebenenfalls der Schlüssel für `check` sind jeweils
+  vorher erreichbar.
+- Kein verborgenes oder nie gerendertes Pflichtquiz hält den Abschluss offen.
 
 `@achievements` aktiviert genau zwölf feste Erfolge:
 
 | ID | Erfolg | Katalogbedingung |
 |---|---|---|
-| `all-quizzes-solved` | Aufgaben-Meister | Abschluss korrekt geprüft und alle dabei geladenen bewertbaren nativen Quizze gelöst |
+| `all-quizzes-solved` | Aufgaben-Meister | alle Kursfolien geladen und alle katalogisierten bewertbaren nativen Quizze korrekt gelöst |
 | `perfect-highscore` | Perfekter Highscore | Endscore entspricht exakt der Maximalpunktzahl |
 | `all-treasure-chests-opened` | Schatzjäger | alle Goldtruheninstanzen geöffnet |
 | `all-diamond-chests-opened` | Diamantensammler | alle Diamanttruheninstanzen geöffnet |
@@ -505,7 +566,9 @@ vollständigen Basiskurs ohne neu eingebaute Gamification. Der Basiskurs enthäl
 weder einen `lia-loot`-Import noch `lia-loot`-Makros oder neu entworfene
 Gamification-Ersatzmechaniken aus anderen Templates, Skripten oder HTML. Eine
 bereits im Ausgangsprompt gewünschte Gamification hebt diese Reihenfolge nicht
-auf.
+auf. Fachlich notwendiger Aufgabentext entsteht in diesem Basiskurs, aber keine
+vorsorgliche Puzzle-, Portal- oder Immersionsprosa. Mit der Übergabe wird sein
+Textbestand für die nachgelagerte Gamification eingefroren.
 
 Lies für diesen Basiskurs mindestens drei passende reale vollständige Kurse,
 sofern so viele vorhanden sind, andernfalls alle. Lies außerdem mindestens drei
@@ -538,11 +601,11 @@ vollständige Antwort und wird nicht erneut als exakte Zahl abgefragt.
 | Achievements | Aktivierung `0` oder `1` | genau ein `@achievements` aktiviert immer alle zwölf festen Erfolge; keine Teilmenge oder eigenen Erfolge |
 | Highscore | Konfiguration `0` oder `1`; bei `1` Maximalpunkte und vier Abzugs-/Zeitwerte | genau ein `@Highscore(max, fehlversuch, hinweis, freiminuten, proMinute)` |
 | Ressourcen | Konfiguration `0` oder `1`; Arten Gold, Diamanten, Energie; Startmenge, Zahl der Belohnungsfunde und Belohnungsmenge je Art | genau ein `@Ressourcen`; feste Truhenmakros |
-| versteckte Inhalte und Items | Anzahl je `unsichtbar` und `zauberstaub`; Inhalt oder Funditem, Ort und Hinweis | `@Unsichtbar`, `@Zauberstaub` oder gleichnamige Fundoption |
+| versteckte Inhalte und Items | Anzahl je `unsichtbar` und `zauberstaub`; Inhalt oder Funditem, Ort und textneutrale Auffindbarkeit; neue Hinweisprosa nur für Puzzle/Geheimfolie | `@Unsichtbar`, `@Zauberstaub` oder gleichnamige Fundoption |
 | vergrabene Inhalte | Anzahl der Erdinstanzen | `@Erdhaufen`, `@Erdhaufen.inline` oder direkte Erdschicht; erreichbare Schaufel |
 | Pflanzen | Anzahl der Pflanzeninstanzen | `@Pflanze`, `@Pflanze.inline` oder direkte Pflanzenschicht; erreichbare Gießkanne |
-| Puzzletore | Toranzahl und Teilezahl je Tor; Farbe, Matrix und Navigationstor oder `anker`-Inhaltstor | `@Puzzleteil` und `@Puzzletor`; höchstens 16 Teile und ein Tor je Farbe |
-| Portale | Gesamtzahl und möglichst Aufteilung in Einweg und Zweiweg | `@Portal` oder `@Einwegportal` |
+| Puzzletore | Toranzahl; je Tor Teilezahl, Farbe, Matrixform und Permutation, Torart, Teilpositionen, Verbergungsketten, Hinweisorte und Decodierregel | `@Puzzleteil` und `@Puzzletor`; 1 bis 16 Teile und ein Tor je Farbe |
+| Portale | Gesamtzahl und möglichst Aufteilung in Einweg und Zweiweg; Quell-Ziel-Kanten, Navigationssperren, Schlüsselrouten und Rückweg/Merge | `@Portal`, `@Einwegportal` oder `@Einbahnportal` |
 | Schlüssel | Anzahl sowie passende Schlösser, Ziele und Farben | `@Schluessel` und bei Pflichtgates `@Schloss` |
 | Geheimfolien | Anzahl und fair ableitbarer Such- oder Portalzugang | `@Geheimfolie` |
 | TriggerEvents oder TiggerEvents | Anzahl bedingter Bereiche und gewünschte feste Triggerfamilien | ausschließlich `@lootif(trigger; spawn)` bis `@Endelootif`; kein Makro `@TriggerEvent` |
@@ -560,7 +623,8 @@ Umfang passende lia-loot-Kurse, sofern so viele vorhanden sind. Priorisiere
 Zielprojekt und Gespräch, danach den commit-gepinnten lokalen Korpus. Schließe
 Dokumentation, Definitionen, Browser-Fixtures, `TemplateTargets.md` und
 `StressTest.md` als reale Beispiele aus. Prüfe die Originalausschnitte und
-übernimm nur belegte Muster für Dichte, Platzierung, Pacing und faire Hinweise;
+übernimm nur belegte Muster für Dichte, Platzierung, Pacing und mechanische
+Nachweisbarkeit beziehungsweise bereits vorhandene Hinweise;
 die aktuelle README bleibt die API-Autorität. Ein vorhandenes Antimuster wird
 nicht dadurch gültig, dass es in einem früheren Kurs steht.
 
@@ -592,15 +656,16 @@ ein Label den Zahlen deutlich, kläre nur diesen Konflikt.
 
 **Itemverstecke**
 
-- Leicht: sichtbarer Inlinefund oder Zauberstaub, eindeutiger Ortshinweis, keine
-  Wartezeit und keine zusätzliche Suchschicht.
+- Leicht: sichtbarer Inlinefund oder Zauberstaub, mechanisch eindeutiger Ort,
+  keine Wartezeit und keine zusätzliche Suchschicht.
 - Mittel: genau eine zusätzliche Hürde, etwa Untermenü, `anker`, kurze
   lia-loot-Verzögerung, Umweltbedingung oder vollständige Unsichtbarkeit mit
-  explizitem Ortshinweis.
+  explizit bestimmbarer Ort. Neue Ortshinweise sind nur für Puzzletor oder
+  Geheimfolie zulässig.
 - Schwer: höchstens zwei abgestimmte zusätzliche Hürden, etwa Geheimfolie plus
   kurze lia-loot-Verzögerung oder Untermenü plus Unsichtbarkeit. Auch schwer
-  verlangt eine vorher erreichbare Lupe, faire Hinweise und einen
-  deterministischen Pfad.
+  verlangt eine vorher erreichbare Lupe, einen nach dem Textvertrag zulässigen
+  Beleg des Orts und einen deterministischen Pfad.
 
 **Ressourcenökonomie**
 
@@ -630,14 +695,15 @@ Score. In jedem Profil bleibt ein abzugsloser perfekter Witness möglich.
 
 Die Pixelgrafiken und Achievementtexte sind fest; eine nicht vorhandene
 Skin-Option darf nicht erfunden werden. Erzeuge Eigenständigkeit durch
-Mechanikmix, Topologie, Platzierung, Ökonomie, Pacing und Narrativ.
+Mechanikmix, Topologie, Platzierung, Ökonomie, Pacing, Puzzlehinweisarchitektur
+und Portal-Schlüssel-Graphen. Erzeuge dafür keinen neuen Erzähltext.
 
 Erstelle vor jedem Entwurf intern diesen Fingerabdruck:
 
 ```text
 Primärmechanik
 Pfadtopologie
-Narrativ und fachliche Rolle
+vorhandene fachliche Rolle ohne neue Prosa
 aktive Featurefamilien
 Ressourcenmodell und Belohnungsmix
 Fundorte und Verbergung
@@ -660,7 +726,7 @@ werden. Gegen den ähnlichsten Vergleich müssen mindestens drei strukturelle
 Dimensionen wechseln; mindestens eine davon ist Primärmechanik, Topologie oder
 Ressourcenmodell. Gegenüber dem unmittelbar vorherigen Entwurf wechselt
 zusätzlich Primärmechanik oder Topologie. Geänderte Farben, Zahlen, Dauern,
-Titel, Bilder oder ein bloß umbenanntes Schlossnarrativ zählen allein nicht.
+Titel, Bilder oder bloß geänderte Schlossbeschriftungen zählen allein nicht.
 
 Ohne verfügbare Historie kannst du keine absolute Neuheit garantieren. Wähle
 dann bewusst unter mehreren Kandidaten und gib den neuen Fingerabdruck bei der
@@ -672,7 +738,7 @@ Mögliche Primärprofile sind beispielsweise:
 - Ressourcenexpedition mit sichtbaren Truhen,
 - Lupen- und Detektivpfad,
 - Hub-and-Spoke mit Zweiwegportalen,
-- optionale Geheimfolien-Seitenquest,
+- optionale Geheimfolienroute,
 - UI-Schatzsuche,
 - Achievement-Sammelkurs,
 - Puzzlefortschritt mit Navigationstoren oder lokalen Inhaltstoren,
@@ -697,7 +763,7 @@ Familie und dürfen vollständig fehlen. Wenn sie vorkommen:
 
 Rotiere ebenso Werkzeuge, Spawn-Trigger, Fundoberflächen, Schichttiefen und
 Umweltachsen. „Alle Features überall“ ist kein eigenes Profil. Der gewählte
-Mix muss die fachliche Dramaturgie unterstützen und visuell wie interaktiv
+Mix muss den vorhandenen fachlichen Ablauf bewahren und visuell wie interaktiv
 anders gestaffelt sein als der unmittelbar vorherige Kurs.
 
 Das sind Generierungsregeln, keine Behauptungen über technische Grenzen der API.
@@ -744,9 +810,9 @@ zurückkehren, Geheimfolie exakt suchen und endlich warten.
 
 Das Zielprädikat umfasst:
 
-- Abschlussquiz korrekt per Prüfen gelöst,
-- alle verpflichtenden Lernfolien besucht,
-- alle verpflichtenden Quizze gelöst,
+- alle Kursfolien mindestens einmal geladen,
+- alle katalogisierten bewertbaren nativen Quizze gelöst oder bewusst
+  aufgelöst; im perfekten Witness alle korrekt gelöst,
 - alle gültigen bedingten Bereiche gespawnt,
 - alle gültig katalogisierten Truhen erreichbar und gesammelt,
 - alle katalogisierten Verbergungsinstanzen gefunden und alle Erd- und
@@ -780,8 +846,10 @@ Das Zielprädikat umfasst:
 6. **Lupe zuerst:** Jede verpflichtende Verbergungsinstanz hat eine vorher
    erreichbare Lupe. Das gilt auch für Lupe, Werkzeuge und direkte Schichten,
    wenn sie selbst verborgen sind. Vollständig unsichtbare Pflichtobjekte haben
-   zusätzlich einen fairen Hinweis auf ihren Ort und werden im Witness wirklich
-   mit der aktiven Lupe gescannt.
+   einen mechanisch erzwungenen oder durch unveränderten vorhandenen Kurstext
+   belegten Ort; nur Puzzle- und Geheimfolienziele dürfen dafür neue knappe
+   Hinweisprosa erhalten. Sie werden im Witness wirklich mit der aktiven Lupe
+   gescannt.
 7. **Bedingte Trigger:** Jeder gültige `@lootif`-Bereich kann außen nach innen
    spawnen. Sein Trigger ist ohne eigenen Inhalt erreichbar. „Alle Aufgaben der
    Folie“ hat mindestens ein vorher erreichbares Quiz; „vorherige Aufgabe“
@@ -803,9 +871,11 @@ Das Zielprädikat umfasst:
     benötigter UI-Zustand existieren. Ein Timer-Schloss hat einen
     `onclick`-Button.
 12. **Portalroute:** Jedes Portalziel ist positiv, vorhanden und verschieden von
-    der Quellfolie. Jeder Zweig führt zurück oder verschmilzt mit dem Hauptpfad.
-    Vor einem Einwegübergang sind alle nur vorher erreichbaren Pflichtobjekte
-    gesammelt.
+    der Quellfolie. Erfasse Modus, unmittelbare Portalschlösser und jede
+    konkurrierende ToC-/Navigationskante. Jeder Zweig führt zurück oder
+    verschmilzt mit dem Hauptpfad. Das temporäre Zweiweg-Rückportal wird vor
+    Verlassen des Ziels auf anderem Weg genutzt; vor einem Einwegübergang sind
+    alle nur vorher erreichbaren Pflichtobjekte gesammelt.
 13. **Globale Sperren:** Kursweite `seitenwechsel`-, ToC- oder Menüschlösser
     blockieren nicht gemeinsam alle Wege zu ihren Schlüsseln, Werkzeugen oder
     Umweltsteuerungen. Sie wirken schon beim Kursstart.
@@ -816,9 +886,10 @@ Das Zielprädikat umfasst:
     Witness materialisiert und abgeschlossen.
 15. **Geheimfolien:** Titel sind normalisiert eindeutig, der vollständige Titel
     ist erreichbar und ToC oder ein valider Portalweg steht zur Verfügung.
-16. **Abschluss:** Das letzte bewertbare native Quiz der letzten erreichbaren
-    Seite ist korrekt prüfbar; es bleibt mindestens eine Energie übrig, wenn
-    Energie aktiviert ist.
+16. **Abschluss:** Alle Kursfolien sind erreichbar und geladen; jedes
+    katalogisierte bewertbare native Quiz erreicht `solved` oder `resolved`.
+    Im perfekten Witness sind alle korrekt prüfbar; dabei bleibt mindestens
+    eine Energie übrig, wenn Energie aktiviert ist.
 17. **Erfolge:** Alle Objekte jeder nichtleeren Kategorie besitzen reale
     Instanzen und sind im selben Witness abschließbar. Pflanzen werden zusätzlich
     geöffnet, wenn Pflichtinhalt hinter ihrer Blüte liegt. Der perfekte
@@ -831,19 +902,24 @@ Das Zielprädikat umfasst:
     alle Teile liegen vor ihrem eigenen Tor und sind im selben Witness sammelbar.
     Ein Navigationstor wird weder durch Portal, ToC noch direkten Hash umgangen;
     ein lokales Inhaltstor endet an der beabsichtigten nächsten
-    Markdown-`#`-Überschrift.
+    Markdown-`#`-Überschrift. Alle Hinweisquellen liegen vor dem Tor und die
+    dokumentierte Decodierregel ergibt eindeutig dessen Permutation.
+20. **Textdelta:** Jede neue lernendenseitige Textzeile ist genau einem
+    konkreten Puzzletor- oder Geheimfolienhinweis zugeordnet; außerhalb dieser
+    Ausnahmen sind Text und Aufgabenreihenfolge unverändert.
 
 ### Planungsalgorithmus
 
-1. Analysiere Folien, Quizze, Hinweise, Imports, Template-Instanzen,
-   Abschlussquiz und fachliche Prärequisiten.
+1. Analysiere den vollständigen Folien- und Quizkatalog, vorhandene Hinweise, Imports,
+   Template-Instanzen, Abschlusszustände und fachliche Prärequisiten.
 2. Fingerprinte verfügbare Vergleichskurse und bilde mehrere deutlich
    verschiedene Gamification-Kandidaten.
 3. Wähle den didaktisch passenden Kandidaten mit großem strukturellem Abstand.
 4. Plane zuerst einen öffentlichen Hauptpfad, dann optionale Zweige mit Rückweg
    oder Merge.
 5. Plane vom Ziel rückwärts: Schloss zu Schlüssel, Puzzletor zu allen
-   gleichfarbigen Teilen und der Zielmatrix, Verbergung zu Lupe, Erde zu
+   gleichfarbigen Teilen, Hinweisquellen, Decodierregel und Zielmatrix,
+   Verbergung zu Lupe, Erde zu
    Schaufel, Pflanze zu Gießkanne und Blütenklick, bedingter Bereich zu
    erreichbarem Trigger, Umweltbedingung zur zugänglichen Steuerung,
    Kostenaktion zu vorheriger Ressource und Ziel zu gültigem Zugang.

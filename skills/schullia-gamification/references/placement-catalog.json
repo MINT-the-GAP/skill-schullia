@@ -1,0 +1,260 @@
+{
+  "schema_version": "1.1.0",
+  "reviewed_source": {
+    "repository": "MINT-the-GAP/lia-loot",
+    "revision": "ae970951fb7304ec9d1dd0f11048ae8a8ee676cb",
+    "readme_sha256": "08087ab78b6183d6ba1f0ea83437f36bdd2ea452d11658c778502abe336978f1",
+    "canonical_target_count": 12
+  },
+  "import_policy": {
+    "scan_scope": "complete_main_header",
+    "enumerate_all_n_plus_one_slots": true,
+    "slot_evidence_states": ["course_observed", "browser_tested", "unproven"],
+    "preserve_existing_order": true,
+    "loot_may_have_following_imports": true,
+    "default_new_order": [
+      "technical_dependencies",
+      "foreign_templates",
+      "lia-freeze-v2",
+      "lia-mathpath",
+      "lia-loot"
+    ],
+    "both_orders_browser_tested_with_loot": ["lia-navigation", "lia-freeze-v2"],
+    "reverse_order_not_separately_proven": [
+      "lia-DynFlex",
+      "lia-timer",
+      "lia-board-mode",
+      "lia-marker",
+      "lia-annotation",
+      "lia-canvas-ocr",
+      "lia-kachel",
+      "lia-llm",
+      "lia-coordinate",
+      "lia-mathpath"
+    ]
+  },
+  "content_policy": {
+    "contract_ref": "../../../references/lia-loot-options.json#/emission_policy/added_text_policy",
+    "existing_learner_facing_text": "preserve_word_for_word",
+    "existing_task_order": "preserve_relative_order",
+    "default_new_text": "forbidden",
+    "applies_to_hidden_and_visible_text": true,
+    "allowed_added_text_purposes": ["puzzle_gate_clue", "secret_slide_access_clue"],
+    "portal_key_resource_tool_and_reward_paths": "macro_and_state_only_without_added_prose",
+    "text_delta_outside_allowed_purposes": 0
+  },
+  "puzzle_piece_placement": {
+    "contract_ref": "../../../references/lia-loot-options.json#/puzzle_rules/piece_placement",
+    "maximum_pieces_per_gate": 16,
+    "fixed_default_piece_count": null,
+    "surface_target_allowed": false,
+    "foreign_template_target_allowed": false,
+    "standalone_or_inline_allowed": true,
+    "shared_option_contract": "../../../references/lia-loot-options.json#/shared_collectible_options",
+    "ordered_direct_layers": "zero_or_more_left_to_right_outer_to_inner",
+    "item_concealment": "zero_or_one_separate_final_stage",
+    "requires": ["safe_anchor_boundary", "reachable_before_own_gate", "tool_and_magnifier_prefixes", "complete_witness"],
+    "candidate_compatibility": {
+      "start_bootstrap": {"status":"allowed","condition":"before_own_gate"},
+      "start_post_tool_block": {"status":"allowed","condition":"tools_before_block"},
+      "h2_whole_slide": {"status":"conditional","condition":"complete_same_slide_wrapper_and_before_own_gate"},
+      "h2_prefix_or_suffix": {"status":"allowed","condition":"safe_top_level_boundary"},
+      "dynflex_whole_section": {"status":"conditional","condition":"adjacent_or_complete_outer_wrapper_not_surface_target"},
+      "standalone_quiz": {"status":"conditional","condition":"adjacent_or_complete_outer_wrapper_not_inside_quiz_syntax"},
+      "solution_reward_tail": {"status":"allowed","condition":"existing_solution_feedback_unchanged"},
+      "flow_text_clue": {"status":"clue_only","condition":"puzzle_gate_or_secret_slide_clue; piece_may_be_inline_without_added_prose"},
+      "local_template_target": {"status":"conditional","condition":"adjacent_or_complete_outer_wrapper_not_direct_target"},
+      "global_surface_target": {"status":"unsupported_direct_target","condition":"normal_body_find_may_be_adjacent_but_is_not_surface_bound"},
+      "lootif_spawn_range": {"status":"allowed","condition":"external_trigger_reachable_before_own_gate"},
+      "container_visibility_option": {"status":"allowed","condition":"magnifier_and_deterministic_discoverability_before_scan"},
+      "collectible_concealment_option": {"status":"allowed","condition":"maximum_one_item_concealment"},
+      "hidden_macro_inside_reveal": {"status":"allowed","condition":"balanced_single_line_payload_and_magnifier_prefix"},
+      "optional_secret_or_portal": {"status":"conditional","condition":"source_order_before_gate_and_reachable_return_or_merge"},
+      "garden_before_reflection": {"status":"allowed","condition":"no_added_garden_heading_or_prose"},
+      "reflection_optional": {"status":"conditional","condition":"does_not_change_existing_reflection_text_or_task_order"},
+      "submission_or_freeze": {"status":"conditional","condition":"before_own_gate_and_before_terminal_completion_with_full_witness"}
+    }
+  },
+  "combination_clue_policy": {
+    "contract_ref": "../../../references/lia-loot-options.json#/puzzle_rules/combination_clue",
+    "allowed_added_text_purpose": "puzzle_gate_clue",
+    "reachable_before_own_gate": true,
+    "must_derive_unique_permutation": true,
+    "may_use_unchanged_existing_course_values": true,
+    "may_use_distributed_fragments": true,
+    "hidden_required_clue_requires": ["earlier_magnifier", "concrete_puzzle_scan_locator"],
+    "semantic_uniqueness": "human_review_required",
+    "random_guess_or_source_inspection": "forbidden"
+  },
+  "portal_route_policy": {
+    "contract_ref": "../../../references/lia-loot-options.json#/portal_modes/route_contract",
+    "public_author_macros": ["Portal", "Einwegportal", "Einbahnportal"],
+    "portalzurueck_is_author_macro": false,
+    "inventory_fields": ["source_slide", "target_slide", "mode", "immediate_portal_locks", "required_keys", "competing_navigation_edges", "return_or_merge_path", "puzzle_gate_boundaries"],
+    "seitenwechsel_does_not_block": ["direct_toc_jump", "portal"],
+    "portal_guided_key_route_allowed": true,
+    "portal_only_requires_competing_edges_closed": true,
+    "global_locks_active_from_start_unless_anchored": true,
+    "navigation_puzzle_gate_blocks_crossing_portal": true,
+    "added_portal_or_key_explanatory_prose": "forbidden"
+  },
+  "environment": {
+    "tools": [
+      {"id": "shovel", "macros": ["Schaufel"], "required_before": ["earth"], "singleton": true},
+      {"id": "watering_can", "macros": ["Giesskanne"], "required_before": ["plant"], "singleton": true},
+      {"id": "magnifier", "macros": ["Lupe"], "required_before": ["hidden_required_item"], "singleton": true}
+    ],
+    "block_pairs": [
+      {"kind": "earth", "open": ["Erdhaufen"], "close": ["EndeErdhaufen"]},
+      {"kind": "plant", "open": ["Pflanze", "Blume"], "close": ["EndePflanze", "EndeBlume"]}
+    ],
+    "conditional_ranges": [
+      {
+        "kind": "lootif",
+        "open": ["lootif"],
+        "close": ["Endelootif", "EndeLootif", "endlootif", "EndLootIf"],
+        "required_action": "spawn",
+        "trigger_argument_index": 0,
+        "action_argument_index": 1,
+        "evidence_scope": "course_outside_own_range",
+        "proof_basis": "source",
+        "comparators": [">", ">=", "=", "<=", "<"],
+        "trigger_families": {
+          "previous_quiz": {"canonical":"Vorherige Aufgabe gelöst","aliases":["vorherige-aufgabe","vorherige-aufgabe-gelost","vorherige-aufgabe-geloest","previous-task","previous-task-solved","previous-quiz","previous-quiz-solved"]},
+          "current_slide_quizzes": {"canonical":"Alle Aufgaben der aktuellen Folie gelöst","aliases":["folienaufgaben-gelost","folienaufgaben-geloest","aktuelle-folie-gelost","aktuelle-folie-geloest","alle-aufgaben-der-aktuellen-folie-gelost","alle-aufgaben-der-aktuellen-folie-geloest","slide-tasks-solved","slide-quizzes-solved"]},
+          "solved_quizzes": {"labels":["aufgaben","bewertbare aufgaben","gelöste aufgaben","geloste aufgaben","geloeste aufgaben","tasks","quizzes","scoreable-tasks"],"value":"nonnegative_safe_integer"},
+          "resources": {"labels":{"gold":["gold","münzen","munzen","goldmünzen","goldmunzen","coins"],"diamonds":["diamant","diamanten","diamonds","gems"],"energy":["energie","energy"]},"macro":"Ressourcen","value":"nonnegative_safe_number"},
+          "opened_chests": {"labels":{"gold":["schatztruhe","schatztruhen","goldkiste","goldkisten","treasure-chest","treasure-chests"],"diamonds":["diamantkiste","diamantkisten","diamantenkiste","diamantenkisten","diamanttruhe","diamanttruhen","diamond-chest","diamond-chests"],"energy":["energiekiste","energiekisten","energy-chest","energy-chests"]},"macros":{"gold":["Schatztruhe"],"diamonds":["Diamanttruhe","Diamantentruhe"],"energy":["Energiekiste","Energietruhe"]},"value":"nonnegative_safe_integer"},
+          "lock_target": {"prefixes":["Schloss","lock"],"macro":"Schloss","target_argument_index":0,"targets":{"toc":["inhaltsverzeichnis"],"mode":["darstellung","ansicht"],"menu":["menue","einstellungen","settings"],"translator":["translate","übersetzer","uebersetzer","sprache"],"classroom":["klasse","teilen","share"],"info":["information","informationen"],"seitenwechsel":["seitennavigation","navigation","pages","page"],"check":["prüfen","pruefen"],"resolve":["auflösen","aufloesen","lösung","loesung","solution"],"hint":["hinweis"],"portal":["folienportal","slideportal"],"pentominoquiz":["PentominoQuiz","PentominoQuizN","PentominoDockQuiz","PentominoDockQuizN","PentominoDockQuizAuswahl","PentominoDockQuizAuswahlN"],"dynflex":["lia-dynflex","flex","flexbereich"],"timer":["lia-timer","quiztimer","zeit"],"boardmode":["lia-board-mode","board-modus","schriftgroesse","boardmodefontbutton","fontbutton"],"marker":["lia-marker","textmarker","highlighter","textmarkerbutton","markerbutton"],"markerquiz":["textmarkerquiz","marker-quiz","highlightquiz"],"annotation":["lia-annotation","annotieren","zeichenleiste","annotationsbar","annotationbar"],"canvasocr":["lia-canvas-ocr","canvas-ocr","zeichenflaeche"],"kachel":["lia-kachel","kachelfolge","tiles"],"mathpath":["lia-mathpath","erklaerpfad","explain"],"llm":["lia-llm","llmquiz","kiquiz"],"coordinate":["lia-coordinate","koordinaten","koordinatensystem"],"freeze":["lia-freeze-v2","abgabe","submission"]}},
+          "puzzle_gate": {"prefixes":["Puzzletor"],"macro":"Puzzletor","color_argument_index":0,"colors":{"rot":["red"],"blau":["blue"],"gruen":["grün","green"],"gelb":["yellow"],"lila":["violett","purple"],"orange":[],"magenta":[],"weiss":["weiß","white"],"schwarz":["black"],"tuerkis":["türkis","turquoise"],"grau":["gray","grey"],"braun":["brau","brown"]}},
+          "secret_slide": {"canonical":"Geheime Folie besucht","aliases":["Geheimfolie besucht","geheimfolie-besucht","geheime-folie-besucht","secret-slide-visited"]},
+          "magnifier": {"canonical":"Lupe gefunden","aliases":["Lupe eingesammelt","lupe-gefunden","lupe-eingesammelt","magnifier-found"],"macro":"Lupe"},
+          "marker": {"prefixes":["markiert","marked"],"colors":{"gelb":["gelb","yellow"],"gruen":["grün","gruen","green"],"blau":["blau","blue"],"rosa":["rosa","pink"],"orange":["orange"],"rot":["rot","red"]},"macro_prefix":"marked","requires_direct_import":"lia-marker"}
+        }
+      }
+    ],
+    "inline_macros": ["Erdhaufen.inline", "Pflanze.inline", "Blume.inline"],
+    "direct_layer_tokens": [
+      "erde",
+      "pflanze",
+      "erde-unsichtbar",
+      "erde-zauberstaub",
+      "pflanze-unsichtbar",
+      "pflanze-zauberstaub"
+    ],
+    "direct_layer_generation_policy": "canonical_tokens_only",
+    "direct_layer_target_policy": {
+      "native_surface_targets": ["toc", "menu", "classroom", "info", "translator", "mode"],
+      "foreign_template_target_carriers": ["Schatztruhe", "Diamanttruhe", "Diamantentruhe", "Energiekiste", "Energietruhe"],
+      "key_foreign_template_targets_allowed": false,
+      "unknown_or_incompatible_target": "invalid_fail_closed"
+    },
+    "item_concealment": {
+      "canonical_options": ["unsichtbar", "zauberstaub"],
+      "scan_aliases": {"unsichtbar":"unsichtbar","solid":"unsichtbar","verdeckt":"unsichtbar","zauberstaub":"zauberstaub","dust":"zauberstaub"},
+      "generation_policy": "canonical_options_only",
+      "maximum_per_carrier": 1,
+      "duplicate_or_conflict": "invalid_fail_closed"
+    },
+    "reveal_visibility": {
+      "canonical_options": ["unsichtbar", "zauberstaub"],
+      "block_option_separator": "; ",
+      "inline_payload_separator": ", ",
+      "inline_option_separator": "; ",
+      "discoverability_review_status": "human_review_required_under_content_policy"
+    },
+    "direct_layer_scan_kind_aliases": {
+      "erde": "earth",
+      "pflanze": "plant",
+      "blume": "plant",
+      "erdhaufen": "earth",
+      "soil": "earth",
+      "dirt": "earth",
+      "plant": "plant",
+      "flower": "plant"
+    },
+    "direct_layer_scan_suffix_aliases": {
+      "unsichtbar": "solid",
+      "zauberstaub": "dust",
+      "solid": "solid",
+      "verdeckt": "solid",
+      "dust": "dust"
+    },
+    "direct_layer_carriers": [
+      "Energiekiste",
+      "Energietruhe",
+      "Schatztruhe",
+      "Diamanttruhe",
+      "Diamantentruhe",
+      "Schluessel",
+      "Puzzleteil",
+      "Lupe",
+      "Schaufel",
+      "Giesskanne"
+    ],
+    "forbidden_direct_layer_carriers": [
+      "Schloss",
+      "Portal",
+      "Einwegportal",
+      "Einbahnportal",
+      "Puzzletor",
+      "Unsichtbar",
+      "Zauberstaub",
+      "Abgabe",
+      "ADetails",
+      "Erdhaufen",
+      "Pflanze",
+      "Blume"
+    ]
+  },
+  "native_targets": [
+    {"id": "toc", "scope": "global", "required_state": "table_of_contents_visible"},
+    {"id": "menu", "scope": "global", "required_state": "main_menu_visible"},
+    {"id": "classroom", "scope": "global", "required_state": "classroom_surface_visible"},
+    {"id": "info", "scope": "global", "required_state": "info_surface_visible"},
+    {"id": "translator", "scope": "global", "required_state": "translator_surface_visible"},
+    {"id": "mode", "scope": "global", "required_state": "mode_surface_visible"}
+  ],
+  "template_providers": [
+    {"provider":"lia-DynFlex","import_patterns":["lia-DynFlex"],"targets":["dynflex"],"scope":"slide","instance_patterns":["dynFlex"],"typed_instance_patterns":[{"id":"section_class_dynflex","kind":"html_class","tag":"section","value":"dynFlex"}],"required_state":"first_visible_dynflex_surface_on_source_slide","block_policy":"wrap_complete_section_from_outside"},
+    {"provider":"lia-timer","import_patterns":["lia-timer"],"targets":["timer"],"scope":"slide","instance_patterns":["oncheck","onclick","timer"],"typed_instance_patterns":[{"id":"timer_comment_metadata","kind":"html_comment_attribute","name":"data-solution-timer"},{"id":"timer_macro_metadata","kind":"macro_argument_attribute","name":"data-solution-timer"}],"required_state":"visible_timer_quiz","purpose_states":{"chest":"visible_timer_quiz_in_any_trigger_mode","lock":"visible_onclick_start_button"},"block_policy":"wrap_complete_top_level_quiz"},
+    {"provider":"lia-board-mode","import_patterns":["lia-board-mode"],"targets":["boardmode"],"scope":"global","instance_patterns":[],"required_state":"font_menu_open","block_policy":"no_local_block_for_global_surface"},
+    {"provider":"lia-marker","import_patterns":["lia-marker"],"targets":["marker","markerquiz"],"target_aliases":{"textmarker":"marker"},"scope":"mixed","instance_patterns":["TextmarkerQuiz","markerquiz"],"target_specs":{"marker":{"scope":"global","instance_patterns":[],"typed_instance_patterns":[],"required_state":"marker_menu_open","block_policy":"no_local_block_for_global_surface"},"markerquiz":{"scope":"slide","instance_patterns":["TextmarkerQuiz","markerquiz"],"typed_instance_patterns":[{"id":"textmarkerquiz_macro","kind":"macro_name","value":"TextmarkerQuiz"},{"id":"markerquiz_html_class","kind":"html_class","tag":"div","value":"markerquiz"}],"required_state":"visible_local_markerquiz_on_source_slide","block_policy":"wrap_complete_local_markerquiz"}}},
+    {"provider":"lia-annotation","import_patterns":["lia-annotation"],"targets":["annotation"],"scope":"global","instance_patterns":[],"required_state":"annotations_hidden","block_policy":"no_local_block_for_global_surface"},
+    {"provider":"lia-canvas-ocr","import_patterns":["lia-canvas-ocr","LiaScript-Canvas"],"targets":["canvasocr"],"scope":"slide","instance_patterns":["canvas","lia-draw"],"typed_instance_patterns":[{"id":"canvas_macro","kind":"macro_name","value":"canvas"},{"id":"lia_draw_canvas","kind":"html_class","tag":"canvas","value":"lia-draw"}],"required_state":"actual_canvas_open","block_policy":"wrap_complete_top_level_canvas_task"},
+    {"provider":"lia-kachel","import_patterns":["lia-kachel"],"targets":["kachel"],"scope":"slide","instance_patterns":["Kachelfolge","KachelfolgeN","KachelgruppeN+KachelgruppenCheck","div.Kachel"],"typed_instance_patterns":[{"id":"kachelfolge_macro","kind":"macro_name","value":"Kachelfolge"},{"id":"kachelfolge_n_macro","kind":"macro_name","value":"KachelfolgeN"},{"id":"kachelgruppe_n_macro","kind":"macro_name","value":"KachelgruppeN"},{"id":"kachelgruppen_check_macro","kind":"macro_name","value":"KachelgruppenCheck"},{"id":"kachel_div","kind":"html_class","tag":"div","value":"Kachel"}],"required_state":"real_visible_tile_task","block_policy":"wrap_complete_top_level_tile_task"},
+    {"provider":"lia-mathpath","import_patterns":["lia-mathpath","lia-MathPath"],"targets":["mathpath"],"scope":"slide","instance_patterns":["Explain"],"typed_instance_patterns":[{"id":"explain_quiz_macro","kind":"macro_name","value":"Explain","requires_native_quiz":true,"forbidden_first_argument":"Tutorial"}],"required_state":"visible_quiz_Explain_link_not_tutorial_only","block_policy":"wrap_complete_top_level_native_quiz"},
+    {"provider":"lia-llm","import_patterns":["lia-llm"],"targets":["llm"],"scope":"slide","instance_patterns":["LLMQuiz","data-llm"],"typed_instance_patterns":[{"id":"llmquiz_macro","kind":"macro_name","value":"LLMQuiz"},{"id":"llm_comment_metadata","kind":"html_comment_attribute_prefix","prefix":"data-llm"},{"id":"llm_html_metadata","kind":"html_attribute_prefix","prefix":"data-llm"}],"required_state":"visible_owned_llm_quiz_runtime","block_policy":"wrap_complete_top_level_llm_quiz"},
+    {"provider":"lia-coordinate","import_patterns":["lia-coordinate"],"hard_required_imports":[],"observed_companion_imports":["jsxgraph"],"companion_policy":"direct JSXGraph before coordinate is a conservative fixture pattern, not an API requirement","targets":["coordinate"],"scope":"slide","instance_patterns":["CoordinateSystem","ErzeugePunkt","board.create","jxgbox"],"typed_instance_patterns":[{"id":"coordinate_system_macro","kind":"macro_name","value":"CoordinateSystem"},{"id":"erzeuge_punkt_macro","kind":"macro_name","value":"ErzeugePunkt"},{"id":"jsxgraph_board_create","kind":"fenced_call","callee":"board.create","required_fence_decorators":["JSX.Graph","JSX.Graph.withParams"]},{"id":"jxgbox_class","kind":"html_class","value":"jxgbox","requires_board_evidence":true},{"id":"jxgbox_id","kind":"html_id","value":"jxgbox","requires_board_evidence":true}],"required_state":"visible_registered_containerObj","block_policy":"wrap_complete_top_level_board_task"},
+    {"provider":"lia-freeze-v2","import_patterns":["lia-freeze-v2"],"targets":["freeze"],"scope":"slide","instance_patterns":["Abgabe","ADetails","Auswertung"],"typed_instance_patterns":[{"id":"abgabe_macro","kind":"macro_name","value":"Abgabe"},{"id":"adetails_macro","kind":"macro_name","value":"ADetails"},{"id":"auswertung_macro","kind":"macro_name","value":"Auswertung"}],"required_state":"visible_submit_exam_adetails_bar_or_eval","purpose_states":{"chest":"first_visible_submit_exam_adetails_bar_or_eval_including_placeholder","lock":"actual_interactive_controls_not_eval_placeholder"},"block_policy":"requires_complete_mandatory_witness"}
+  ],
+  "non_target_imports": [
+    {"provider":"lia-orthography","import_patterns":["lia-orthography"],"instance_patterns":["orthography","diktat"],"placement":"wrap_complete_local_block_or_adjacent_layered_item"},
+    {"provider":"lia-Mathe","import_patterns":["lia-Mathe","Bruchquiz"],"instance_patterns":["Algebrite","GeometrieQuiz","KonstruktionQuiz","circleQuiz","rectQuiz"],"placement":"wrap_complete_local_block_or_adjacent_layered_item"},
+    {"provider":"lia-navigation","import_patterns":["lia-navigation"],"instance_patterns":[],"placement":"import_order_only; lia-loot portals are mapped as their own topology"},
+    {"provider":"lia-resetter","import_patterns":["lia-resetter"],"instance_patterns":["reset","Reset"],"placement":"wrap_local_output_only"},
+    {"provider":"Algebrite","import_patterns":["Algebrite"],"instance_patterns":["Algebrite"],"placement":"no_loot_target_wrap_owning_quiz"},
+    {"provider":"JSXGraph","import_patterns":["jsxgraph"],"instance_patterns":["JXG.","jxgbox"],"placement":"coordinate_dependency_not_target_alone"},
+    {"provider":"lia-pentominos","import_patterns":["lia-pentominos"],"instance_patterns":["Pentomino","pentominoquiz"],"placement":"lock_only_target_wrap_complete_local_component"}
+  ],
+  "candidate_classes": [
+    {"id":"start_bootstrap","forms":["inline","direct_layer","tool_pickup"]},
+    {"id":"start_post_tool_block","forms":["block"],"requires":["tools_visible_before_open_marker"]},
+    {"id":"h2_whole_slide","forms":["block"]},
+    {"id":"h2_prefix_or_suffix","forms":["block"],"requires":["top_level_balanced_boundaries"]},
+    {"id":"dynflex_whole_section","forms":["block","target_chest"]},
+    {"id":"standalone_quiz","forms":["block","adjacent_direct_layered_item"]},
+    {"id":"solution_reward_tail","forms":["block","inline","direct_layer"]},
+    {"id":"flow_text_clue","forms":["inline"],"requires":["puzzle_gate_clue_or_secret_slide_access_clue"]},
+    {"id":"local_template_target","forms":["target_chest","block"]},
+    {"id":"global_surface_target","forms":["target_chest","native_surface_key"]},
+    {"id":"lootif_spawn_range","forms":["block"],"requires":["reachable_external_trigger"]},
+    {"id":"container_visibility_option","conceptual_group":"concealment","forms":["container_option"],"requires":["earlier_magnifier_and_text_neutral_discoverability"]},
+    {"id":"collectible_concealment_option","conceptual_group":"concealment","forms":["collectible_option"],"requires":["earlier_magnifier_and_text_neutral_discoverability"]},
+    {"id":"hidden_macro_inside_reveal","conceptual_group":"concealment","forms":["nested_content"],"requires":["earlier_magnifier_and_text_neutral_discoverability"]},
+    {"id":"optional_secret_or_portal","forms":["block","inline","adjacent_direct_layered_item"],"requires":["return_path_or_explicit_one_way","stateful_portal_graph_witness"]},
+    {"id":"garden_before_reflection","forms":["block","inline","direct_layer"]},
+    {"id":"reflection_optional","forms":["block","inline","direct_layer","adjacent_direct_layered_item"]},
+    {"id":"submission_or_freeze","forms":["block","target_chest"],"requires":["complete_mandatory_witness"]}
+  ]
+}

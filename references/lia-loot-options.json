@@ -1,10 +1,10 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "source": {
     "source_id": "ghrepo:mint-the-gap/lia-loot",
     "path": "README.md",
-    "reviewed_revision": "8411dbbb99a2975eae7fb52470e785065189e65d",
-    "readme_sha256": "51d87ab5368a0d4cfdb92285a249e22b67c7b428c6c6463b6571269db9b447c9",
+    "reviewed_revision": "ae970951fb7304ec9d1dd0f11048ae8a8ee676cb",
+    "readme_sha256": "08087ab78b6183d6ba1f0ea83437f36bdd2ea452d11658c778502abe336978f1",
     "usage_context": "task-content"
   },
   "emission_policy": {
@@ -16,6 +16,24 @@
     "preexisting_non_loot_course_macros": "preserve_but_do_not_introduce_or_extend_as_gamification",
     "critical_keys_require_explicit_color": true,
     "singleton_tools_default_to_one_declaration": true,
+    "added_text_policy": {
+      "applies_to": ["existing_course_gamification", "gamification_after_approved_base_course"],
+      "freeze_point": "approved_ungamified_base_course",
+      "existing_learner_facing_text": "preserve_word_for_word",
+      "existing_task_order": "preserve_relative_order",
+      "mandatory_task_route_reordering": "forbidden_unless_explicitly_requested",
+      "default_new_learner_facing_text": "forbidden",
+      "applies_to_hidden_and_visible_text": true,
+      "forbidden_categories": ["immersion", "narrative", "scene", "transition", "reward", "progress", "motivation", "quest", "decorative_heading", "decorative_label"],
+      "allowed_purposes": ["puzzle_gate_clue", "secret_slide_access_clue"],
+      "secret_slide_minimal_unique_title_belongs_to": "secret_slide_access_clue",
+      "new_non_task_slide": "only_explicitly_configured_secret_slide",
+      "portal_key_resource_tool_and_reward_paths": "mechanically_intelligible_without_added_prose",
+      "other_hidden_required_item": "visible_or_mechanically_forced_or_supported_by_unchanged_existing_text",
+      "each_added_line_requires_targeted_allowed_purpose": true,
+      "text_delta_outside_allowed_purposes": 0,
+      "clue_style": ["functional", "minimal", "deterministic", "witness_relevant"]
+    },
     "internal_macros_forbidden": [
       "LootAchievements_",
       "LootIfStart_",
@@ -62,6 +80,8 @@
       "base_course_first": true,
       "base_course_must_be_pedagogically_complete": true,
       "base_course_has_no_new_gamification": true,
+      "base_course_has_no_preemptive_puzzle_portal_or_immersion_prose": true,
+      "base_course_text_freezes_at_handoff": true,
       "lia_loot_import_forbidden_in_base_course": true,
       "lia_loot_macros_forbidden_in_base_course": true,
       "other_new_gamification_forbidden_in_base_course": true,
@@ -105,7 +125,7 @@
         "ask_quantity": true,
         "cardinality": "disabled_or_single_configuration",
         "accepted_counts": [0, 1],
-        "public_macros": ["Ressourcen", "Schatztruhe", "Diamanttruhe", "Energiekiste"],
+        "public_macros": ["Ressourcen", "Schatztruhe", "Diamanttruhe", "Diamantentruhe", "Energiekiste", "Energietruhe"],
         "required_details": ["resource_types", "initial_amounts", "reward_find_counts", "reward_amounts"]
       },
       {
@@ -113,7 +133,8 @@
         "ask_quantity": true,
         "cardinality": "repeatable_instances",
         "public_macros": ["Unsichtbar", "Zauberstaub"],
-        "required_details": ["solid_or_dust", "content_or_collectible", "location_and_fair_clue"]
+        "required_details": ["solid_or_dust", "content_or_collectible", "location_and_text_neutral_discoverability"],
+        "new_clue_text_allowed_only_for": ["puzzle_gate_clue", "secret_slide_access_clue"]
       },
       {
         "id": "buried_content",
@@ -134,15 +155,15 @@
         "ask_quantity": true,
         "cardinality": "repeatable_up_to_one_per_color",
         "public_macros": ["Puzzleteil", "Puzzletor"],
-        "required_details": ["pieces_per_gate", "color", "matrix", "navigation_or_anchored_content_gate"],
+        "required_details": ["pieces_per_gate", "color", "matrix_shape", "permutation", "navigation_or_anchored_content_gate", "piece_locations", "piece_concealment_chains", "clue_locations", "decoding_rule", "clue_visibility"],
         "maximum_pieces_per_gate": 16
       },
       {
         "id": "portals",
         "ask_quantity": true,
         "cardinality": "repeatable_instances",
-        "public_macros": ["Portal", "Einwegportal"],
-        "required_details": ["one_way_and_two_way_counts", "routes"]
+        "public_macros": ["Portal", "Einwegportal", "Einbahnportal"],
+        "required_details": ["one_way_and_two_way_counts", "source_target_edges", "navigation_lock_interaction", "key_routes", "return_or_merge_paths"]
       },
       {
         "id": "keys",
@@ -191,10 +212,10 @@
       "exact_parameters_override_label": true,
       "conflicting_exact_parameters_and_label_require_targeted_clarification": true,
       "item_concealment": {
-        "factors": ["surface_or_submenu", "anchor", "delay", "slide_binding", "concealment_layers", "environment_conditions", "clue_quality"],
+        "factors": ["surface_or_submenu", "anchor", "delay", "slide_binding", "concealment_layers", "environment_conditions", "text_neutral_discoverability"],
         "easy": "visible_or_dust_with_clear_location_and_no_extra_gate",
-        "medium": "one_extra_gate_with_fair_clue",
-        "hard": "at_most_two_coordinated_extra_gates_with_prior_tool_and_deterministic_clues"
+        "medium": "one_extra_gate_with_text_neutral_discoverability_or_allowed_targeted_clue",
+        "hard": "at_most_two_coordinated_extra_gates_with_prior_tool_and_deterministic_discoverability_under_added_text_policy"
       },
       "resources": {
         "factors": ["initial_amounts", "reward_find_counts", "reward_amounts", "fixed_costs", "recovery_reserve"],
@@ -221,7 +242,7 @@
     "selection_factors": ["subject", "learner_group", "course_size"],
     "excluded_contexts": ["documentation", "definition", "test_fixture", "TemplateTargets.md", "StressTest.md"],
     "read_local_original_excerpts": true,
-    "grounding_uses": ["density", "placement", "pacing", "fair_clues", "fingerprint"],
+    "grounding_uses": ["density", "placement", "pacing", "discoverability_evidence", "fingerprint"],
     "api_authority": "current_pinned_lia_loot_readme",
     "existing_antipatterns_must_not_be_copied": true,
     "EscapeRoom.md": "demanding_upper_bound_not_default_recipe"
@@ -266,14 +287,16 @@
       "syntax": "@Diamanttruhe([amount;] [targets...;] [collectible_options...])",
       "reward": "diamonds",
       "default_amount": 1,
-      "option_group": "chest"
+      "option_group": "chest",
+      "aliases": ["Diamantentruhe"]
     },
     "Energiekiste": {
       "syntax": "@Energiekiste([amount;] [targets...;] [collectible_options...])",
       "reward": "energy",
       "default_amount": 1,
       "option_group": "chest",
-      "requires_energy_resource_parameter": true
+      "requires_energy_resource_parameter": true,
+      "aliases": ["Energietruhe"]
     },
     "Schluessel": {
       "syntax": "@Schluessel([color]; [surface_target]; [collectible_options...])",
@@ -401,7 +424,9 @@
     "EndLootIf",
     "Schatztruhe",
     "Diamanttruhe",
+    "Diamantentruhe",
     "Energiekiste",
+    "Energietruhe",
     "Schluessel",
     "Puzzleteil",
     "Puzzletor",
@@ -490,6 +515,7 @@
     "reveal_inline": {
       "applies_to": ["Erdhaufen.inline", "Pflanze.inline"],
       "payload": "single_line_content_first_argument",
+      "nested_public_macros_with_balanced_parentheses": true,
       "options": "optional_second_argument_after_comma",
       "shared_collectible_options": true,
       "additional_direct_layers": "invalid_fail_closed",
@@ -508,7 +534,9 @@
     "applies_to": [
       "Schatztruhe",
       "Diamanttruhe",
+      "Diamantentruhe",
       "Energiekiste",
+      "Energietruhe",
       "Schluessel",
       "Puzzleteil",
       "Lupe",
@@ -582,7 +610,7 @@
       "duplicate_or_conflict": "fail_closed"
     },
     "direct_layers": {
-      "applies_to": ["Schatztruhe", "Diamanttruhe", "Energiekiste", "Schluessel", "Puzzleteil", "Lupe", "Schaufel", "Giesskanne"],
+      "applies_to": ["Schatztruhe", "Diamanttruhe", "Diamantentruhe", "Energiekiste", "Energietruhe", "Schluessel", "Puzzleteil", "Lupe", "Schaufel", "Giesskanne"],
       "canonical_kinds": {"erde": "soil", "pflanze": "plant"},
       "documented_kind_aliases": {"blume": "plant"},
       "accepted_extra_kind_aliases": {"erdhaufen": "soil", "soil": "soil", "dirt": "soil", "plant": "plant", "flower": "plant"},
@@ -752,21 +780,76 @@
     "anchored_gate": "content_until_next_markdown_h1",
     "navigation_gate_blocks": ["next", "toc", "direct_slide_hash", "browser_history", "portal"],
     "closing_macro": null,
-    "persistence_scope": "current_tab_bound_to_course_version_and_puzzle_signature"
+    "persistence_scope": "current_tab_bound_to_course_version_and_puzzle_signature",
+    "piece_count_per_gate": {
+      "minimum": 1,
+      "maximum": 16,
+      "equals_matrix_cell_count": true,
+      "fixed_default": null,
+      "may_vary_between_gates_and_courses": true
+    },
+    "piece_placement": {
+      "catalog_ref": "skills/schullia-gamification/references/placement-catalog.json#/puzzle_piece_placement",
+      "standalone_or_inline": true,
+      "inside_complete_soil_or_plant_block": true,
+      "inside_reveal_inline_payload": true,
+      "inside_valid_lootif_spawn_range": true,
+      "reachable_portal_or_secret_branch": true,
+      "shared_collectible_options_allowed": true,
+      "ordered_direct_layers_allowed": true,
+      "surface_target_allowed": false,
+      "foreign_template_target_allowed": false,
+      "must_be_collectible_before_own_gate": true,
+      "own_gate_or_descendant_forbidden": true
+    },
+    "combination_clue": {
+      "added_text_purpose": "puzzle_gate_clue",
+      "location": "any_reachable_position_before_own_gate",
+      "delivery_modes": ["visible", "unsichtbar", "zauberstaub", "soil_or_plant_reveal", "lootif_spawn", "portal_branch", "secret_slide", "distributed_fragments", "existing_task_derived"],
+      "derivation_modes": ["explicit_permutation", "ordered_existing_task_values", "digit_extraction", "rank_existing_values_with_deterministic_tie_break", "existing_answer_positions", "existing_table_or_diagram_values", "distributed_reconstruction"],
+      "must_not_modify_tasks_to_manufacture_code": true,
+      "requirements": ["unique_matrix_solution", "rule_and_inputs_reachable_before_gate", "no_random_guess", "no_source_inspection", "no_forced_wrong_answer", "no_unresolved_tie_or_rounding", "hidden_clue_has_earlier_magnifier_and_concrete_puzzle_locator", "not_only_paid_native_hint_when_perfect_highscore_promised"],
+      "distributed_fragments_require": ["reachable_meta_rule", "known_fragment_count", "deterministic_order"]
+    },
+    "required_plan_fields_per_gate": ["color", "piece_count", "matrix_shape", "permutation", "gate_scope", "gate_source_position", "piece_locations", "piece_concealment_chains", "clue_sources", "decoding_rule", "derived_permutation", "prerequisite_states", "ordered_witness_steps"]
   },
   "portal_modes": {
     "two_way": {
       "canonical": "hinundher",
-      "accepted_aliases": ["hin und her", "hin-und-her", "zweiweg", "bidirektional", "twoway", "two way", "two-way"]
+      "accepted_aliases": ["hin und her", "hin-und-her", "zweiweg", "bidirektional", "twoway", "two way", "two-way"],
+      "temporary_return_portal_created": true,
+      "return_portal_disappears_after_target_left_by_other_edge": true,
+      "automatic_return_portal_lockable": false
     },
     "one_way": {
       "canonical": "einweg",
-      "accepted_aliases": ["einbahn", "einbahnstraße", "einbahnstrasse", "oneway", "one way", "one-way"]
+      "accepted_aliases": ["einbahn", "einbahnstraße", "einbahnstrasse", "oneway", "one way", "one-way"],
+      "public_macro_aliases": ["Einwegportal", "Einbahnportal"],
+      "return_portal_created": false,
+      "replaces_own_browser_history_step_only": true,
+      "toc_and_normal_navigation_unchanged": true
     },
     "target": "exactly_one_positive_safe_one_based_slide_number",
     "runtime_target": "must_exist_and_differ_from_source_slide",
     "conflicting_modes": "invalid_fail_closed",
-    "same_mode_duplicates": "idempotent"
+    "same_mode_duplicates": "idempotent",
+    "route_contract": {
+      "graph_nodes": "one_based_course_slides",
+      "edge_kinds": ["normal_navigation", "toc_jump", "portal_forward", "temporary_portal_return"],
+      "portal_guided_key_route_allowed": true,
+      "portal_lock_binds_to": "last_authored_portal_before_immediate_lock_on_same_slide",
+      "portal_only_claim_requires_other_learner_visible_edges_blocked": true,
+      "seitenwechsel_lock_alone_is_not_portal_exclusive": true,
+      "global_locks_active_from_course_start_unless_anchored": true,
+      "destination_key_must_be_collectible_without_its_own_lock": true,
+      "matching_key_precedes_unlock": true,
+      "same_color_multiple_locks_require_one_key_each": true,
+      "one_way_requires_post_key_merge_unlock_or_reachable_forward_edge": true,
+      "navigation_puzzle_gate_disables_crossing_portal_edge_until_open": true,
+      "portal_key_route_added_explanatory_prose": "forbidden",
+      "required_witness_fields": ["source_slide", "target_slide", "mode", "locks_before", "portal_available", "key_color", "matching_lock_target", "prerequisites", "return_or_merge_path", "toc_and_navigation_competing_edges", "puzzle_gate_boundaries"],
+      "forbidden": ["portal_locked_by_destination_key", "key_behind_own_lock", "portal_bypass_of_unopened_navigation_puzzle_gate", "required_one_way_dead_end", "portal_only_claim_with_open_toc_bypass"]
+    }
   },
   "resource_costs": {
     "native_hint_open": {"resource": "gold", "amount": 1},
@@ -804,13 +887,17 @@
     "valid_closed_lootif_ranges_count_before_spawn": true,
     "valid_puzzle_gates_count_and_require_exact_opening": true,
     "invalid_or_unbalanced_ranges_do_not_count": true,
-    "all_quizzes_solved_is_rendered_quizzes_not_source_full_catalog": true,
+    "all_quizzes_solved_requires_every_course_slide_loaded": true,
+    "all_quizzes_solved_requires_all_cataloged_gradable_native_quizzes_correct": true,
+    "resolved_quizzes_can_complete_course_but_not_all_quizzes_achievement": true,
     "secret_slide_found_requires_at_least_one_not_all_secret_slides": true
   },
   "automatic_completion": {
-    "target": "last_gradable_native_quiz_on_last_course_slide",
-    "trigger": "correct_check_result",
-    "resolve_alone_finishes": false
+    "target": "all_course_slides_loaded_and_all_cataloged_gradable_native_quizzes_terminal",
+    "terminal_quiz_states": ["solved", "resolved"],
+    "trigger": "last_remaining_slide_or_quiz_requirement_becomes_satisfied",
+    "resolve_can_finish_course": true,
+    "all_correct_required_for_all_quizzes_achievement": true
   },
   "variation_contract": {
     "history_scope": ["target_project", "current_conversation"],
@@ -825,18 +912,20 @@
       "conditional_trigger_strategy",
       "environment_state_strategy",
       "portal_structure",
+      "portal_lock_and_key_routing",
       "lock_density_and_target_classes",
       "feedback",
       "pacing",
       "visual_staging",
-      "narrative"
+      "puzzle_clue_distribution_and_decoding"
     ],
     "core_dimensions": ["primary_mechanic", "path_topology", "resource_model"],
     "minimum_changed_dimensions_from_nearest_prior": 3,
     "minimum_changed_core_dimensions_from_nearest_prior": 1,
     "immediate_predecessor_must_change_one_of": ["primary_mechanic", "path_topology"],
     "identical_fingerprint_forbidden": true,
-    "non_structural_changes_alone": ["colors", "numbers", "durations", "titles", "images", "renamed_lock_story"],
+    "non_structural_changes_alone": ["colors", "numbers", "durations", "titles", "images", "changed_lock_label", "puzzle_matrix_only"],
+    "narrative_generation": "preserve_existing_no_added_text",
     "no_history_policy": "do_not_claim_absolute_novelty_and_emit_fingerprint",
     "locks_are_never_default": true
   },
@@ -859,6 +948,8 @@
       "gold_diamonds_energy",
       "key_multiset",
       "puzzle_piece_inventory_slot_assignments_and_open_gates",
+      "puzzle_clue_sources_decoding_rule_and_derived_permutation",
+      "portal_edges_modes_locks_competing_edges_and_temporary_returns",
       "magnifier_and_action_tools",
       "ordered_soil_and_plant_states",
       "each_concealment_discovery",
@@ -871,7 +962,7 @@
       "full_achievement_catalog_progress"
     ],
     "required_goal": [
-      "correct_check_of_automatic_final_quiz",
+      "all_course_slides_loaded_and_all_cataloged_gradable_native_quizzes_terminal",
       "all_mandatory_learning_and_quizzes",
       "all_valid_lootif_ranges_spawned",
       "all_cataloged_chests_collected",
@@ -879,11 +970,13 @@
       "all_cataloged_soil_dug",
       "all_cataloged_plants_bloomed_and_mandatory_payloads_opened",
       "all_valid_puzzle_gates_opened",
+      "all_required_portal_key_routes_traversed_with_return_or_merge",
       "all_valid_locks_opened",
       "all_intended_secret_slides_visited",
-      "all_nonempty_achievement_categories_completed_when_enabled"
+      "all_nonempty_achievement_categories_completed_when_enabled",
+      "text_delta_zero_outside_targeted_puzzle_and_secret_clues"
     ],
-    "forbidden_path_steps": ["reload", "browser_back", "new_tab", "source_inspection", "random_guess_of_invisible_location"],
+    "forbidden_path_steps": ["reload", "browser_back", "new_tab", "source_inspection", "random_guess_of_invisible_location", "random_guess_of_puzzle_permutation", "forced_wrong_answer_for_required_clue"],
     "default_recovery": "one_failed_check_or_one_optional_hint_or_each_offered_branch_still_has_completion_path"
   },
   "solvability_contract_ids": [
@@ -893,6 +986,8 @@
     "SOLV-PUZZLE-PIECES-BEFORE-GATE",
     "SOLV-PUZZLE-MATRIX-COMPLETE",
     "SOLV-PUZZLE-NAVIGATION-BOUNDARY",
+    "SOLV-PUZZLE-CLUE-UNIQUE",
+    "SOLV-PUZZLE-CLUE-BEFORE-GATE",
     "SOLV-NO-SELF-LOCK",
     "SOLV-MAGNIFIER-FIRST",
     "SOLV-SINGLETON-TOOLS",
@@ -905,6 +1000,9 @@
     "SOLV-SURFACE-ACCESS",
     "SOLV-DIRECT-TEMPLATE-IMPORT",
     "SOLV-PORTAL-ROUTE",
+    "SOLV-PORTAL-KEY-ROUTE",
+    "SOLV-PORTAL-TEMPORARY-RETURN",
+    "SOLV-TEXT-DELTA-ZERO",
     "SOLV-SECRET-SLIDE",
     "SOLV-FULL-CATALOG",
     "SOLV-REAL-CATALOG-INSTANCES",
