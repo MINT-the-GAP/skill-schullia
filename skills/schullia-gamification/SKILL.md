@@ -41,8 +41,15 @@ Achievement-Konfiguration nicht geklärt oder ausdrücklich delegiert sind.
 
 ## Routing
 
-- Lies für den analysierten Normalaufbau und die zwölf Referenzkurse
-  `references/wochenaufgaben-baseline.md`.
+- Lies für den akzeptierten Wochenaufgabenstandard und die Auswahl passender
+  Vergleichskurse `references/wochenaufgaben-baseline.md`.
+- Nutze `references/accepted-weekly-courses.json` als versionierten Bestand.
+  Lade nur die Übersicht und ausgewählte Kursprofile; führe zur aktuellen
+  Bestandsprüfung `python skills/schullia-gamification/scripts/profile_weekly_courses.py --check`
+  aus. Neue oder geänderte Dateien sind nicht stillschweigend neu akzeptiert.
+  Diagnosen oder unvollständige Strukturprofile verlangen den Abgleich mit den
+  Originalüberschriften und Makrostellen; unvollständige Zählungen sind keine
+  Grundlage für Platzierungsdichte oder Spielfluss.
 - Lies für Erde, Pflanzen, Werkzeuge, Containergrenzen, Importziele und
   Lösbarkeitsnachweise `references/earth-plant-placement.md`.
 - Lies für alle Puzzleteilpositionen, Kombinationshinweise, Portal-Schlüssel-
@@ -119,7 +126,8 @@ Datensätzen expandiert: Die Verbergungsfamilie trennt Containeroption,
 Fundoption und verschachteltes Verbergungsmakro; Start- und H2-Familie trennen
 jeweils Bootstrap/Teilblock von der großflächigen Variante.
 
-Notiere pro Kandidat: konkrete Zeile/Überschrift, Trägerklasse,
+Notiere pro Kandidat: konkrete Zeile/Überschrift, Referenzvorbild, Funktion im Lernablauf,
+erwartete Entdeckungssituation, nächste Freigabe oder Belohnung, Trägerklasse,
 Block-/Inline-/Direktschicht-Form, benötigten Werkzeugpräfix, Sichtbarkeit,
 Importvertrag, Belohnung, Rückweg und Ausschlussgrund. Notiere für jede neue
 Textzeile zusätzlich `puzzle_gate_clue` oder `secret_slide_access_clue` samt
@@ -206,33 +214,35 @@ Ein Zweiweg-Rückportal ist temporär, ein Einwegportal erzeugt keines. Ein
 Navigationspuzzletor blockiert auch Portalziele jenseits seiner Grenze.
 Portal-Schlüssel-Routen erhalten keinen erklärenden Begleittext.
 
-### 6. Strukturell variieren
+### 6. Am akzeptierten Standard ausrichten und sinnvoll variieren
 
-Die vier Kurse `5/Deutsch/Lia5_03`, `5/Mathematik/Lia5_03`,
-`6/Deutsch/Lia6_03` und `6/Mathematik/Lia6_03` enthalten denselben
-nachgeschalteten Garten. Behandle ihn als einen Anti-Fingerabdruck, nicht als
-vier Vorlagen.
+Wähle mehrere passende Vergleichskurse aus dem akzeptierten Bestand und lies
+vor dem Entwurf ihre Originalausschnitte. Das Referenzprofil unterscheidet
+Standardfamilien und enthält den Ablaufplan pro Lernabschnitt. Beurteile jeden
+Kandidaten nach fachlich passender Platzierung, erwarteter Auffindbarkeit,
+zusammenhängenden Arbeitsphasen und anschließender Wirkung der Spielaktion.
 
-Erzeuge vor einer Umsetzung mindestens drei Kandidaten mit unterschiedlichen
-Kernmustern. Der gewählte Entwurf unterscheidet sich vom ähnlichsten früheren
-Kurs in mindestens drei strukturellen Dimensionen; darunter liegt mindestens
-Primärmechanik, Topologie oder Ressourcenmodell. Gegenüber dem unmittelbar
-vorherigen Entwurf wechselt zusätzlich Primärmechanik oder Topologie. Prüfe
-dabei insbesondere:
+Die in mehreren Wochenaufgaben wiederkehrenden Garten-, Werkzeug-,
+Schlüssel- und Puzzlemuster sind zulässige Standardbausteine. Ein gleicher
+Gartenfingerabdruck ist ein Hinweis auf eine gemeinsame Familie, keine
+pauschale Abwertung der akzeptierten Kurse. Die automatische Gartenanalyse
+ersetzt keinen Vergleich der vollständigen Kursabläufe.
 
-- primäre Mechanik,
-- Topologie,
-- Ressourcenmodell aus Startbestand, Pflichtkosten, Reserve und Belohnungen,
-- Werkzeug-/Schichtkette,
-- Trägerklasse und Fundposition,
-- Reihenfolge/Tiefe Erde↔Pflanze,
-- Sichtbarkeit oder Umweltbedingung,
-- Puzzle-/Portalbezug,
-- Belohnungsmix,
-- Pacing.
+Vergleiche mehrere Entwürfe innerhalb der passenden Standardfamilien.
+Übernimm bewährte Grundmechaniken und kombiniere oder platziere ihre Bausteine
+passend zum neuen Fachinhalt. Dokumentiere pro Übernahme Referenz und Anpassung.
+Ein vollständiger Gamificationablauf wird nicht schematisch kopiert; eine
+feste Mindestzahl veränderter Dimensionen oder ein erzwungener Wechsel der
+Primärmechanik/Topologie gilt nicht. Bewerte Variation anhand der ganzen
+Abfolge von Lernphasen, Funden, Werkzeugen, Schichten und Freigaben. Farben
+und Zahlen allein belegen keine gelungene Anpassung. Vorhandene Texte und
+Aufgabenreihenfolge bleiben gemäß Textvertrag erhalten.
 
-Nur Farbe, Zahl, Puzzlematrix, Text oder Überschrift zu ändern zählt nicht.
-Vorhandene Texte und Überschriften sind ohnehin eingefroren.
+Prüfe vor der Übergabe aus Lernendensicht, wann jedes relevante Objekt erstmals
+bemerkt, erreichbar und sinnvoll einsetzbar wird. Vergleiche die tatsächliche
+Folge im geschriebenen Kurs mit dem geplanten Ablauf und korrigiere unbegründete
+Häufungen, übergangene Vorbilder oder unnötige Unterbrechungen vor der Ausgabe.
+Dieser Gestaltungsdurchgang ergänzt den technischen Witness.
 
 ### 7. Vollständigen Witness prüfen
 
@@ -265,8 +275,8 @@ Gib bei einer Analyse mindestens aus:
 1. Kursprofil und konkrete Abschnittsanker,
 2. unveränderte Importreihenfolge samt relativer Loot-Position,
 3. vollständige Kandidatenmatrix mit Ausschlüssen,
-4. drei strukturell verschiedene Entwurfsoptionen,
-5. gewählten Fingerabdruck,
+4. verglichene, zum Standard passende Entwürfe und Auswahlbegründung,
+5. gewählten Kursfingerabdruck, übernommene Bausteine und Anpassungen,
 6. Puzzlehinweis- und Portalgraph,
 7. Werkzeug-, Schicht- und Abschluss-Witness,
 8. Textdelta mit jeder erlaubten neuen Hinweiszeile und ihrem konkreten Ziel,

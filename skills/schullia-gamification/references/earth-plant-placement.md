@@ -329,9 +329,12 @@ Primärmechanik
 | Pacing
 ```
 
-Ein neuer Kurs unterscheidet sich vom ähnlichsten früheren Kurs in mindestens
-drei strukturellen Dimensionen; darunter liegt mindestens Primärmechanik,
-Topologie oder Ressourcenmodell. Gegenüber dem unmittelbar vorherigen Entwurf
-wechselt zusätzlich Primärmechanik oder Topologie. Eine andere Farbe, Matrix
-oder Anzahl allein genügt nicht. Eine neue Erzähloberfläche ist nach dem
-Textvertrag ohnehin unzulässig.
+Richte den Entwurf am akzeptierten Wochenaufgabenstandard aus
+([Referenzprofil](wochenaufgaben-baseline.md)). Bewährte Grundmechaniken und
+wiederkehrende Garten-/Werkzeugbausteine sind zulässig. Kombiniere sie passend
+zum Kurs und begründe konkrete Positionen über Lernmoment, Auffindbarkeit und
+folgende Freigabe. Dokumentiere Referenz und Anpassung; kopiere keinen ganzen
+Gamificationablauf schematisch. Es gibt keine feste Mindestzahl veränderter
+Dimensionen und keinen erzwungenen Wechsel von Primärmechanik oder Topologie.
+Eine andere Farbe, Matrix oder Anzahl allein belegt keine gelungene Anpassung.
+Der Textvertrag bleibt unverändert.

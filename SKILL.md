@@ -1,6 +1,6 @@
 ---
 name: schullia-knowledge
-description: Synchronisiert, indexiert und durchsucht die öffentlichen Repositories von MINT-the-GAP, die offizielle LiaScript-Dokumentation sowie ausgewählte LiaTemplates-READMEs. Verwende diesen Skill, wenn ein KI-Agent SchulLia- oder LiaScript-Aufgaben oder Kurse erstellen, überarbeiten, erklären, vergleichen oder klassifizieren soll; LiaScript-Dokumentköpfe, Grundsyntax, Quizsyntax, Makros, Aufgabenarten, Metadaten, Fach- und Klassenstufenzuordnungen oder imperative Operatoren untersuchen soll; mit lia-loot abwechslungsreiche, erreichbare Gamification aus Ressourcen, Funden, Werkzeugen, Freigabeschichten, bedingten Bereichen, Schlüsseln, Schlössern, Puzzleteilen, Puzzletoren, Lupen, Portalen, Geheimfolien, Highscore oder Erfolgen planen soll; oder belegte Beispiele aus Aufgabensammlung, Wochenaufgabe, lia-loot, lia-marker, lia-kachel, lia-Mathe, lia-orthography, den LiaScript-Docs, Algebrite, JSXGraph, Speech-Recognition-Quiz, ABCjs oder AVR8js benötigt.
+description: Synchronisiert, indexiert und durchsucht die öffentlichen Repositories von MINT-the-GAP, die offizielle LiaScript-Dokumentation sowie ausgewählte LiaTemplates-READMEs. Verwende diesen Skill, wenn ein KI-Agent SchulLia- oder LiaScript-Aufgaben oder Kurse erstellen, überarbeiten, erklären, vergleichen oder klassifizieren soll; LiaScript-Dokumentköpfe, Grundsyntax, Quizsyntax, Makros, Aufgabenarten, Metadaten, Fach- und Klassenstufenzuordnungen oder imperative Operatoren untersuchen soll; mit lia-loot abwechslungsreiche, erreichbare Gamification aus Ressourcen, Funden, Werkzeugen, Freigabeschichten, bedingten Bereichen, Schlüsseln, Schlössern, Puzzleteilen, Puzzletoren, Lupen, Portalen, Geheimfolien, Highscore oder Erfolgen planen soll; oder Template-Makros mit vollständigen Optionsprofilen einschließlich LLMQuiz, Coverage, Satzbau, Rechtschreibung, OCR, Koordinaten, Quizsteuerung, Musik und Simulation benötigt.
 ---
 
 # SchulLia Knowledge
@@ -53,6 +53,74 @@ generierten Korpus ausschließlich unter `corpus/` dieses Skills ab.
 4. Prüfe bei Rückgabecode `2` den `sync-report`. Verwende vorhandene veraltete
    Snapshots nur mit einem ausdrücklichen Aktualitätshinweis.
 5. Suche lokal. Löse während einer Suche keine versteckten Netzaufrufe aus.
+6. Prüfe vor Template-Generierung und nach einer Synchronisierung die Abdeckung
+   mit `python scripts/template_inventory.py --check`. Folge bei Abweichungen
+   der Nachprüfung in [template-options.md](references/template-options.md).
+
+## Verbindliche Fachsprache
+
+Wende diese Regeln ohne erneute Nutzererinnerung auf alle neu verfassten oder
+fachlich überarbeiteten Aufgaben, Erklärungen, Überschriften, Diagramm- und
+Tabellenbeschriftungen, Alternativtexte, Lösungen, Hinweise und Feedbacktexte
+sowie selbst verfasste LLMQuiz-Anweisungen und erwartete Rückmeldungen an.
+
+### Fachübergreifend
+
+- **Energieumwandlung:** Verwende in allen Fächern „Energieumwandlung“ für den
+  entsprechenden Vorgang. Beschreibe Energie weder als verbraucht, erzeugt,
+  vernichtet noch als verschwunden. Benenne die Ausgangs- und Endformen;
+  beispielsweise wandelt ein Elektromotor elektrische Energie unter anderem
+  in kinetische und innere Energie um. Die Gesamtenergie bleibt erhalten.
+  Beschreibe auch vermeintliche „Energieverluste“ durch Umwandlung und Abgabe
+  an die Umgebung. Wird Energie zwischen Systemen übertragen, benenne dies
+  präzise als Energieübertragung; erfinde dabei keine Änderung der Energieform.
+  Verwende „Energieverbrauch“, „Energieerzeugung“ und ähnliche Alltagsausdrücke
+  nicht als eigene Vorgangsbezeichnung, auch nicht in
+  Sachunterricht, Biologie, Geografie, Wirtschafts- oder Sprachaufgaben.
+- **Masse und Gewichtskraft:** Masse $m$ wird beispielsweise in Gramm oder
+  Kilogramm angegeben; Gewichtskraft $F_G$ in Newton. „Gewicht“ darf nicht als
+  Synonym für Masse dienen. Schreibe „Der Körper hat eine Masse von 2 kg“ und
+  verwende für die Kraft ausdrücklich „Gewichtskraft“. Unterscheide die Größen
+  auch in Tabellen, Diagrammen, Alltagssituationen und Musterlösungen.
+  Die Gleichung $F_G = m \cdot g$ verknüpft Masse und Gewichtskraft; eine
+  Änderung des Ortsfaktors verändert bei gleicher Masse die Gewichtskraft.
+- **Geschwindigkeitseinheit:** Schreibe und lies „Kilometer pro Stunde“.
+  Verwende als Einheitenzeichen `km/h`, mathematisch etwa
+  $\frac{\mathrm{km}}{\mathrm{h}}$. Verwende weder „kmh“ noch „Stundenkilometer“.
+  Zahlenangaben sind etwa „50 Kilometer pro Stunde“ beziehungsweise „50 km/h“.
+
+### Zusätzlich in Mathematik und Physik
+
+| Gemeint | Verbindliche Bezeichnung |
+|---|---|
+| Waagerechte kartesische Achse | Abszissenachse |
+| Senkrechte kartesische Achse | Ordinatenachse |
+| Erste beziehungsweise zweite Koordinate eines Punktes | Abszisse beziehungsweise Ordinate |
+| Mathematische oder physikalische Gleichheitsbeziehung, etwa $s = v \cdot t$ | Gleichung |
+
+Schreibe beispielsweise „Schnittpunkt mit der Abszissenachse“ und „Stelle die
+Gleichung nach $t$ um“. Verwende dafür weder „x-Achse“/„y-Achse“ noch „Formel“
+oder „Formel umstellen“, auch nicht in Varianten wie „$x$-Achse“. Ein Ausdruck
+wie $2x + 3$ bleibt ein Term; nenne ihn nicht Gleichung. Größenzeichen und
+Einheiten an physikalischen Achsen bleiben erhalten, etwa $t$ in $\mathrm{s}$
+an der Abszissenachse.
+
+### Geltungsgrenzen und Bewertung
+
+Eine reine Autorenpräferenz macht fachlich richtige Lernendenantworten mit
+gebräuchlichen Synonymen nicht falsch; Terminologie ist nur dann ein eigenes
+Bewertungskriterium, wenn sie ausdrücklich Lernziel ist. Eine Verwechslung von
+Masse und Gewichtskraft oder eine behauptete Vernichtung von Energie ist
+hingegen ein inhaltlicher Fehler, keine bloße Stilabweichung.
+
+Übernimm abweichende Bezeichnungen aus Korpusbeispielen nicht in eigene Texte.
+Technische Namen wie `formula:`, `xlabel`, `ylabel`, Makronamen, URLs und
+unverändert wiedergegebene Quellen bleiben exakt. Eine technische Spielressource
+namens „Energie“ ist keine physikalische Größe; ihre API und Punktelogik bleiben
+erhalten. Die Fachsprachregel erweitert keinen reinen Gamification-Auftrag um
+Änderungen am eingefrorenen Fachtext; wende sie bereits bei der Erstellung
+beziehungsweise fachlichen Überarbeitung an und beachte danach den Text- und
+Reihenfolgevertrag.
 
 ## Anfrage routen
 
@@ -60,7 +128,11 @@ generierten Korpus ausschließlich unter `corpus/` dieses Skills ab.
 
 1. Lies [liascript-basics.md](references/liascript-basics.md),
    [operator-taxonomy.md](references/operator-taxonomy.md) und
-   [quiz-structures.md](references/quiz-structures.md).
+   [quiz-structures.md](references/quiz-structures.md) und die
+   [Template-Auswahl](references/template-options.md). Gehe deren gesamte
+   Einsatzmatrix durch und lade danach nur die zum Lernziel passenden
+   Detailreferenzen. Plane passende Makros und Zusatzoptionen bereits in der
+   ersten Fassung ein; warte nicht darauf, dass der Nutzer sie einzeln nennt.
 2. Bestimme, ob ein vollständiger Kurs oder nur ein einzufügender
    Aufgabenausschnitt verlangt ist. Verwende nur für den vollständigen Kurs
    einen Hauptkopf `<!-- ... -->`.
@@ -84,13 +156,31 @@ generierten Korpus ausschließlich unter `corpus/` dieses Skills ab.
    SchulLia-Konventionen.
 6. Übernimm Syntax- und Metadatenmuster, aber erzeuge zur Anfrage passende neue
    Inhalte. Kopiere keine fremde Aufgabe unbesehen.
-7. Füge `import:`, `script:` und `link:` nur ein, wenn die erzeugte Aufgabe
-   sie tatsächlich benötigt. Beachte, dass verschachtelte Template-Importe
-   nicht verlässlich aufgelöst werden.
+7. Verwende für gewählte Aufgabenmakros das vollständige passende
+   Optionsprofil aus der Template-Referenz. Bei offenen Antworten gehören
+   insbesondere Inhaltsabdeckung (`coverage`), Satzbau und Rechtschreibung
+   von Anfang an zur Prüfung und werden bei geeignetem Lernziel ausdrücklich
+   konfiguriert. Schreibe verwendete Optionen nachvollziehbar und leicht
+   entfernbar aus, statt nur die kürzeste Makroform zu liefern. Beachte dabei
+   die API-Schreibweisen, gegenseitige Ausschlüsse und aufgabenspezifischen
+   Grenzen aus [template-options.md](references/template-options.md).
+   Füge alle dafür nötigen direkten `import:`-Angaben sowie benötigte
+   `script:`- und `link:`-Ressourcen ein, auch bei importgesteuerten Templates
+   ohne sichtbaren Makroaufruf. Verschachtelte Template-Importe werden nicht
+   verlässlich aufgelöst.
 8. Stelle die Frage als normalen Absatz unmittelbar vor das Quiz. Prüfe
    Überschriftenhierarchie, Blocktrennung, Medien-Alternativtexte,
    Operatorformulierung, Quizsyntax, Lösung, Hinweise, Feedback, Punkteangabe
-   und verwendete Makros gegeneinander.
+   und verwendete Makros gegeneinander. Prüfe in jedem Fach sämtliche selbst
+   verfassten Texte einschließlich Makroargumenten und LLMQuiz-Anweisungen auf
+   die Fachsprachregeln oben: Energieumwandlung/-übertragung, Masse/Gewichtskraft
+   samt Einheiten und „Kilometer pro Stunde“/`km/h`. Suche insbesondere nach
+   `Energieverbrauch`, `Energieerzeugung`, `Energieverlust`, `Gewicht`, `kmh`
+   und `Stundenkilometer` sowie sinngleichen Verbformen und Schreibvarianten.
+   Prüfe bei Mathematik und Physik zusätzlich `Formel`, `x-Achse` und `y-Achse`
+   samt Plural- und Zusammensetzungsformen. Korrigiere fachliche Bezeichnungen
+   vor der Ausgabe; technische Bezeichner, bloße Kriteriengewichte, Quellen und
+   Terme dürfen nicht durch blindes Suchen und Ersetzen verändert werden.
 9. Entferne alle Vorlagenplatzhalter vor der Ausgabe. Gib einen fehlenden Autor
    als offene Angabe an statt einen Namen zu erfinden.
 10. Erzeuge einen neuen vollständigen Kurs zunächst als fachlich und didaktisch
@@ -123,8 +213,8 @@ Gamification überspringt diese Trennung nicht. Wird dagegen ein bereits
 vorhandener Kurs ausdrücklich zur Gamifizierung übergeben, kann diese Route
 unmittelbar beginnen.
 
-Lies bei jeder Kartierung oder Einbettung von Erde, Pflanzen, Werkzeugen oder
-importierten Loot-Zielen zusätzlich die vollständige
+Lies bei jeder Gamification-Kartierung oder Einbettung mit lia-loot zusätzlich
+die vollständige
 [Gamification-Skillanweisung](skills/schullia-gamification/SKILL.md) und folge
 ihrem Routing. Ihr Positionskatalog und read-only Mapper spezifizieren diesen
 Teil der vorliegenden Route; Klärungsgate, Variationsvertrag und Witness dieser
@@ -187,16 +277,22 @@ Gamificationroute.
    vorhandene fremde Kursmakros unverändert; neue Überschriften oder Texte sind
    nur nach dem Text- und Reihenfolgevertrag zulässig. Verwende oder erweitere
    fremde Kursmakros nicht als neu entworfene Gamification-Mechanik.
-4. Orientiere jeden Entwurf nachweislich an bestehenden Gamification-Kursen.
-   Suche zuerst mindestens drei fachlich, altersbezogen oder vom Umfang her
-   passende reale Kurse im Zielprojekt und im commit-gepinnten Korpus und lies
-   ihre lokalen Originalausschnitte. Zähle README-Dokumentation, Definitionen,
-   Browser-Fixtures, `TemplateTargets.md` und `StressTest.md` nicht als reale
-   Vergleichskurse; `EscapeRoom.md` dient nur als anspruchsvolle obere
-   Vergleichsgrenze. Sind weniger als drei reale Kurse verfügbar, verwende alle
-   auffindbaren und nenne die Einschränkung. Übernimm Muster für Dichte, Pacing
-   und mechanisch belegte Platzierungen sowie bereits vorhandene Hinweise, aber
-   kopiere keinen Kursbauplan und keine nachweisbare Sackgasse.
+4. Verwende die vom Nutzer als akzeptabel bestimmten gamifizierten
+   Wochenaufgaben als Standard für Platzierung, Abwechslung und Spielfluss.
+   Führe vor der Auswahl
+   `python skills/schullia-gamification/scripts/profile_weekly_courses.py --check`
+   aus; neue oder geänderte Dateien übernehmen die Akzeptanz nicht automatisch.
+   Lies das [Referenzprofil](skills/schullia-gamification/references/wochenaufgaben-baseline.md)
+   und wähle aus dem [akzeptierten Bestand](skills/schullia-gamification/references/accepted-weekly-courses.json)
+   mindestens drei nach Fach, Lerngruppe, Umfang und Aufgabenmakros passende
+   Kurse, sofern verfügbar, andernfalls alle passenden. Lade zunächst nur die
+   kompakte Übersicht und danach die ausgewählten Originalausschnitte.
+   Übernimm ihre bewährten Abläufe, Fundorte, Werkzeugfolgen und Dichten als
+   Ausgangsprofil. Eine vertraute Grundmechanik ist ausdrücklich zulässig.
+   Dokumentation und Test-Fixtures zählen nicht als Vergleichskurse;
+   `EscapeRoom.md` ist nur eine anspruchsvolle obere Vergleichsgrenze.
+   Die Akzeptanz betrifft die Gestaltung; prüfe API, Importe und Lösbarkeit
+   weiterhin selbst und übernimm keine nachgewiesene technische Sackgasse.
 5. Errichte vor Entwurf oder Bearbeitung ein verbindliches Klärungsgate. Werte
    Prompt, Gespräch und ausdrücklich übergebene Kursvorgaben aus und frage alle
    noch offenen Punkte gebündelt ab. Für jeden Punkt ist eine Anzahl erforderlich;
@@ -267,29 +363,31 @@ Gamificationroute.
    Puzzlelogik und Hinweisarchitektur, bedingten Spawn-Triggern,
    Umweltbedingungen, Portal- und Schlüsselgraph, Schlossdichte und
    -zielklassen, mechanischer Feedbackform, Pacing und visueller Inszenierung.
-   Wenn der Nutzer konkrete Vergleichskurse nennt oder ausdrücklich eine ähnliche
-   Gamification verlangt, lies jeden genannten Kurs, ordne jede übernommene
-   Mechanik einer dieser Referenzen zu und simuliere den vollständigen
-   Ressourcen- und Freigabepfad. Erfinde dafür keine zusätzlichen
-   Sammelobjekte, Immersionsbegriffe oder Questbegriffe. Eine neue Code- oder
-   Decodierregel ist nur als konkreter Puzzletorhinweis nach dem Textvertrag
-   zulässig und wird aus bereits vorhandenem Kursmaterial abgeleitet. In diesem Fall ist der Variationsvertrag ein
-   Kombinationsgebot: keine 1:1-Kopie, aber erkennbare Familienähnlichkeit hat
-   Vorrang vor maximalem Abstand zu den Referenzen.
-9. Erzeuge mehrere Kandidaten und vergleiche sie mit allen verfügbaren früheren
-   Fingerabdrücken. Wiederhole keinen Fingerabdruck. Der gewählte Entwurf
-   unterscheidet sich vom ähnlichsten früheren Kurs in mindestens drei
-   strukturellen Dimensionen; darunter liegt mindestens Primärmechanik,
-   Pfadtopologie oder Ressourcenmodell. Gegenüber dem unmittelbar vorherigen
-   Entwurf wechselt zusätzlich Primärmechanik oder Topologie. Farben, Zahlen,
-   Titel, Bildaustausch und geänderte Schlossbeschriftungen zählen allein nicht als
-   strukturelle Variation. Ohne zugängliche Vergleichshistorie behaupte keine
-   absolute Neuheit, sondern dokumentiere den neuen Fingerabdruck für den
-   nächsten Vergleich.
-10. Verwende Schlüssel und Schlösser nie automatisch als Primärmechanik. Ein Kurs
-   darf schlossfrei sein. Wenn Schlösser fachlich passen, verteile sie über
-   sinnvolle Zielklassen und sperre nicht schematisch jedes Quiz oder immer nur
-   `check`.
+   Verwende den Fingerabdruck zum Erkennen und Kombinieren bewährter Muster.
+   Ordne übernommene Abläufe konkreten akzeptierten Referenzkursen zu. Benenne
+   die Anpassung an die neue Aufgabe und simuliere den vollständigen
+   Ressourcen- und Freigabepfad. Erfinde dafür keine zusätzlichen Items oder
+   Begleitgeschichten. Neue Hinweisprosa bleibt auf die beiden Ausnahmen des
+   Textvertrags beschränkt.
+9. Vergleiche mehrere zum Standard passende Entwürfe nach nachvollziehbarer
+   Platzierung und Spielfluss. Für jede gewählte Spielaktion müssen Funktion,
+   erwartete Entdeckungssituation, Bezug zum fachlichen Abschnitt und folgende
+   Freigabe oder Belohnung klar sein. Verwende dafür den Ablaufplan aus dem
+   Referenzprofil. Bewährte Garten-, Werkzeug-, Schlüssel- und Puzzlebausteine
+   dürfen wiederkehren. Passe ihre Kombination und konkreten Positionen an;
+   kopiere keinen vollständigen Gamificationablauf schematisch. Es gibt keine
+   Pflicht zu drei geänderten Dimensionen oder zum Wechsel der Primärmechanik
+   beziehungsweise Topologie gegenüber dem letzten Kurs. Nähe zum akzeptierten
+   Standard und ein stimmiger Arbeitsfluss haben Vorrang vor maximalem Abstand.
+   Vergleiche Reihenfolgen, Fundverteilung, Unterbrechungen und Freigabeketten
+   im ganzen Kurs. Halte Übernahmen und begründete Anpassungen für den nächsten
+   Vergleich fest; behaupte ohne verfügbare Historie keine absolute Neuheit.
+10. Wähle Schlüssel, Schlösser, Werkzeuge und andere Mechaniken anhand des
+    passenden Referenzprofils und des geklärten Nutzerwunschs. Schlüssel und
+    Schlösser sind nicht automatisch die Primärmechanik, ein schlossfreier
+    Entwurf ist aber ebenfalls keine allgemeine Pflicht. Erhalte akzeptierte
+    Interaktionsdichte; erfinde weder pauschale Reduktionsquoten noch zusätzliche
+    Sperren ohne nachvollziehbare Funktion im Ablauf.
 11. Plane vor dem Schreiben einen Zustands- und Abhängigkeitsgraphen. Erfasse
    Folien, normale Navigation, ToC-Kanten, Portale samt temporären Rückkanten,
    Geheimfolien, Quizze, Lupe, Schaufel,
@@ -334,7 +432,8 @@ Gamificationroute.
    oder einen erreichbaren Reparaturpfad ein; messerscharfe Ressourcenbilanzen
    nur auf ausdrücklichen Wunsch.
 15. Nenne bei der Übergabe knapp die konkretisierten Mengen und
-    Schwierigkeitswerte, die verwendeten Vergleichskurse, den
+    Schwierigkeitswerte, die verwendeten Vergleichskurse, die
+    übernommenen Standardbausteine und ihre konkreten Anpassungen, den
     Gamification-Fingerabdruck, den geprüften Vollständigkeitspfad und die
     Endbestände. Berichte außerdem das Textdelta und liste jede zulässige neue
     Hinweiszeile mit ihrem konkreten Puzzletor- oder Geheimfolienziel auf.
@@ -353,6 +452,10 @@ Gamificationroute.
 
 1. Lies bei LiaScript-Grundsyntax zuerst
    [liascript-basics.md](references/liascript-basics.md).
+   Nutze für Templates die Einsatzmatrix in
+   [template-options.md](references/template-options.md) und die dort
+   verknüpfte Detailreferenz. Prüfe alle Optionen der gewählten Makrofamilie,
+   nicht nur ihren Namen oder einen kurzen Beispielaufruf.
 2. Lies bei lia-loot zusätzlich [lia-loot.md](references/lia-loot.md) und die
    vollständige aktuelle lia-loot-README; verwende deren öffentliche Makros und
    erfinde keine frei definierbaren Quest-, Item-, Skin-, Trigger- oder
@@ -431,11 +534,23 @@ Pflege neue feste Quellen ausschließlich in
 in [operator-taxonomy.json](references/operator-taxonomy.json), ohne daraus
 ungeprüft didaktische Kategorien abzuleiten.
 
+Die historischen Mapper-Regressionen verwenden einen separaten, gepinnten
+Testbestand. Bereite ihn einmal mit
+`python scripts/prepare_gamification_test_fixture.py` vor. Der Helfer legt nur
+den ignorierten Cache `.test-fixtures/` an; anschließende Mapper-Tests benötigen
+kein Netz. Dieser historische Testbestand ersetzt nicht den aktuellen
+Wochenaufgabenstandard.
+
 Validiere nach Änderungen:
 
 ```text
 python scripts/test_parser.py
 python scripts/test_sync.py
+python scripts/test_template_inventory.py
+python scripts/template_inventory.py --check
+python skills/schullia-gamification/scripts/test_map_course.py
+python skills/schullia-gamification/scripts/test_profile_weekly_courses.py
+python skills/schullia-gamification/scripts/profile_weekly_courses.py --check
 python scripts/validate_corpus.py
 python scripts/validate_corpus.py --deep
 ```
@@ -446,6 +561,8 @@ python scripts/validate_corpus.py --deep
 - LiaScript-Grundlagen und Dokumentkopf:
   [liascript-basics.md](references/liascript-basics.md)
 - Quizsyntax und Makrofamilien: [quiz-structures.md](references/quiz-structures.md)
+- Template-Auswahl, vollständige Optionsprofile und Abdeckungsprüfung:
+  [template-options.md](references/template-options.md)
 - lia-loot-API, Variation und Lösbarkeit:
   [lia-loot.md](references/lia-loot.md) und
   [lia-loot-options.json](references/lia-loot-options.json)

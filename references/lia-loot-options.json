@@ -1,9 +1,9 @@
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "source": {
     "source_id": "ghrepo:mint-the-gap/lia-loot",
     "path": "README.md",
-    "reviewed_revision": "ae970951fb7304ec9d1dd0f11048ae8a8ee676cb",
+    "reviewed_revision": "10e9c302681b31cb4f5ea9dd7a4e4fb7e5227e65",
     "readme_sha256": "08087ab78b6183d6ba1f0ea83437f36bdd2ea452d11658c778502abe336978f1",
     "usage_context": "task-content"
   },
@@ -197,7 +197,7 @@
       "low_terms": ["wenig", "ein paar", "sparsam"],
       "medium_terms": ["einige", "mittel", "ausgewogen"],
       "high_terms": ["viel", "viele", "häufig"],
-      "primary_calibration": "comparable_real_courses",
+      "primary_calibration": "comparable_accepted_weekly_courses_after_explicit_user_choices",
       "fallback_by_relevant_learning_slides": {
         "low": "max(1, ceil(S/4))",
         "medium": "max(1, ceil(S/2))",
@@ -214,8 +214,8 @@
       "item_concealment": {
         "factors": ["surface_or_submenu", "anchor", "delay", "slide_binding", "concealment_layers", "environment_conditions", "text_neutral_discoverability"],
         "easy": "visible_or_dust_with_clear_location_and_no_extra_gate",
-        "medium": "one_extra_gate_with_text_neutral_discoverability_or_allowed_targeted_clue",
-        "hard": "at_most_two_coordinated_extra_gates_with_prior_tool_and_deterministic_discoverability_under_added_text_policy"
+        "medium": "familiar_manageable_find_sequence_calibrated_to_accepted_references_with_text_neutral_discoverability",
+        "hard": "coordinated_multistage_find_sequence_calibrated_to_accepted_references_with_prior_tools_and_deterministic_discoverability_under_added_text_policy"
       },
       "resources": {
         "factors": ["initial_amounts", "reward_find_counts", "reward_amounts", "fixed_costs", "recovery_reserve"],
@@ -900,7 +900,10 @@
     "all_correct_required_for_all_quizzes_achievement": true
   },
   "variation_contract": {
-    "history_scope": ["target_project", "current_conversation"],
+    "history_scope": [
+      "target_project",
+      "current_conversation"
+    ],
     "fingerprint_dimensions": [
       "primary_mechanic",
       "path_topology",
@@ -919,25 +922,45 @@
       "visual_staging",
       "puzzle_clue_distribution_and_decoding"
     ],
-    "core_dimensions": ["primary_mechanic", "path_topology", "resource_model"],
-    "minimum_changed_dimensions_from_nearest_prior": 3,
-    "minimum_changed_core_dimensions_from_nearest_prior": 1,
-    "immediate_predecessor_must_change_one_of": ["primary_mechanic", "path_topology"],
-    "identical_fingerprint_forbidden": true,
-    "non_structural_changes_alone": ["colors", "numbers", "durations", "titles", "images", "changed_lock_label", "puzzle_matrix_only"],
+    "core_dimensions": [
+      "primary_mechanic",
+      "path_topology",
+      "resource_model"
+    ],
+    "minimum_changed_dimensions_from_nearest_prior": 0,
+    "minimum_changed_core_dimensions_from_nearest_prior": 0,
+    "immediate_predecessor_must_change_one_of": [],
+    "identical_fingerprint_forbidden": false,
+    "non_structural_changes_alone": [
+      "colors",
+      "numbers",
+      "durations",
+      "titles",
+      "images",
+      "changed_lock_label",
+      "puzzle_matrix_only"
+    ],
     "narrative_generation": "preserve_existing_no_added_text",
     "no_history_policy": "do_not_claim_absolute_novelty_and_emit_fingerprint",
-    "locks_are_never_default": true
+    "accepted_standard_catalog": "skills/schullia-gamification/references/accepted-weekly-courses.json",
+    "priority_order": [
+      "technical_validity_and_solvability",
+      "explicit_user_choices",
+      "accepted_standard_fit",
+      "learning_flow_and_placement",
+      "purposeful_variation"
+    ],
+    "whole_course_copy_forbidden": true,
+    "accepted_building_blocks_may_repeat": true,
+    "require_reference_inheritance_and_adaptation": true,
+    "locks_are_not_automatically_primary": true
   },
   "variation_contract_ids": [
+    "VAR-ACCEPTED-WEEKLY-STANDARD",
     "VAR-FINGERPRINT-ALL-HISTORY",
-    "VAR-NO-IDENTICAL-FINGERPRINT",
-    "VAR-THREE-STRUCTURAL-DIMENSIONS",
-    "VAR-ONE-CORE-DIMENSION",
-    "VAR-IMMEDIATE-PRIMARY-OR-TOPOLOGY-CHANGE",
-    "VAR-STRUCTURAL-DIFFERENCE",
-    "VAR-NO-LOCK-DEFAULT",
-    "VAR-LOCK-TARGET-ROTATION",
+    "VAR-NO-WHOLE-COURSE-COPY",
+    "VAR-REFERENCE-INHERITANCE",
+    "VAR-PURPOSEFUL-PLACEMENT",
     "VAR-NO-FALSE-NOVELTY"
   ],
   "solvability_contract": {

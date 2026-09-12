@@ -77,7 +77,8 @@ werden soll, eine Major-Version ab `1`. Erhöhe:
 - Verwende `dark`, `classroom`, `sharing`, `translateWithGoogle` und `persistent`
   nur bei einer bewussten Konfigurationsentscheidung.
 - Verwende `formula` für globale KaTeX-Makros.
-- Verwende `import:` nur für tatsächlich aufgerufene Template-Makros, `script:`
+- Verwende `import:` für aufgerufene Template-Makros oder benötigte
+  importgesteuerte Funktionen wie Navigation und Annotation, `script:`
   für externe JavaScript-Ressourcen und `link:` für externe Stylesheets.
 - Beachte, dass ein importierter Kurs nur Definitionen seines Hauptkopfs liefert
   und verschachtelte Kursimporte laut offizieller Dokumentation nicht
@@ -85,6 +86,8 @@ werden soll, eine Major-Version ab `1`. Erhöhe:
 
 ## Grundstruktur und Qualitätsregeln
 
+- Beachte in allen Fächern die [Fachsprachregeln des Hauptskills](../SKILL.md#verbindliche-fachsprache)
+  zu Energieumwandlung, Masse/Gewichtskraft und „Kilometer pro Stunde“.
 - Strukturiere Kurs und Seiten mit Markdown-Überschriften. Behandle Abschnitte als
   einzeln präsentierte Seiten und halte die Hierarchie konsistent.
 - Trenne Absätze, Listen, Tabellen, Medien und Quizblöcke durch Leerzeilen.
@@ -92,8 +95,12 @@ werden soll, eine Major-Version ab `1`. Erhöhe:
   damit LiaScript sie barriereärmer als Beschriftung zuordnen kann.
 - Wähle den passenden nativen Quiztyp oder ein nachweislich benötigtes Makro.
   Prüfe Lösung, Hinweise `[[?]]`, ausführliche Lösung, Feedback und optionales
-  Prüfscripting gemeinsam.
-- Verwende `$...$` für Inlineformeln und `$$...$$` für Formelblöcke.
+  Prüfscripting gemeinsam. Nutze [template-options.md](template-options.md)
+  für die vollständige Template-Auswahl und ihre passenden Optionsprofile.
+- Verwende `$...$` für mathematische Ausdrücke im Fließtext und `$$...$$` für
+  abgesetzte mathematische Blöcke. Die Darstellung unterscheidet nicht zwischen
+  Term und Gleichung; benenne den Inhalt gemäß der
+  [verbindlichen Fachsprache](../SKILL.md#verbindliche-fachsprache).
 - Gib Bildern und anderen Medien aussagekräftige Alternativtexte. Verwende
   relative Ressourcenpfade relativ zur Kursdatei oder stabile absolute URLs.
 - Führe eingebettete oder importierte Skripte bei der Analyse nicht aus. Prüfe

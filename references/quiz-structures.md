@@ -28,14 +28,25 @@ kann es Beschriftung und Antwort trennen.
 
 ## SchulLia-Makros und Erweiterungen
 
-Suche zusätzlich nach Makroaufrufen und ihren README-Definitionen. Relevante
-Familien umfassen unter anderem:
+Prüfe bei der Aufgabenauswahl die vollständige Einsatzmatrix in
+[template-options.md](template-options.md). Sie verteilt alle geprüften
+Templates auf nach Bedarf zu lesende Detailreferenzen:
 
-- `@canvas`, `@CoordinateSystem`, `@TextmarkerQuiz`
-- `@circleQuiz`, `@rectQuiz`, `@orthography`, `@diktat`
-- `@Kachelfolge`, Timer-, Freeze- und dynamische Flex-Strukturen
-- `@Algebrite.*`, `@JSX.*`, `@SpeechRecognition`
-- `@ABCJS.*`, `@AVR8js.*`
+- [Sprache](template-language.md): `@LLMQuiz` einschließlich Kriterien,
+  `coverage`, `Rechtschreibung`, `Satzbau` und Denkbudget; Orthographie,
+  Diktat, Kacheln, Textmarker und `@SpeechRecognition`.
+- [Mathematik](template-math.md): Canvas/OCR, Koordinaten und Konstruktionen,
+  Bruchdarstellungen, Strichlisten, Rechenwege, Pentominos, Algebrite und JSXGraph.
+- [Kurs](template-course.md): DynFlex, Annotation, Board-Mode, Navigation,
+  GlobalQuiz, Resetter, Timer, Freeze/Abgabe, ABCjs und AVR8js.
+- [Gamification](lia-loot.md): öffentliche lia-loot-Makros und ihr
+  [Optionskatalog](lia-loot-options.json), nach der gesonderten Gamification-Route.
+
+Setze passende Zusatzoptionen bereits in der ersten Fassung ausdrücklich.
+Unterscheide technische Defaults und das reichhaltigere Autorenprofil des
+Skills. Beachte insbesondere: Coverage benötigt ein LLM-Kriterienformat;
+`@Kachelfolge` allein prüft keine Reihenfolge; globale DOM-Quizattribute
+ersetzen nicht alle nativen Parserkommentare.
 
 Zähle ein durch ein Makro intern erzeugtes verstecktes Standardquiz nicht
 doppelt als authored Quiz. Lies bei komplexen Makroargumenten die vollständige

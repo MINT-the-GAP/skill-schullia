@@ -351,8 +351,34 @@ def _is_link_reference_definition(value: str) -> bool:
     return end is not None and end == len(value)
 
 
+def _liascript_fence_decorators(info: str) -> bool:
+    """Recognize macro-only decorators after an optional language token.
+
+    LiaScript permits backtick-quoted macro arguments on a fence opener.
+    Limit that extension to complete macro calls so ordinary CommonMark info
+    strings containing backticks do not accidentally become code fences.
+    """
+
+    prefix = re.match(r"[ \t]*(?:[^\s@`]+[ \t]+)?(?=@)", info)
+    if prefix is None:
+        return False
+    cursor = prefix.end()
+    while cursor < len(info):
+        parsed = _parse_macro_at(info, cursor, len(info))
+        if parsed is None:
+            return False
+        _, macro_end, _ = parsed
+        next_cursor = _spaces_tabs_end(info, macro_end)
+        if next_cursor == len(info):
+            return True
+        if next_cursor == macro_end:
+            return False
+        cursor = next_cursor
+    return False
+
+
 def _fence_opener_match(value: str) -> re.Match[str] | None:
-    """Return a valid CommonMark fenced-code opener, including info rules."""
+    """Return a CommonMark opener or LiaScript macro-decorated opener."""
 
     match = re.match(
         r"^ {0,3}(" + re.escape(BACKTICK) + r"{3,}|~{3,})(.*)$",
@@ -360,7 +386,11 @@ def _fence_opener_match(value: str) -> re.Match[str] | None:
     )
     if match is None:
         return None
-    if match.group(1)[0] == BACKTICK and BACKTICK in match.group(2):
+    if (
+        match.group(1)[0] == BACKTICK
+        and BACKTICK in match.group(2)
+        and not _liascript_fence_decorators(match.group(2))
+    ):
         return None
     return match
 

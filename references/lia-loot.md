@@ -11,7 +11,7 @@ python scripts/search_knowledge.py search Gamification --type document --source 
 ```
 
 Diese Referenz und [lia-loot-options.json](lia-loot-options.json) wurden gegen
-Revision `ae970951fb7304ec9d1dd0f11048ae8a8ee676cb` und den README-SHA-256
+Revision `10e9c302681b31cb4f5ea9dd7a4e4fb7e5227e65` und den README-SHA-256
 `08087ab78b6183d6ba1f0ea83437f36bdd2ea452d11658c778502abe336978f1`
 geprüft. Weicht der aktuelle Snapshot ab, lies README, Quellcode und Tests erneut
 und aktualisiere beide Referenzen, bevor du neue Syntax behauptest.
@@ -619,8 +619,10 @@ keine offene Angabe.
 ### Bestehende Kurse als Mengengrundlage
 
 Lies vor der Konkretisierung mindestens drei reale, nach Fach, Lerngruppe oder
-Umfang passende lia-loot-Kurse, sofern so viele vorhanden sind. Priorisiere
-Zielprojekt und Gespräch, danach den commit-gepinnten lokalen Korpus. Schließe
+Umfang passende lia-loot-Kurse, sofern so viele vorhanden sind. Explizite
+Nutzervorgaben haben Vorrang; verwende danach passende akzeptierte Wochenaufgaben
+als Mengengrundlage und sonstige Kurse aus Zielprojekt oder Gespräch ergänzend.
+Schließe
 Dokumentation, Definitionen, Browser-Fixtures, `TemplateTargets.md` und
 `StressTest.md` als reale Beispiele aus. Prüfe die Originalausschnitte und
 übernimm nur belegte Muster für Dichte, Platzierung, Pacing und mechanische
@@ -658,14 +660,18 @@ ein Label den Zahlen deutlich, kläre nur diesen Konflikt.
 
 - Leicht: sichtbarer Inlinefund oder Zauberstaub, mechanisch eindeutiger Ort,
   keine Wartezeit und keine zusätzliche Suchschicht.
-- Mittel: genau eine zusätzliche Hürde, etwa Untermenü, `anker`, kurze
-  lia-loot-Verzögerung, Umweltbedingung oder vollständige Unsichtbarkeit mit
-  explizit bestimmbarer Ort. Neue Ortshinweise sind nur für Puzzletor oder
-  Geheimfolie zulässig.
-- Schwer: höchstens zwei abgestimmte zusätzliche Hürden, etwa Geheimfolie plus
-  kurze lia-loot-Verzögerung oder Untermenü plus Unsichtbarkeit. Auch schwer
-  verlangt eine vorher erreichbare Lupe, einen nach dem Textvertrag zulässigen
-  Beleg des Orts und einen deterministischen Pfad.
+- Mittel: eine anhand passender Standardkurse vertraute, überschaubare Fundfolge,
+  etwa ein Untermenü, ein `anker` oder eine bereits eingeführte Werkzeugschicht.
+  Entscheidend sind Auffindbarkeit und bekannte Handlungsschritte.
+- Schwer: abgestimmte mehrstufige Fundfolgen, etwa Erde → Pflanze → Lupe oder
+  ein gestufter Geheimfolienzugang. Schwierigkeit entsteht durch die Verbindung
+  der Schritte, ohne unbelegte Verzögerungen oder zusätzliche Suchhürden.
+
+Kalibriere die konkrete Kombination anhand vergleichbarer akzeptierter Kurse;
+eine pauschale Höchstzahl an Schichten ist kein Standardkriterium. Alle Stufen
+verlangen erreichbare benötigte Werkzeuge, einen deterministischen Pfad und
+textneutrale Auffindbarkeit. Neue Ortshinweise bleiben ausschließlich für
+Puzzletore oder Geheimfolien zulässig.
 
 **Ressourcenökonomie**
 
@@ -720,17 +726,27 @@ Pacing
 visuelle Inszenierung und Interaktionsrhythmus
 ```
 
-Vergleiche damit alle zugänglichen früheren lia-loot-Kurse im Zielprojekt und
-frühere Entwürfe des Gesprächs. Ein Fingerabdruck darf nie identisch wiederholt
-werden. Gegen den ähnlichsten Vergleich müssen mindestens drei strukturelle
-Dimensionen wechseln; mindestens eine davon ist Primärmechanik, Topologie oder
-Ressourcenmodell. Gegenüber dem unmittelbar vorherigen Entwurf wechselt
-zusätzlich Primärmechanik oder Topologie. Geänderte Farben, Zahlen, Dauern,
-Titel, Bilder oder bloß geänderte Schlossbeschriftungen zählen allein nicht.
+Nutze vorrangig die vom Nutzer als Standard akzeptierten gamifizierten
+Wochenaufgaben. Das [Referenzprofil](../skills/schullia-gamification/references/wochenaufgaben-baseline.md)
+beschreibt ihre Platzierungen und Abläufe; der
+[akzeptierte Bestand](../skills/schullia-gamification/references/accepted-weekly-courses.json)
+hält die konkreten Revisionen und Kursprofile fest. Wähle passende Vorbilder
+nach Fach, Lerngruppe, Umfang und Aufgabenmakros und lies ihre Originalstellen.
 
-Ohne verfügbare Historie kannst du keine absolute Neuheit garantieren. Wähle
-dann bewusst unter mehreren Kandidaten und gib den neuen Fingerabdruck bei der
-Übergabe an, damit er künftig vergleichbar bleibt.
+Nähe zu diesen Standards ist erwünscht. Gleiche Grundmechaniken sowie
+wiederkehrende Garten-, Schlüssel-, Werkzeug- und Puzzlebausteine dürfen
+übernommen werden. Dokumentiere für jede Übernahme das Vorbild und die
+Anpassung an den neuen Kurs. Kopiere keinen vollständigen Gamificationablauf
+schematisch. Eine feste Mindestzahl veränderter Dimensionen oder ein
+Primärmechanik-/Topologiewechsel gegenüber dem letzten Kurs ist nicht nötig.
+Der Fingerabdruck unterstützt den Vergleich der vollständigen Abläufe;
+ein gleicher Gartenfingerabdruck allein macht keinen Kurs ungeeignet.
+
+Entscheide nach technischer Gültigkeit und Lösbarkeit, ausdrücklichen
+Nutzervorgaben, Passung zum akzeptierten Standard, fachlicher Platzierung und
+Spielfluss sowie sinnvoller Variation. Reine Farb- und Zahlenänderungen
+begründen keine gelungene Anpassung. Ohne verfügbare Historie behaupte keine
+absolute Neuheit und halte das neue Profil für künftige Vergleiche fest.
 
 Mögliche Primärprofile sind beispielsweise:
 
@@ -747,26 +763,23 @@ Mögliche Primärprofile sind beispielsweise:
 - Grabungs- oder Gartenkette mit Werkzeug-Bootstrap,
 - live umschaltbare Theme-/Modus-/Annotationssuche.
 
-Verwende nicht automatisch alle Features. Schlüssel und Schlösser sind nur eine
-Familie und dürfen vollständig fehlen. Wenn sie vorkommen:
+Wähle den Mechanikmix und die Interaktionsdichte anhand der passenden
+akzeptierten Kurse und des geklärten Nutzerwunschs. Hohe Dichte ist nicht allein
+ein Fehler. Verwende Schlüssel und Schlösser nicht automatisch als
+Primärmechanik und erzwinge ebenso wenig einen schlossfreien Kurs.
 
-- sperre nicht jedes Quiz und nicht wiederholt nur `check`,
-- verwende bei mindestens vier Schlössern mindestens zwei der Zielklassen
-  Oberfläche, Quizaktion, Portal oder Fremdtemplate,
-- lasse kein einzelnes Schlossziel mehr als die Hälfte der Schlösser stellen,
-- lasse mindestens die Hälfte der gamifizierten Interaktionen aus
-  Nicht-Schloss-Mechaniken bestehen,
-- wiederhole auf aufeinanderfolgenden Folien nicht denselben Gate-Typ ohne
-  fachlichen Grund,
-- plane nach zwei aufeinanderfolgenden Schlosskursen zuerst einen schlossfreien
-  Kandidaten.
+Begründe jede ausgewählte Position anhand ihrer Funktion: Welcher fachliche
+Abschnitt führt dorthin, wann kann das Objekt entdeckt werden, und was
+ermöglicht der Fund anschließend? Vergleiche zusammenhängende Lernphasen,
+Werkzeugabstände, Lösungsschwänze, Schichtketten, Geheim-/Portalwege und
+Abgabefreigabe mit den Vorbildern. Korrigiere unbegründete Unterbrechungen und
+unverständliche Umwege. Eine pauschale Obergrenze für Schlösser, ein
+Mindestanteil anderer Mechaniken oder ein fester Wechselrhythmus ersetzt
+diesen Vergleich nicht.
 
-Rotiere ebenso Werkzeuge, Spawn-Trigger, Fundoberflächen, Schichttiefen und
-Umweltachsen. „Alle Features überall“ ist kein eigenes Profil. Der gewählte
-Mix muss den vorhandenen fachlichen Ablauf bewahren und visuell wie interaktiv
-anders gestaffelt sein als der unmittelbar vorherige Kurs.
-
-Das sind Generierungsregeln, keine Behauptungen über technische Grenzen der API.
+Die Akzeptanz der Gestaltung bestätigt keine fehlerfreie API-Verwendung oder
+Lösbarkeit jeder Referenz. Übernimm keine nachgewiesene technische Sackgasse.
+Textvertrag, direkte Imports und vollständiger Witness bleiben verbindlich.
 
 ## Verbindlicher Lösbarkeitsvertrag
 
@@ -912,9 +925,11 @@ Das Zielprädikat umfasst:
 
 1. Analysiere den vollständigen Folien- und Quizkatalog, vorhandene Hinweise, Imports,
    Template-Instanzen, Abschlusszustände und fachliche Prärequisiten.
-2. Fingerprinte verfügbare Vergleichskurse und bilde mehrere deutlich
-   verschiedene Gamification-Kandidaten.
-3. Wähle den didaktisch passenden Kandidaten mit großem strukturellem Abstand.
+2. Wähle passende akzeptierte Wochenaufgaben, lies ihre Originalstellen und
+   bilde mehrere Entwürfe mit dokumentierten Übernahmen und Anpassungen.
+3. Wähle anhand von Standardpassung, sinnvoller Platzierung und Spielfluss.
+   Plane je Lernabschnitt Lernhandlung, Fund/Spielaktion, folgende Wirkung
+   sowie das konkrete Referenzvorbild; prüfe diese Abfolge vor der Ausgabe.
 4. Plane zuerst einen öffentlichen Hauptpfad, dann optionale Zweige mit Rückweg
    oder Merge.
 5. Plane vom Ziel rückwärts: Schloss zu Schlüssel, Puzzletor zu allen

@@ -62,7 +62,7 @@ def test_lia_loot_reference_contract() -> None:
     options_path = ROOT / "references" / "lia-loot-options.json"
     options = json.loads(options_path.read_text(encoding="utf-8"))
 
-    assert options["schema_version"] == 4
+    assert options["schema_version"] == 5
     assert set(options["macros"]) == {
         "Highscore",
         "Ressourcen",
@@ -521,24 +521,38 @@ def test_lia_loot_reference_contract() -> None:
         "required_one_way_dead_end",
     }.issubset(portal_route["forbidden"])
     variation = options["variation_contract"]
-    assert variation["minimum_changed_dimensions_from_nearest_prior"] == 3
-    assert variation["minimum_changed_core_dimensions_from_nearest_prior"] == 1
-    assert variation["identical_fingerprint_forbidden"] is True
+    assert variation["minimum_changed_dimensions_from_nearest_prior"] == 0
+    assert variation["minimum_changed_core_dimensions_from_nearest_prior"] == 0
+    assert variation["identical_fingerprint_forbidden"] is False
+    assert variation["whole_course_copy_forbidden"] is True
+    assert variation["accepted_building_blocks_may_repeat"] is True
+    assert variation["require_reference_inheritance_and_adaptation"] is True
+    assert variation["locks_are_not_automatically_primary"] is True
+    assert variation["accepted_standard_catalog"] == (
+        "skills/schullia-gamification/references/accepted-weekly-courses.json"
+    )
+    assert variation["priority_order"] == [
+        "technical_validity_and_solvability",
+        "explicit_user_choices",
+        "accepted_standard_fit",
+        "learning_flow_and_placement",
+        "purposeful_variation",
+    ]
     assert variation["narrative_generation"] == "preserve_existing_no_added_text"
     assert "narrative" not in variation["fingerprint_dimensions"]
     assert {
         "portal_lock_and_key_routing",
         "puzzle_clue_distribution_and_decoding",
     }.issubset(variation["fingerprint_dimensions"])
-    assert set(variation["immediate_predecessor_must_change_one_of"]) == {
-        "primary_mechanic", "path_topology",
-    }
-    assert {
+    assert variation["immediate_predecessor_must_change_one_of"] == []
+    assert set(options["variation_contract_ids"]) == {
+        "VAR-ACCEPTED-WEEKLY-STANDARD",
         "VAR-FINGERPRINT-ALL-HISTORY",
-        "VAR-NO-IDENTICAL-FINGERPRINT",
-        "VAR-NO-LOCK-DEFAULT",
-        "VAR-STRUCTURAL-DIFFERENCE",
-    }.issubset(options["variation_contract_ids"])
+        "VAR-NO-WHOLE-COURSE-COPY",
+        "VAR-REFERENCE-INHERITANCE",
+        "VAR-PURPOSEFUL-PLACEMENT",
+        "VAR-NO-FALSE-NOVELTY",
+    }
     assert {
         "SOLV-ONE-COMPLETE-WITNESS",
         "SOLV-PREFIX-RESOURCES",

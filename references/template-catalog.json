@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-09-12",
+  "scope": "All synchronized MINT-the-GAP/lia-* repositories and configured template-reference sources; not the entire LiaTemplates organization.",
+  "review_basis": "Pinned README plus statically inspected implementation where documented in the linked reference. For lia-loot the README hash is unchanged from the existing options catalog.",
+  "templates": [
+    {
+      "source_id": "ghfile:liatemplates/abcjs:README.md",
+      "repo": "ABCjs",
+      "reviewed_revision": "385c4c55d2a2858aea6c78d199ecebeb99457719",
+      "readme_sha256": "7c812c43fae695294b99af6c2d4d3aadb1c9a1570247d6547eef3bdcae39cece",
+      "reference": "template-course.md"
+    },
+    {
+      "source_id": "ghfile:liatemplates/algebrite:README.md",
+      "repo": "Algebrite",
+      "reviewed_revision": "9227c2fa05cbc97d3a19ed6fb394e29080781081",
+      "readme_sha256": "77c142b318f885eae1d8bf0c1f9e476ae9f5e66b000043f85e91b52faa263ee1",
+      "reference": "template-math.md"
+    },
+    {
+      "source_id": "ghfile:liatemplates/avr8js:README.md",
+      "repo": "AVR8js",
+      "reviewed_revision": "68dd1a3bf5544ff85ddef8c172aa63441ff76e75",
+      "readme_sha256": "058d85d9eca33062bda2f4c4a40d17940a6d1f610006a767b54089552b30e57e",
+      "reference": "template-course.md"
+    },
+    {
+      "source_id": "ghfile:liatemplates/jsxgraph:README.md",
+      "repo": "JSXGraph",
+      "reviewed_revision": "f426725ff10580b5ebdcc3230a4ca31c415faadb",
+      "readme_sha256": "ef85dbc0fa7d284328d8a89afe6a93715e9436ced0211eee9a858eff6a1f73c2",
+      "reference": "template-math.md"
+    },
+    {
+      "source_id": "ghfile:liatemplates/speech-recognition-quiz:README.md",
+      "repo": "Speech-Recognition-Quiz",
+      "reviewed_revision": "0edc1ecdd6688af34521133000a795986203cd46",
+      "readme_sha256": "f64c5d1a1f3526a75864567a14344a68e423100edebb8245938da21efb9cd338",
+      "reference": "template-language.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-annotation",
+      "repo": "lia-annotation",
+      "reviewed_revision": "d7be96c56ff84e50df4341632b448db3396d226e",
+      "readme_sha256": "a4e09a56ef290c565aefb20ec29ab82025aa3c952c394b7aaf2b2c2817e37fd0",
+      "reference": "template-course.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-board-mode",
+      "repo": "lia-board-mode",
+      "reviewed_revision": "5c473bd8c99a1bc052b39c073bb06c747bb932ee",
+      "readme_sha256": "29e4c02cb61688c4de6672574469625cd704ef672408ca0b1b00a60bbde23010",
+      "reference": "template-course.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-canvas-ocr",
+      "repo": "lia-canvas-ocr",
+      "reviewed_revision": "a139a851213c3b295d316da51aefecd1cb9019fe",
+      "readme_sha256": "043d40576e4586d4bcf4a477474d465d636cb7fe4523b38a264fb1b542e3280f",
+      "reference": "template-math.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-coordinate",
+      "repo": "lia-coordinate",
+      "reviewed_revision": "8dcdbb50d410cea6b107388d4ef5f7e4dedf63cb",
+      "readme_sha256": "c0adf2cdc690514f3d388913c695301847174481931e0db301acd12953a1bdf8",
+      "reference": "template-math.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-dynflex",
+      "repo": "lia-DynFlex",
+      "reviewed_revision": "d91ae5c4445070b96f03b5438241ae9cfebc8817",
+      "readme_sha256": "b213583af11676de993daac4567d7e00b3049196e191bb4b9778eb613436ae7b",
+      "reference": "template-course.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-freeze-v2",
+      "repo": "lia-freeze-v2",
+      "reviewed_revision": "e7088bd6ab0a9508658b02aca4081867f505fce3",
+      "readme_sha256": "b5084285cf228747ac236d3825f787dff70fc9eaf7aa1cfb1dd1889afce2cbc7",
+      "reference": "template-course.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-globalquiz",
+      "repo": "lia-globalquiz",
+      "reviewed_revision": "ea2e0b5608e8d0c08ddde859900474174e3e02e5",
+      "readme_sha256": "d89d5aa03eaaaf5b3ee806bb8b955473e51fbbaf139726fa64266bdf5ff9391b",
+      "reference": "template-course.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-kachel",
+      "repo": "lia-kachel",
+      "reviewed_revision": "9175beec16e91bc6f400e0fe0fd7f99d2c127cb0",
+      "readme_sha256": "b2d06c08fd1d84928f210c5384f21c6b2ade1f3bda3effd73789de29ec819748",
+      "reference": "template-language.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-llm",
+      "repo": "lia-llm",
+      "reviewed_revision": "76c1ab5c9361f166b1563c1c796699ea26361645",
+      "readme_sha256": "4d7c04c075950bd655fa432eb1fdb0a6ab7ae2df6e2ba4d81c0917ff5f7279a8",
+      "reference": "template-language.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-loot",
+      "repo": "lia-loot",
+      "reviewed_revision": "10e9c302681b31cb4f5ea9dd7a4e4fb7e5227e65",
+      "readme_sha256": "08087ab78b6183d6ba1f0ea83437f36bdd2ea452d11658c778502abe336978f1",
+      "reference": "lia-loot.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-marker",
+      "repo": "lia-marker",
+      "reviewed_revision": "ed3da1236c5582c4083f2951fdaa4f83dfc97484",
+      "readme_sha256": "63f7254365412a000dd62af94708e38beb415e06003c4bbf3ca33092a20de92f",
+      "reference": "template-language.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-mathe",
+      "repo": "lia-Mathe",
+      "reviewed_revision": "9f6048a438b649f1575609a4020dc63c09f93baf",
+      "readme_sha256": "56e3adbdc9cdc53522e84151c47e3dd56e76f4ebb22e5e9bb3b44e975e2d6238",
+      "reference": "template-math.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-mathpath",
+      "repo": "lia-mathpath",
+      "reviewed_revision": "62548fa72170a7be67e3ad448a366598da1b14b1",
+      "readme_sha256": "8429b86c08cf5eec81ffa29e23b7c9089d828b9fd46656cd2a4a65aebc57c590",
+      "reference": "template-math.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-navigation",
+      "repo": "lia-navigation",
+      "reviewed_revision": "065c05a7180318d5c9056a4033596b5de8f85fd7",
+      "readme_sha256": "9d4c72f85c8fa80d65078bb21d00e0bb375d77a81b6729b6ca6e6f06390fa5d9",
+      "reference": "template-course.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-orthography",
+      "repo": "lia-orthography",
+      "reviewed_revision": "9bad81542ebf7c3a840ed784a41a8e3a11c5ab50",
+      "readme_sha256": "a17f700535c2af0db26b8096710f135f14d14b3d6657c977d08e1bdb210853df",
+      "reference": "template-language.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-pentominos",
+      "repo": "lia-pentominos",
+      "reviewed_revision": "055342d24604f8db43b591c7738c7af7847a9971",
+      "readme_sha256": "e6e4ccc7bd533ff113270355fd658a87c35cb7e62a2ff6653d6a3e52f06b3357",
+      "reference": "template-math.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-resetter",
+      "repo": "lia-resetter",
+      "reviewed_revision": "dddf761f80c4f287b3652477f4dfab8e5a505589",
+      "readme_sha256": "a13d2c02e71663f9e28f47a2e78c1761a00d05dbc5e7f6adde6a346fdc03a549",
+      "reference": "template-course.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-timer",
+      "repo": "lia-timer",
+      "reviewed_revision": "4fde4c52cab2e1ea49e36b22d50d1cf4844e249b",
+      "readme_sha256": "13940bd315e7648a797b18ad9866c381c92818cd8f461f2b02032168ce9fe9fa",
+      "reference": "template-course.md"
+    }
+  ]
+}

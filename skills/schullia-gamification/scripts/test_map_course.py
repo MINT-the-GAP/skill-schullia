@@ -3,11 +3,13 @@
 
 from __future__ import annotations
 
+import argparse
 import importlib.util
 import hashlib
 import json
 from pathlib import Path
 import sys
+import tempfile
 from typing import Any
 
 
@@ -22,14 +24,25 @@ CATALOG_PATH = (
     / "references"
     / "placement-catalog.json"
 )
-COURSE_ROOT = (
+# Exact line/count regressions below were reviewed against this historical
+# revision. The synchronized teaching corpus may advance independently.
+HISTORICAL_REVISION = "f55442bd5aa8804040e53f144bde461653defbbc"
+HISTORICAL_SOURCE_ID = "ghrepo:mint-the-gap/wochenaufgabe"
+HISTORICAL_FIXTURE_ROOT = (
+    ROOT / ".test-fixtures" / f"wochenaufgabe-{HISTORICAL_REVISION}"
+)
+LIVE_FIXTURE_ROOT = (
     ROOT
     / "corpus"
     / "sources"
     / "ghrepo-mint-the-gap-wochenaufgabe-66366d21e5"
-    / "files"
 )
-FIXTURE_TREE_ROOT = COURSE_ROOT.parent
+FIXTURE_TREE_ROOT = (
+    HISTORICAL_FIXTURE_ROOT
+    if HISTORICAL_FIXTURE_ROOT.exists()
+    else LIVE_FIXTURE_ROOT
+)
+COURSE_ROOT = FIXTURE_TREE_ROOT / "files"
 
 SPEC = importlib.util.spec_from_file_location("schullia_map_course", MAPPER_PATH)
 assert SPEC and SPEC.loader
@@ -277,6 +290,106 @@ def _target(result: dict[str, Any], identifier: str) -> dict[str, Any]:
         for item in result["provider_targets"]["targets"]
         if item["target"] == identifier
     )
+
+
+def _validate_fixture_provenance(root: Path) -> None:
+    """Fail before parser assertions when a moving corpus replaces the goldens."""
+    source_path = root / "source.json"
+    manifest_path = root / "manifest.jsonl"
+    if not source_path.is_file() or not manifest_path.is_file():
+        raise RuntimeError(
+            f"Historical mapper fixtures are missing at {root}. "
+            f"Prepare Wochenaufgabe revision {HISTORICAL_REVISION} at "
+            f"{HISTORICAL_FIXTURE_ROOT}, or supply --fixture-root SOURCE_TREE. "
+            "Tests do not download fixtures or skip historical regressions."
+        )
+    source = json.loads(source_path.read_text(encoding="utf-8"))
+    actual_revision = source.get("revision_sha")
+    if (
+        source.get("source_id") != HISTORICAL_SOURCE_ID
+        or actual_revision != HISTORICAL_REVISION
+    ):
+        raise RuntimeError(
+            f"Historical mapper fixture drift at {root}: expected "
+            f"{HISTORICAL_SOURCE_ID}@{HISTORICAL_REVISION}, found "
+            f"{source.get('source_id')}@{actual_revision}. "
+            "The exact golden lines/counts describe the historical revision, "
+            "not the current accepted teaching standard. Prepare the pinned "
+            f"snapshot at {HISTORICAL_FIXTURE_ROOT}, or use --fixture-root."
+        )
+    files_root = (root / "files").resolve()
+    verified_paths: set[str] = set()
+    for line_number, line in enumerate(
+        manifest_path.read_text(encoding="utf-8").splitlines(), start=1
+    ):
+        if not line.strip():
+            continue
+        entry = json.loads(line)
+        if (
+            entry.get("source_id") != HISTORICAL_SOURCE_ID
+            or entry.get("revision_sha") != HISTORICAL_REVISION
+        ):
+            raise RuntimeError(f"Fixture manifest provenance mismatch at line {line_number}")
+        if not entry.get("stored"):
+            continue
+        relative = entry["path"]
+        candidate = (files_root / relative).resolve()
+        if not candidate.is_relative_to(files_root) or relative in verified_paths:
+            raise RuntimeError(f"Invalid or duplicate fixture manifest path: {relative}")
+        if not candidate.is_file():
+            raise RuntimeError(f"Stored historical fixture is missing: {relative}")
+        actual_sha = hashlib.sha256(candidate.read_bytes()).hexdigest()
+        if actual_sha != entry.get("content_sha256"):
+            raise RuntimeError(f"Historical fixture hash mismatch: {relative}")
+        verified_paths.add(relative)
+    missing = {fixture["rel"] for fixture in FIXTURES.values()} - verified_paths
+    if missing:
+        raise RuntimeError(f"Historical fixture manifest omits required courses: {sorted(missing)}")
+
+
+def test_fixture_provenance_rejects_drift() -> None:
+    with tempfile.TemporaryDirectory(prefix="schullia-mapper-provenance-") as temporary:
+        root = Path(temporary)
+        source = {
+            "source_id": HISTORICAL_SOURCE_ID,
+            "revision_sha": HISTORICAL_REVISION,
+        }
+        source_path = root / "source.json"
+        source_path.write_text(json.dumps(source), encoding="utf-8")
+        records = []
+        for fixture in FIXTURES.values():
+            relative = fixture["rel"]
+            path = root / "files" / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            raw = relative.encode("utf-8")
+            path.write_bytes(raw)
+            records.append({
+                **source,
+                "path": relative,
+                "stored": True,
+                "content_sha256": hashlib.sha256(raw).hexdigest(),
+            })
+        (root / "manifest.jsonl").write_text(
+            "\n".join(json.dumps(record) for record in records), encoding="utf-8"
+        )
+        _validate_fixture_provenance(root)
+        source["revision_sha"] = "0" * 40
+        source_path.write_text(json.dumps(source), encoding="utf-8")
+        try:
+            _validate_fixture_provenance(root)
+        except RuntimeError as error:
+            assert "fixture drift" in str(error)
+        else:
+            raise AssertionError("A changed revision must not run old goldens")
+        source["revision_sha"] = HISTORICAL_REVISION
+        source_path.write_text(json.dumps(source), encoding="utf-8")
+        path.write_bytes(b"modified fixture")
+        try:
+            _validate_fixture_provenance(root)
+        except RuntimeError as error:
+            assert "hash mismatch" in str(error)
+        else:
+            raise AssertionError("A changed file must not run old goldens")
 
 
 def _tree_snapshot(root: Path) -> tuple[tuple[Any, ...], ...]:
@@ -1068,6 +1181,93 @@ def test_invalid_environment_and_lootif_ranges() -> None:
         assert not any(
             item["valid"] for item in result["block_ranges"]["lootif"]
         )
+
+
+def test_liascript_fence_decorator_backtick_arguments() -> None:
+    bt = chr(96)
+    decorators = [
+        "text @LLMQuiz(0.55;coverage=0.55;solution=1;Satzbau=1,"
+        + bt + "Describe (a, b) without inventing a story." + bt + ")",
+        "text @LLMQuiz(0.5," + bt * 2 + "Keep `x` and (a, b)."
+        + bt * 2 + ")",
+        "@LLMQuiz(0.5," + bt + "No language token." + bt + ")",
+        "text @Before @LLMQuiz(0.5," + bt + "Prompt." + bt
+        + ") @After(1)",
+    ]
+    for index, decorator in enumerate(decorators):
+        marker = bt * (3 + index % 2)
+        course = _synthetic_course(
+            ["lia-llm", "lia-loot"],
+            (
+                "## First task\n[[Answer]]\n"
+                + marker + decorator + "\n"
+                "<!-- lia-llm:criterion -->\n"
+                "## Not a slide\n@Schaufel\n[[not a native quiz]]\n"
+                + marker + "\n\n@Lupe\n"
+                "## Second task\n[[next answer]]\n"
+                "@Energiekiste(2; anker)\n# Abgabe\n@Abgabe\n"
+            ),
+        )
+        result = mapper.map_text(course, source_path=f"llm-fence-{index}.md")
+        fences = [
+            item for item in result["protected_spans"]
+            if item["kind"] == "fence"
+        ]
+        assert len(fences) == 1 and fences[0]["closed"] is True, decorator
+        assert not any(
+            item["code"] == "unterminated_fence"
+            for item in result["diagnostics"]
+        ), decorator
+        assert [item["title"] for item in result["headings"]] == [
+            "Testkurs", "First task", "Second task", "Abgabe",
+        ], decorator
+        macros = result["macros"]
+        llm = [item for item in macros if item["name"] == "LLMQuiz"]
+        assert len(llm) == 1
+        assert llm[0]["usage_context"] == "fence_decorator"
+        assert llm[0]["inside_fence"] is True
+        assert llm[0]["span"]["raw"].endswith(bt + ")")
+        assert {"Lupe", "Energiekiste", "Abgabe"}.issubset(
+            {item["name"] for item in macros}
+        )
+        assert "Schaufel" not in {item["name"] for item in macros}
+        assert all(
+            "not a native quiz" not in course[
+                item["span"]["char_start"]:item["span"]["char_end"]
+            ]
+            for item in result["block_ranges"]["native_quiz"]
+        )
+
+    # This is a syntax extension for decorators, not an LLM-only allowlist.
+    quoted = mapper.map_text(
+        _synthetic_course(
+            ["lia-loot"],
+            "> " + bt * 3 + "text @Example.inline(" + bt
+            + "(literal)" + bt + ")\n"
+            "> @Schaufel\n> " + bt * 3
+            + "\n\n## After quote\n@Lupe\n",
+        ),
+        source_path="generic-quoted-decorator.md",
+    )
+    assert [item["title"] for item in quoted["headings"]] == [
+        "Testkurs", "After quote",
+    ]
+    assert [item["name"] for item in quoted["macros"]] == [
+        "Example.inline", "Lupe",
+    ]
+
+    invalid_infos = [
+        "text bad" + bt + "info",
+        "text " + bt + "@LLMQuiz(1)" + bt,
+        "text @LLMQuiz(1," + bt + "unclosed)",
+        "text @LLMQuiz(1," + bt + "closed quote" + bt,
+        "text @LLMQuiz(1) " + bt + "trailing" + bt,
+        "text @LLMQuiz(1)bad" + bt + "suffix" + bt,
+        "text \\@LLMQuiz(1," + bt + "escaped macro" + bt + ")",
+        "bad" + bt + "language @LLMQuiz(1," + bt + "prompt" + bt + ")",
+    ]
+    for info in invalid_infos:
+        assert mapper._fence_opener_match(bt * 3 + info) is None, info
 
 
 def test_fence_negative_cases() -> None:
@@ -6706,6 +6906,7 @@ def test_freeze_audit_fail_closed_regressions() -> None:
 
 
 def test_twelve_course_regressions() -> dict[str, dict[str, Any]]:
+    _validate_fixture_provenance(FIXTURE_TREE_ROOT)
     catalog = mapper.load_catalog(CATALOG_PATH)
     catalog_candidate_ids = [
         item["id"] for item in catalog["candidate_classes"]
@@ -7963,12 +8164,28 @@ def test_final_commonmark_owner_and_html_block_regressions() -> None:
 
 
 def main() -> None:
+    global FIXTURE_TREE_ROOT, COURSE_ROOT
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--fixture-root", type=Path,
+        help=(
+            "Historical Wochenaufgabe source tree containing source.json, "
+            "manifest.jsonl and files/; no automatic network access"
+        ),
+    )
+    arguments = parser.parse_args()
+    if arguments.fixture_root is not None:
+        FIXTURE_TREE_ROOT = arguments.fixture_root.resolve()
+        COURSE_ROOT = FIXTURE_TREE_ROOT / "files"
+    _validate_fixture_provenance(FIXTURE_TREE_ROOT)
+    test_fixture_provenance_rejects_drift()
     test_catalog_contract()
     test_synthetic_lexer_and_macro_tree()
     test_every_import_rank_and_n_plus_one_slots()
     test_provider_semantics_and_candidate_contracts()
     test_provider_false_positives_fail_closed()
     test_invalid_environment_and_lootif_ranges()
+    test_liascript_fence_decorator_backtick_arguments()
     test_fence_negative_cases()
     test_indented_code_tabstops_containers_and_continuations()
     test_container_tab_residual_columns()
@@ -7991,7 +8208,7 @@ def main() -> None:
     print(
         "PASS map_course P1: catalog, lexer, exact N+1 imports, "
         "semantic providers, candidates, invalid ranges, BOM/CRLF, "
-        "read-only 12-course tree"
+        f"read-only historical 12-course tree @{HISTORICAL_REVISION}"
     )
 
 
