@@ -1,10 +1,10 @@
 {
-  "schema_version": 5,
+  "schema_version": 6,
   "source": {
     "source_id": "ghrepo:mint-the-gap/lia-loot",
     "path": "README.md",
-    "reviewed_revision": "10e9c302681b31cb4f5ea9dd7a4e4fb7e5227e65",
-    "readme_sha256": "08087ab78b6183d6ba1f0ea83437f36bdd2ea452d11658c778502abe336978f1",
+    "reviewed_revision": "a32641928d2ff2b2d6f891c0555e05c5e2402247",
+    "readme_sha256": "52fd9fe9e010c944fbec0b4611e979af4171be30e59421c556e48bb9f2ecd730",
     "usage_context": "task-content"
   },
   "emission_policy": {
@@ -118,7 +118,7 @@
         "cardinality": "disabled_or_single_configuration",
         "accepted_counts": [0, 1],
         "public_macros": ["Highscore"],
-        "required_details_when_enabled": ["max_points", "failed_check_penalty", "hint_penalty", "grace_minutes", "per_minute_penalty"]
+        "required_details_when_enabled": ["base_points", "failed_check_penalty", "hint_penalty", "grace_minutes", "per_minute_penalty"]
       },
       {
         "id": "resources",
@@ -126,7 +126,8 @@
         "cardinality": "disabled_or_single_configuration",
         "accepted_counts": [0, 1],
         "public_macros": ["Ressourcen", "Schatztruhe", "Diamanttruhe", "Diamantentruhe", "Energiekiste", "Energietruhe"],
-        "required_details": ["resource_types", "initial_amounts", "reward_find_counts", "reward_amounts"]
+        "required_details": ["resource_types", "initial_amounts", "reward_find_counts", "reward_amounts"],
+        "optional_details": ["gold_score_value", "diamond_score_value"]
       },
       {
         "id": "hidden_content",
@@ -225,7 +226,7 @@
         "hard_still_obeys_default_recovery": true
       },
       "highscore": {
-        "factors": ["max_points", "failed_check_penalty", "hint_penalty", "grace_minutes", "per_minute_penalty"],
+        "factors": ["base_points", "failed_check_penalty", "hint_penalty", "grace_minutes", "per_minute_penalty", "gold_score_value", "diamond_score_value"],
         "easy": "more_than_expected_time_and_small_relative_penalties",
         "medium": "about_expected_time_and_moderate_relative_penalties",
         "hard": "tight_grace_period_and_larger_relative_penalties",
@@ -249,17 +250,27 @@
   },
   "macros": {
     "Highscore": {
-      "syntax": "@Highscore(max, failed_check_penalty, hint_penalty, grace_minutes, per_minute_penalty)",
+      "syntax": "@Highscore(base_points, failed_check_penalty, hint_penalty, grace_minutes, per_minute_penalty)",
       "arity": 5,
-      "constraints": ["max > 0", "all_other_values >= 0"],
-      "placement": "first_slide"
+      "constraints": ["base_points > 0", "all_other_values >= 0"],
+      "placement": "first_slide",
+      "final_score": "max(0, base_points - penalties) + remaining_gold * gold_score_value + remaining_diamonds * diamond_score_value",
+      "base_points_are_upper_bound": false,
+      "perfect_highscore_achievement_uses": "base_score_before_resource_bonus"
     },
     "Ressourcen": {
-      "syntax": "@Ressourcen(gold, diamonds[, energy])",
-      "arity": [2, 3],
+      "syntax": "@Ressourcen(gold, diamonds[, energy][, diamantwert=value][, goldwert=value])",
+      "arity": [2, 5],
       "runtime_values": "nonnegative_numbers_rounded_down",
       "generation_values": "nonnegative_integers",
-      "first_valid_source_declaration_wins": true
+      "first_valid_source_declaration_wins": true,
+      "named_score_options": {
+        "goldwert": {"default": 100, "minimum": 0, "finite": true},
+        "diamantwert": {"default": 250, "minimum": 0, "finite": true},
+        "order": "arbitrary_after_resource_values",
+        "semicolon_grouping": true,
+        "energy_score_value": 0
+      }
     },
     "achievements": {
       "syntax": "@achievements",
@@ -865,7 +876,7 @@
   ],
   "fixed_achievements": [
     {"id": "all-quizzes-solved", "label": "Aufgaben-Meister"},
-    {"id": "perfect-highscore", "label": "Perfekter Highscore"},
+    {"id": "perfect-highscore", "label": "Perfekter Highscore", "condition": "base_score_before_resource_bonus_equals_configured_base_points"},
     {"id": "all-treasure-chests-opened", "label": "Schatzjäger", "catalog": "gold_chests"},
     {"id": "all-diamond-chests-opened", "label": "Diamantensammler", "catalog": "diamond_chests"},
     {"id": "all-energy-chests-opened", "label": "Energiesammler", "catalog": "energy_chests"},

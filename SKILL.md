@@ -126,16 +126,24 @@ Reihenfolgevertrag.
 
 ### Aufgabe erstellen oder überarbeiten
 
-1. Lies [liascript-basics.md](references/liascript-basics.md),
+1. Lies zuerst den verbindlichen
+   [SchulLia-Ausgabevertrag](references/authoring-contract.md), danach
+   [liascript-basics.md](references/liascript-basics.md),
    [operator-taxonomy.md](references/operator-taxonomy.md) und
    [quiz-structures.md](references/quiz-structures.md) und die
    [Template-Auswahl](references/template-options.md). Gehe deren gesamte
    Einsatzmatrix durch und lade danach nur die zum Lernziel passenden
    Detailreferenzen. Plane passende Makros und Zusatzoptionen bereits in der
    ersten Fassung ein; warte nicht darauf, dass der Nutzer sie einzeln nennt.
-2. Bestimme, ob ein vollständiger Kurs oder nur ein einzufügender
-   Aufgabenausschnitt verlangt ist. Verwende nur für den vollständigen Kurs
-   einen Hauptkopf `<!-- ... -->`.
+2. Bestimme genau ein Ausgabeprofil: `weekly` für eine vollständige
+   Wochenaufgabe, `course` für einen anderen vollständigen Kurs oder `task` für
+   einen einzufügenden Aufgabenausschnitt. Verwende bei `weekly` die
+   [Wochenaufgabenvorlage](assets/schullia-weekly-course-template.md), bei
+   `course` die [Kursvorlage](assets/liascript-course-template.md) und bei
+   `task` die [Aufgabenblockvorlage](assets/schullia-task-fragment-template.md).
+   Ein vorhandener, ausdrücklich vorgegebener Kursrahmen hat Vorrang und wird
+   mit `--reference-shell` geschützt. Nur vollständige Kurse erhalten einen
+   Hauptkopf `<!-- ... -->`; füge in Ausschnitte niemals einen zweiten ein.
 3. Ermittle den Autor aus der Nutzerangabe, dem vorhandenen Dokument oder einer
    ausdrücklich genannten Projektvorgabe. Erfinde keine Person und leite den
    Autor nicht aus Repository-Eigentum ab. Verwende bei mehreren Autoren eine
@@ -167,7 +175,11 @@ Reihenfolgevertrag.
    Füge alle dafür nötigen direkten `import:`-Angaben sowie benötigte
    `script:`- und `link:`-Ressourcen ein, auch bei importgesteuerten Templates
    ohne sichtbaren Makroaufruf. Verschachtelte Template-Importe werden nicht
-   verlässlich aufgelöst.
+   verlässlich aufgelöst. Führe vor der Erzeugung
+   `python scripts/template_inventory.py --check` aus. Verwende für jedes
+   gewählte Template die dort bestätigte aktuelle Revision und lies dessen
+   commit-gepinnte README; bei einem als veraltet gemeldeten Reviewstand darfst
+   die zusammenfassende Referenz nicht als aktuelle API ausgeben.
 8. Stelle die Frage als normalen Absatz unmittelbar vor das Quiz. Prüfe
    Überschriftenhierarchie, Blocktrennung, Medien-Alternativtexte,
    Operatorformulierung, Quizsyntax, Lösung, Hinweise, Feedback, Punkteangabe
@@ -180,9 +192,22 @@ Reihenfolgevertrag.
    Prüfe bei Mathematik und Physik zusätzlich `Formel`, `x-Achse` und `y-Achse`
    samt Plural- und Zusammensetzungsformen. Korrigiere fachliche Bezeichnungen
    vor der Ausgabe; technische Bezeichner, bloße Kriteriengewichte, Quellen und
-   Terme dürfen nicht durch blindes Suchen und Ersetzen verändert werden.
-9. Entferne alle Vorlagenplatzhalter vor der Ausgabe. Gib einen fehlenden Autor
-   als offene Angabe an statt einen Namen zu erfinden.
+   Terme dürfen nicht durch blindes Suchen und Ersetzen verändert werden. Leite
+   bei Größenaufgaben vorab Größe, Größenzeichen und Einheit ab und gleiche
+   damit Aufgabentext, Antwortfeld, Validator, Rechenweg und Antwortsatz ab.
+   `@Algebrite.check` und `@Algebrite.check_expression` erhalten bei
+   Einheitenwerten `units=1`; komplexe Sollterme mit Klammern stehen in
+   Backticks. Jede neue bewertbare Aufgabe mit `@ADetails` erhält im selben
+   Quizblock den Hint `[[?]] @Explain` und ein nachgewiesenes Explain-Thema.
+9. Wende den Leerzeilen-, Import-, Header-, Footer- und Aufgabenblockvertrag aus
+   [authoring-contract.md](references/authoring-contract.md) zeilengleich an.
+   Entferne alle Vorlagenplatzhalter vor der Ausgabe. Gib einen fehlenden Autor
+   als offene Angabe an statt einen Namen zu erfinden. Speichere den Entwurf und
+   führe `python scripts/validate_lia.py PFAD --profile PROFIL --strict` aus; bei
+   bewahrtem Wochenaufgabenrahmen zusätzlich mit `--reference-shell ALT.md`.
+   Liefere weder Fehler noch ungeklärte Warnungen aus und nenne im Prüf-Witness
+   Profil, Vorlage beziehungsweise Referenz, Template-Revisionen,
+   Direktimporte, Explain-Abdeckung, Einheitenprüfung und Validator-Ergebnis.
 10. Erzeuge einen neuen vollständigen Kurs zunächst als fachlich und didaktisch
     vollständigen, ungegamifizierten Basiskurs. Importiere `lia-loot` nicht,
     verwende keine `lia-loot`-Makros und baue auch keine andere neue
@@ -301,12 +326,14 @@ Gamificationroute.
    - Achievements: Aktivierung `0` oder `1`; `@achievements` aktiviert
      ausschließlich den vollständigen festen Erfolgskatalog, keine frei
      wählbare Teilmenge und keine eigenen Achievements.
-   - Highscore: `0` oder `1`; bei Aktivierung außerdem Maximalwert,
+   - Highscore: `0` oder `1`; bei Aktivierung außerdem Basispunktzahl,
      Freiminuten sowie Abzüge für Fehlprüfung, Hinweis und weitere Zeit, soweit
      nicht bereits angegeben.
    - Ressourcen: Aktivierung `0` oder `1`, welche der festen Arten Gold,
      Diamanten und Energie verwendet werden sowie Startmenge, Zahl der
-     Belohnungsfunde und Belohnungsmenge je Art.
+     Belohnungsfunde und Belohnungsmenge je Art; außerdem optional Gold- und
+     Diamantpunktwert, wenn die Defaults 100 beziehungsweise 250 nicht gelten
+     sollen.
    - versteckten Inhalten oder Items samt textneutraler Auffindbarkeit,
    - vergrabenen Inhalten beziehungsweise Erdinstanzen,
    - Pflanzeninstanzen,
@@ -338,7 +365,7 @@ Gamificationroute.
    - **Ressourcenökonomie:** Großzügigkeit von Startbestand und erreichbaren
      Truhen gegenüber Pflichtkosten und Fehlerreserve. Die lia-loot-Kosten sind
      fest: Hinweis ein Gold, Auflösen ein Diamant, Prüfen eine Energie.
-   - **Highscore:** Maximalpunkte, Freiminuten sowie Abzug für Fehlprüfung,
+   - **Highscore:** Basispunkte, Freiminuten sowie Abzug für Fehlprüfung,
      Hinweis und jede weitere Minute. Das ist kein hartes Zeitlimit.
 
    Konkrete Zahlen haben Vorrang vor einem verbalen Schwierigkeitslabel. Decken
@@ -546,6 +573,7 @@ Validiere nach Änderungen:
 ```text
 python scripts/test_parser.py
 python scripts/test_sync.py
+python scripts/test_validate_lia.py
 python scripts/test_template_inventory.py
 python scripts/template_inventory.py --check
 python skills/schullia-gamification/scripts/test_map_course.py
@@ -560,6 +588,9 @@ python scripts/validate_corpus.py --deep
 - Quellenumfang und Lizenzregeln: [sources.md](references/sources.md)
 - LiaScript-Grundlagen und Dokumentkopf:
   [liascript-basics.md](references/liascript-basics.md)
+- Verbindliche Ausgabeprofile, Standardimporte, Leerzeilen, `@Explain`,
+  Einheiten und Ausgabegate:
+  [authoring-contract.md](references/authoring-contract.md)
 - Quizsyntax und Makrofamilien: [quiz-structures.md](references/quiz-structures.md)
 - Template-Auswahl, vollständige Optionsprofile und Abdeckungsprüfung:
   [template-options.md](references/template-options.md)

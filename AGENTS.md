@@ -44,6 +44,9 @@ Führe nach relevanten Änderungen vom Repository-Stamm aus:
 ```text
 python scripts/test_parser.py
 python scripts/test_sync.py
+python scripts/test_validate_lia.py
+python scripts/test_template_inventory.py
+python scripts/template_inventory.py --check
 python skills/schullia-gamification/scripts/test_map_course.py
 python scripts/validate_corpus.py
 python scripts/validate_corpus.py --deep

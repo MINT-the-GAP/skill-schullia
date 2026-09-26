@@ -263,6 +263,12 @@ Simuliere einen gemeinsamen 100%-Pfad vom Kursstart bis zur Abgabe:
 - für „alle Quizze korrekt“ dürfen keine benötigten Trigger einen Fehlversuch
   erzwingen;
 - Mehrzieltruhen werden in einzelne Zielinstanzen und Schichten expandiert;
+- die Ressourcenbilanz enthält neben jedem Bestand auch den Goldbonus
+  `restliches Gold × goldwert` und den Diamantbonus
+  `restliche Diamanten × diamantwert`; Defaults sind 100 und 250;
+- der Abschluss-Score ist `max(0, Basispunktzahl − Abzüge) + Ressourcenbonus`
+  und darf daher über der Basispunktzahl liegen; „Perfekter Highscore“ prüft
+  nur die abzuglose Basiswertung vor dem Ressourcenbonus;
 - keine Abgabe wird durch eine unerreichbare Gartenmechanik blockiert.
 
 Bei aktivem `@achievements` gehört jede erzeugte Erde und Pflanze zum

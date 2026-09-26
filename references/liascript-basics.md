@@ -90,7 +90,11 @@ werden soll, eine Major-Version ab `1`. Erhöhe:
   zu Energieumwandlung, Masse/Gewichtskraft und „Kilometer pro Stunde“.
 - Strukturiere Kurs und Seiten mit Markdown-Überschriften. Behandle Abschnitte als
   einzeln präsentierte Seiten und halte die Hierarchie konsistent.
-- Trenne Absätze, Listen, Tabellen, Medien und Quizblöcke durch Leerzeilen.
+- Behandle Leerzeilen als Syntax und wende den exakten
+  [SchulLia-Ausgabevertrag](authoring-contract.md#leerzeilen-sind-syntax) an:
+  genau eine Leerzeile zwischen unabhängigen Blöcken, keine innerhalb der
+  zusammengehörigen Kette aus Quiz, Validator und `[[?]]`-Hinweisen sowie je
+  eine vor und nach `@resetter` und eine vor `@ADetails`.
 - Stelle eine Quizfrage als normalen Absatz unmittelbar vor das zugehörige Quiz,
   damit LiaScript sie barriereärmer als Beschriftung zuordnen kann.
 - Wähle den passenden nativen Quiztyp oder ein nachweislich benötigtes Makro.
@@ -106,11 +110,16 @@ werden soll, eine Major-Version ab `1`. Erhöhe:
 - Führe eingebettete oder importierte Skripte bei der Analyse nicht aus. Prüfe
   sie statisch und übernimm nur die minimal benötigten Ressourcen.
 
-## Vorlage verwenden
+## Vorlage und Ausgabeprofil verwenden
 
-Kopiere für einen neuen vollständigen Kurs
-[`assets/liascript-course-template.md`](../assets/liascript-course-template.md).
+Wähle das Profil vor dem Schreiben und kopiere den passenden Ausgangspunkt:
+
+- `weekly`: [`schullia-weekly-course-template.md`](../assets/schullia-weekly-course-template.md),
+- `course`: [`liascript-course-template.md`](../assets/liascript-course-template.md),
+- `task`: [`schullia-task-fragment-template.md`](../assets/schullia-task-fragment-template.md).
+
 Ersetze oder entferne vor der Ausgabe jeden Platzhalter. Ergänze bedingte Felder
-und Importe nur, wenn der konkrete Kurs sie benötigt. Verwende die Vorlage nicht
-für einen einzelnen Aufgabenausschnitt, der in einen bestehenden Kurs eingefügt
-werden soll.
+und direkte Importe nur, wenn der konkrete Kurs sie benötigt. Ein bestehender
+Kursrahmen hat Vorrang; für einen einzelnen Aufgabenausschnitt entsteht kein
+zweiter Hauptkopf. Prüfe das Ergebnis mit dem zum Profil gehörenden Aufruf aus
+dem [Ausgabegate](authoring-contract.md#ausgabegate).

@@ -11,7 +11,7 @@ python scripts/search_knowledge.py search Gamification --type document --source 
 ```
 
 Diese Referenz und [lia-loot-options.json](lia-loot-options.json) wurden gegen
-Revision `10e9c302681b31cb4f5ea9dd7a4e4fb7e5227e65` und den README-SHA-256
+Revision `a32641928d2ff2b2d6f891c0555e05c5e2402247` und den README-SHA-256
 `08087ab78b6183d6ba1f0ea83437f36bdd2ea452d11658c778502abe336978f1`
 geprüft. Weicht der aktuelle Snapshot ab, lies README, Quellcode und Tests erneut
 und aktualisiere beide Referenzen, bevor du neue Syntax behauptest.
@@ -91,8 +91,8 @@ sind kein Grund, uneinheitliche Syntax zu erzeugen.
 
 | Makro | Öffentliche Grammatik | Vertrag |
 |---|---|---|
-| `@Highscore` | `@Highscore(max, fehlversuch, hinweis, freiminuten, proMinute)` | genau fünf Zahlen; `max > 0`, alle Abzüge und Zeiten `>= 0` |
-| `@Ressourcen` | `@Ressourcen(gold, diamanten[, energie])` | zwei oder drei nichtnegative Werte; für neue Kurse nur ganze Zahlen verwenden |
+| `@Highscore` | `@Highscore(basis, fehlversuch, hinweis, freiminuten, proMinute)` | genau fünf Zahlen; `basis > 0`, alle Abzüge und Zeiten `>= 0`; Basis ist keine Obergrenze |
+| `@Ressourcen` | `@Ressourcen(gold, diamanten[, energie][, diamantwert=…][, goldwert=…])` | Startbestände nichtnegativ; für neue Kurse ganzzahlig. Optionale nichtnegative Punktwerte, Defaults: Gold 100, Diamant 250; Energie ohne Scorebonus |
 | `@achievements` | ohne Argument | aktiviert zwölf feste Erfolge; Aliasse `@Achievements`, `@Erfolge` |
 | `@lootif` … `@Endelootif` | `@lootif(trigger; spawn)` | dauerhafte bedingte Bereichsfreigabe; drei dokumentierte End-Aliasse |
 | `@Schatztruhe` | `@Schatztruhe([menge;] [ziele...;] [fundoptionen...])` | Default: inline, ein Gold |
@@ -127,12 +127,24 @@ Setze `@Highscore` auf die erste Folie; dort beginnt die Zeitmessung. Der Score
 ist:
 
 ```text
-max(0,
-  maxPoints
+basiswertung = max(0,
+  basispunkte
   - Fehlprüfungen * Fehlprüfungsabzug
   - geöffnete Hinweise * Hinweisabzug
   - volle Sekunden nach der Freigrenze * Minutenabzug / 60)
+
+ressourcenbonus = restliches Gold * goldwert
+                 + restliche Diamanten * diamantwert
+
+endscore = basiswertung + ressourcenbonus
 ```
+
+Die Basispunktzahl ist deshalb **keine Maximalpunktzahl**: Der Endscore kann sie
+überschreiten. Ohne benannte Optionen gelten `goldwert=100` und
+`diamantwert=250`; Energie gibt keinen Bonus. Beide Werte dürfen in beliebiger
+Reihenfolge als weitere Argumente oder gemeinsam semikolongetrennt angegeben
+werden. `0` deaktiviert den jeweiligen Bonus. Werte müssen endlich und
+nichtnegativ sein.
 
 Die Anzeige verwendet höchstens eine Nachkommastelle. Ab 90 Prozent erscheint
 Gold, ab 75 Prozent Silber, ab 50 Prozent Kupfer, darunter keine Trophäe.
@@ -523,7 +535,7 @@ Quizze korrekt gelöst sein. Stelle deshalb sicher:
 | ID | Erfolg | Katalogbedingung |
 |---|---|---|
 | `all-quizzes-solved` | Aufgaben-Meister | alle Kursfolien geladen und alle katalogisierten bewertbaren nativen Quizze korrekt gelöst |
-| `perfect-highscore` | Perfekter Highscore | Endscore entspricht exakt der Maximalpunktzahl |
+| `perfect-highscore` | Perfekter Highscore | Basiswertung **vor** Ressourcenbonus entspricht exakt der konfigurierten Basispunktzahl |
 | `all-treasure-chests-opened` | Schatzjäger | alle Goldtruheninstanzen geöffnet |
 | `all-diamond-chests-opened` | Diamantensammler | alle Diamanttruheninstanzen geöffnet |
 | `all-energy-chests-opened` | Energiesammler | alle Energiekisteninstanzen geöffnet |
@@ -599,8 +611,8 @@ vollständige Antwort und wird nicht erneut als exakte Zahl abgefragt.
 | Pflichtpunkt | Zu klärende Anzahl und Details | Öffentliche lia-loot-Abbildung |
 |---|---|---|
 | Achievements | Aktivierung `0` oder `1` | genau ein `@achievements` aktiviert immer alle zwölf festen Erfolge; keine Teilmenge oder eigenen Erfolge |
-| Highscore | Konfiguration `0` oder `1`; bei `1` Maximalpunkte und vier Abzugs-/Zeitwerte | genau ein `@Highscore(max, fehlversuch, hinweis, freiminuten, proMinute)` |
-| Ressourcen | Konfiguration `0` oder `1`; Arten Gold, Diamanten, Energie; Startmenge, Zahl der Belohnungsfunde und Belohnungsmenge je Art | genau ein `@Ressourcen`; feste Truhenmakros |
+| Highscore | Konfiguration `0` oder `1`; bei `1` Basispunktzahl und vier Abzugs-/Zeitwerte | genau ein `@Highscore(basis, fehlversuch, hinweis, freiminuten, proMinute)` |
+| Ressourcen | Konfiguration `0` oder `1`; Arten Gold, Diamanten, Energie; Startmenge, Zahl der Belohnungsfunde und Belohnungsmenge je Art; optional Gold-/Diamantpunktwert abweichend von 100/250 | genau ein `@Ressourcen`; feste Truhenmakros und optional `goldwert`/`diamantwert` |
 | versteckte Inhalte und Items | Anzahl je `unsichtbar` und `zauberstaub`; Inhalt oder Funditem, Ort und textneutrale Auffindbarkeit; neue Hinweisprosa nur für Puzzle/Geheimfolie | `@Unsichtbar`, `@Zauberstaub` oder gleichnamige Fundoption |
 | vergrabene Inhalte | Anzahl der Erdinstanzen | `@Erdhaufen`, `@Erdhaufen.inline` oder direkte Erdschicht; erreichbare Schaufel |
 | Pflanzen | Anzahl der Pflanzeninstanzen | `@Pflanze`, `@Pflanze.inline` oder direkte Pflanzenschicht; erreichbare Gießkanne |
@@ -690,12 +702,14 @@ ausdrücklicher Vorgabe zulässig.
 
 **Highscore**
 
-Frage oder bestimme transparent Maximalpunkte, Fehlprüfungsabzug,
+Frage oder bestimme transparent Basispunkte, Fehlprüfungsabzug,
 Hinweisabzug, Freiminuten und Abzug pro weiterer Minute. Leicht gewährt mehr als
 die erwartete Bearbeitungszeit und kleine relative Abzüge, mittel ungefähr die
 erwartete Zeit und mäßige Abzüge, schwer eine knappe Freigrenze und deutlichere
 Abzüge. lia-loot setzt kein hartes Zeitlimit; nach der Freigrenze sinkt nur der
 Score. In jedem Profil bleibt ein abzugsloser perfekter Witness möglich.
+Berechne und protokolliere getrennt Basiswertung, Goldbonus, Diamantbonus und
+Endscore; nenne die Basispunktzahl nicht Maximalwert.
 
 ## Variationsvertrag
 

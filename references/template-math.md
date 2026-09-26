@@ -43,22 +43,22 @@ Lokale Dateien liegen unter `corpus/sources/<source-dir>/files/`.
 
 | Kürzel | Repository / Revision | source-dir |
 |---|---|---|
-| OCR | `MINT-the-GAP/lia-canvas-ocr`, `a139a851213c3b295d316da51aefecd1cb9019fe` | `ghrepo-mint-the-gap-lia-canvas-ocr-b602498873` |
-| KO | `MINT-the-GAP/lia-coordinate`, `8dcdbb50d410cea6b107388d4ef5f7e4dedf63cb` | `ghrepo-mint-the-gap-lia-coordinate-ad5f35c719` |
+| OCR | `MINT-the-GAP/lia-canvas-ocr`, `167982ed0804e57b12316c5b54ec9d97807d629e` | `ghrepo-mint-the-gap-lia-canvas-ocr-b602498873` |
+| KO | `MINT-the-GAP/lia-coordinate`, `a4d24ee6c7c8b64f9379876f0c3d143e2229d7ff` | `ghrepo-mint-the-gap-lia-coordinate-ad5f35c719` |
 | MA | `MINT-the-GAP/lia-Mathe`, `9f6048a438b649f1575609a4020dc63c09f93baf` | `ghrepo-mint-the-gap-lia-mathe-1df98115ce` |
 | MP | `MINT-the-GAP/lia-mathpath`, `62548fa72170a7be67e3ad448a366598da1b14b1` | `ghrepo-mint-the-gap-lia-mathpath-011889c391` |
-| PE | `MINT-the-GAP/lia-pentominos`, `055342d24604f8db43b591c7738c7af7847a9971` | `ghrepo-mint-the-gap-lia-pentominos-08098ff96a` |
-| AL | `LiaTemplates/Algebrite`, `9227c2fa05cbc97d3a19ed6fb394e29080781081` | `ghfile-liatemplates-algebrite-readme-md-deee131a9c` |
+| PE | `MINT-the-GAP/lia-pentominos`, `33d7df37fdf3e2b0ee3d7a4543f3584ef0be025c` | `ghrepo-mint-the-gap-lia-pentominos-08098ff96a` |
+| AL | `LiaTemplates/Algebrite`, `b5a675525d0be71e3cc37476a7fba065e9590f62` | `ghfile-liatemplates-algebrite-readme-md-deee131a9c` |
 | JX | `LiaTemplates/JSXGraph`, `f426725ff10580b5ebdcc3230a4ca31c415faadb` | `ghfile-liatemplates-jsxgraph-readme-md-b608304eab` |
 
 | Kürzel | Direkter Import | Weitere direkte Imports |
 |---|---|---|
-| OCR | `https://raw.githubusercontent.com/MINT-the-GAP/lia-canvas-ocr/a139a851213c3b295d316da51aefecd1cb9019fe/README.md` | Algebrite davor |
-| KO | `https://raw.githubusercontent.com/MINT-the-GAP/lia-coordinate/8dcdbb50d410cea6b107388d4ef5f7e4dedf63cb/README.md` | JSXGraph davor; Ausnahme rein statischer Import |
+| OCR | `https://raw.githubusercontent.com/MINT-the-GAP/lia-canvas-ocr/167982ed0804e57b12316c5b54ec9d97807d629e/README.md` | Algebrite davor |
+| KO | `https://raw.githubusercontent.com/MINT-the-GAP/lia-coordinate/a4d24ee6c7c8b64f9379876f0c3d143e2229d7ff/README.md` | JSXGraph davor; Ausnahme rein statischer Import |
 | MA | `https://raw.githubusercontent.com/MINT-the-GAP/lia-Mathe/9f6048a438b649f1575609a4020dc63c09f93baf/README.md` | Algebrite bei CAS-Prüfung |
 | MP | `https://raw.githubusercontent.com/MINT-the-GAP/lia-mathpath/62548fa72170a7be67e3ad448a366598da1b14b1/README.md` | FreezeREADME vor MathPath nur für automatischen `@ADetails`-Kontext |
-| PE | `https://raw.githubusercontent.com/MINT-the-GAP/lia-pentominos/055342d24604f8db43b591c7738c7af7847a9971/README.md` | JSXGraph, lia-coordinate, Pentominos in dieser Reihenfolge |
-| AL | `https://raw.githubusercontent.com/LiaTemplates/Algebrite/9227c2fa05cbc97d3a19ed6fb394e29080781081/README.md` | Keine zusätzlichen Kursmakros |
+| PE | `https://raw.githubusercontent.com/MINT-the-GAP/lia-pentominos/33d7df37fdf3e2b0ee3d7a4543f3584ef0be025c/README.md` | JSXGraph, lia-coordinate, Pentominos in dieser Reihenfolge |
+| AL | `https://raw.githubusercontent.com/LiaTemplates/Algebrite/b5a675525d0be71e3cc37476a7fba065e9590f62/README.md` | Keine zusätzlichen Kursmakros |
 | JX | `https://raw.githubusercontent.com/LiaTemplates/JSXGraph/f426725ff10580b5ebdcc3230a4ca31c415faadb/README.md` | Keine zusätzlichen Kursmakros |
 
 Importbelege: OCR `README.md:81–91,195,372–378`; KO `README.md:341–354`;
@@ -73,14 +73,27 @@ transitive Laufzeit: Templateköpfe enthalten teils bewegliche Fremdimporte.
 | Öffentlicher Aufruf | Optionen und Einsatz | Beleg |
 |---|---|---|
 | `@canvas` | Parameterlos unmittelbar unter ein bestehendes Antwortfeld. Handschrifteingabe; kein neues Quiz und kein fachlicher Validator. Auswahlrechteck überträgt den erkannten mathematischen Ausdruck in das Feld. | OCR `README.md:20–34,97–125` |
-| `@BerechneOCR(aufgabe[,optionen])` | Genau ein natives Quiz für vollständigen Rechenweg samt Validator. Aufgabe als Backtick-Argument. Zweites Argument `1` zeigt Zeilenfeedback, `0` schaltet es aus; weggelassen ist Feedback an. Keine separate detaillierte Lösung anhängen. | OCR `README.md:36–54,127–195,238–243` |
+| `@BerechneOCR(aufgabe[, optionen])` | Genau ein natives Quiz für vollständigen Rechenweg samt Validator. Aufgabe in Backticks, besonders bei Kommata oder Klammern. Zweites Argument `1`/`0` schaltet Zeilenfeedback ein/aus; alternativ enthält ein gemeinsames Backtick-Argument die benannten Optionen. Quizattribute unmittelbar davor, native `[[?]]`-Hinweise unmittelbar danach. Keine separate detaillierte Lösung anhängen. | OCR `README.md:36–54,136–331` |
 
-Der Optionsparser akzeptiert außerdem `true`/`false` und die benannten
-Schreibweisen `zeilenrückmeldung=1` beziehungsweise
-`zeilenrueckmeldung=true`. Nur diese Optionsfamilie ist belegt; unbekannte,
-doppelte und leere Teiloptionen sind ungültig. Dies sind statisch belegte
-Parserformen; die README dokumentiert die kurzen `1`/`0`-Aufrufe.
-Beleg: OCR `src/lia/calculation-options.ts:16–19,35–94`.
+Die benannten Optionen stehen gemeinsam in **einem** Backtick-Argument und
+werden durch Semikola getrennt. Dokumentiert sind `aufgabe`, `stelle`,
+`ordnung`, `intervall`, `von`, `bis`, `zweitefunktion`, `seite`, `art`,
+`familie`, `teile`, `winkelmass` und `zeilenrueckmeldung`. `aufgabe` kennt 26
+Arten von `gleichung` und `nullstellen` über Analysisaufträge bis
+`kurvendiskussion`; Pflichtangaben und mathematische Abdeckung für den
+konkreten Typ in der aktuellen README nachschlagen. Unbekannte, doppelte,
+leere oder für den Aufgabentyp unzulässige Optionen sind Fehler und werden
+nicht stillschweigend ignoriert. `@BerechneOCRWithOptions` bleibt nur ein
+Kompatibilitätsalias; neue Aufgaben verwenden `@BerechneOCR`.
+
+```markdown
+<!-- data-hint-button="1" data-solution-button="3" -->
+@BerechneOCR(`f(x)=2*x^3-5*x^2+4*x-9`,`aufgabe=ableitung;ordnung=1;zeilenrueckmeldung=1`)
+[[?]] Wende die Potenzregel auf jeden Summanden einzeln an.
+```
+
+Belege: OCR `README.md:136–331`,
+`docs/berechneocr-functions.md:1–78`.
 
 Nichtnegative ganzzahlige Aufgaben mit `+`, `-`, `\cdot`/`\times` oder `:`
 wählen das schriftliche Verfahren automatisch. Keinen Modusparameter erfinden.
@@ -135,18 +148,32 @@ Katalog ist keine Garantie für ein beliebiges Thema.
 
 | Öffentlicher Aufruf | Prüflogik / Optionen | Beleg |
 |---|---|---|
-| `@Algebrite.eval` | Nach ausführbarem Codeblock; CAS-Eingabe aus `@input`. | AL `README.md:74,266–287` |
-| `@Algebrite.check(soll)` | Algebraische Gleichwertigkeit; Ausdruck oder Semikolonliste `[a;b;c]` für mehrere Eingaben. | AL `README.md:76–117,291–343` |
-| `@Algebrite.check2(soll,toleranz)` | Absolute Abweichung **kleiner** als Toleranz; beide Argumente auch als gleich lange Semikolonlisten. Zweites Argument ist keine obere Intervallgrenze. | AL `README.md:146–192,345–380` |
-| `@Algebrite.check_margin(unten,oben)` | Inklusives Intervall für die erste Eingabe. | AL `README.md:194–211,384–396` |
-| `@Algebrite.check_expression(sollgleichung)` | Vergleicht die Differenzen linke minus rechte Seite. Keine allgemeine Gleichheit von Lösungsmengen zusichern. | AL `README.md:119–144,398–411` |
+| `@Algebrite.eval` | Direkt unter einem Codeblock; Ergebnisse standardmäßig als Klartext. `pretty(1)` schaltet auf Formeldarstellung. | AL `README.md:323–372` |
+| `@Algebrite.pretty` | Wie `eval`, aber alle Ergebnisse dauerhaft als nummerierte LaTeX-Formeln; Fehler rot. | AL `README.md:374–400` |
+| `@Algebrite.repl` | Führt den Codeblock aus und öffnet danach ein interaktives Terminal mit demselben Variablenzustand. | AL `README.md:402–416` |
+| `@Algebrite.check(soll[, units=1])` | Algebraische Gleichwertigkeit; Ausdruck oder Semikolonliste `[a;b;c]` für mehrere Eingaben. Einheiten standardmäßig aus. | AL `README.md:457–545` |
+| `@Algebrite.check2(soll,toleranz[, units=0])` | Absolute Abweichung **kleiner oder gleich** der Toleranz. Sollwerte als Semikolonliste; eine einzelne Toleranz gilt für alle Felder, sonst positionsgleiche Liste. Einheiten standardmäßig an. | AL `README.md:547–601` |
+| `@Algebrite.check_margin(unten,oben[, units=0])` | Inklusives Intervall für die erste Eingabe; Einheiten standardmäßig an. | AL `README.md:603–617` |
+| `@Algebrite.check_expression(sollgleichung[, units=1])` | Vergleicht die Differenzen linke minus rechte Seite. Einheiten standardmäßig aus; keine allgemeine Gleichheit von Lösungsmengen zusichern. | AL `README.md:619–634` |
 
 Dezimalkomma, Prozent und LaTeX-Normalisierung sind Teil der Implementierung.
 Keinen bestimmten Rechenweg oder eine bestimmte Schreibweise als erzwungen
-behaupten. Validator direkt an das jeweilige native Quiz anschließen.
-Der ausführliche Implementationsblock am README-Ende enthält ältere
-Normalisierungsformen; maßgeblich für den Import ist der echte Dokumentkopf.
-Beleg: AL `README.md:24–211,414–609`.
+behaupten. Validator ohne Leerzeile direkt an das jeweilige native Quiz
+anschließen. Bei einer physikalischen Größe stehen Einheit und Zahlenwert im
+Antwortfeld und im Sollwert; für `check` und `check_expression` dann zwingend
+`units=1` setzen. Eine falsche oder fehlende Einheit muss falsch bewertet
+werden. Bei `check2` darf die Toleranz eine andere, aber äquivalente Einheit
+besitzen.
+
+Als SchulLia-Autorenregel Sollterme und Sollgleichungen mit Klammern, Kommata,
+Semikola oder verschachtelten Funktionen in Backticks setzen, damit die
+LiaScript-Argumentgrenzen eindeutig bleiben; bei neuen symbolischen Aufgaben
+Backticks generell bevorzugen, etwa
+``@Algebrite.check(`-(K/2)*t^(-3/2)`)``. Diese Schreibweise ist in realen
+MINT-the-GAP-Aufgaben belegt und verhindert insbesondere die wiederkehrende
+Klammerfehlinterpretation.
+
+Beleg: AL `README.md:189–253,418–634`.
 
 ## LiaTemplates/JSXGraph
 
@@ -197,12 +224,27 @@ Spiegeln ist in dieser Revision keine Bedienoption. Für offene Abdeckungen ist
 Musterlage kann als anschließender Sternblock ergänzt werden.
 Quelle: PE `README.md:319–325,355–373,411–499`.
 
+Das Hunderterfeld ist höchstens 520 px breit und passt sich der verfügbaren
+**Containerbreite** an. Das Inventar steht bei genügend Platz rechts, sonst
+darunter; auch seine Spaltenzahl reagiert auf den Container und nicht nur auf
+das Browserfenster. Keine starre Zweispaltenbreite um das Makro bauen.
+Quelle: PE `README.md:234–252`.
+
 ## lia-coordinate: gemeinsame Regeln
 
 Alle `spec`-Argumente in Backticks schreiben; Bestandteile durch Semikola
 trennen. Deutsche/englische Namen sind öffentliche Aliase, einschließlich
 `@Regession`. Auf Schreibweise achten: insbesondere `@distance` und
 `@angle`. Vollständiger öffentlicher Kopf: KO `README.md:13–320`.
+
+Aktionsknöpfe, Quizrückmeldungen, Tooltips und Eingabehilfen richten sich nach
+`language: de` beziehungsweise `language: en` des Kurses. Bei `@DGS` stellt
+„Restore initial state“ den autorenseitigen Ausgangszustand einschließlich
+gelöschter Makroobjekte und Achsenbeschriftungen wieder her. Der
+Vollbildschalter bewahrt beim Verlassen die vorherige eingebettete Größe und
+deren Pan-/Zoom-Ausschnitt; Änderungen am Vollbildausschnitt überschreiben ihn
+nicht. Diese Wiederherstellung nicht durch eigene Ersatzmakros nachbauen.
+Belege: KO `README.md:631–635,1485–1499`.
 
 Eindeutige Board-ID verbindet die Bestandteile. Board zuerst, danach
 referenzierte Punkte/Objekte, abgeleitete Geometrie, Quiz und Hilfen.

@@ -62,7 +62,7 @@ def test_lia_loot_reference_contract() -> None:
     options_path = ROOT / "references" / "lia-loot-options.json"
     options = json.loads(options_path.read_text(encoding="utf-8"))
 
-    assert options["schema_version"] == 5
+    assert options["schema_version"] == 6
     assert set(options["macros"]) == {
         "Highscore",
         "Ressourcen",
@@ -100,6 +100,12 @@ def test_lia_loot_reference_contract() -> None:
     assert options["macros"]["Pflanze.inline"]["aliases"] == ["Blume.inline"]
     assert options["macros"]["Diamanttruhe"]["aliases"] == ["Diamantentruhe"]
     assert options["macros"]["Energiekiste"]["aliases"] == ["Energietruhe"]
+    assert options["macros"]["Highscore"]["base_points_are_upper_bound"] is False
+    assert options["macros"]["Highscore"]["perfect_highscore_achievement_uses"] == "base_score_before_resource_bonus"
+    score_options = options["macros"]["Ressourcen"]["named_score_options"]
+    assert score_options["goldwert"]["default"] == 100
+    assert score_options["diamantwert"]["default"] == 250
+    assert score_options["energy_score_value"] == 0
     assert set(options["public_macro_names_including_aliases"]) == {
         "Highscore",
         "Ressourcen",
