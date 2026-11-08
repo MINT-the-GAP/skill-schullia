@@ -1,0 +1,363 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schullia/local-orientation-metadata.schema.json",
+  "description": "Strict local-only structural metadata for an orientation-only TeX source.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "parser_version",
+    "usage_context",
+    "source_id",
+    "document_id",
+    "local_provenance",
+    "classification",
+    "features",
+    "technical",
+    "suitability",
+    "structure",
+    "tasks",
+    "solutions",
+    "reference_counts",
+    "warning_codes",
+    "risk_codes"
+  ],
+  "properties": {
+    "schema_version": { "type": "integer", "const": 2 },
+    "parser_version": { "type": "integer", "const": 2 },
+    "usage_context": { "const": "orientation-only" },
+    "source_id": { "$ref": "#/$defs/source_id" },
+    "document_id": { "$ref": "#/$defs/document_id" },
+    "local_provenance": { "$ref": "#/$defs/local_provenance" },
+    "classification": { "$ref": "#/$defs/classification" },
+    "features": { "$ref": "#/$defs/features" },
+    "technical": { "$ref": "#/$defs/technical" },
+    "suitability": {
+      "enum": ["structure_only", "review_required"]
+    },
+    "structure": { "$ref": "#/$defs/structure" },
+    "tasks": {
+      "type": "array",
+      "maxItems": 5000,
+      "items": { "$ref": "#/$defs/task" }
+    },
+    "solutions": {
+      "type": "array",
+      "maxItems": 5000,
+      "items": { "$ref": "#/$defs/solution" }
+    },
+    "reference_counts": { "$ref": "#/$defs/reference_counts" },
+    "warning_codes": {
+      "type": "array",
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/warning_code" }
+    },
+    "risk_codes": {
+      "type": "array",
+      "maxItems": 128,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/risk_code" }
+    }
+  },
+  "$defs": {
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+    },
+    "document_id": {
+      "type": "string",
+      "pattern": "^doc-[a-f0-9]{32}$"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^task-[0-9]{6}$"
+    },
+    "solution_id": {
+      "type": "string",
+      "pattern": "^solution-[0-9]{6}$"
+    },
+    "line_span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "integer", "minimum": 1, "maximum": 100000 },
+        "end": { "type": "integer", "minimum": 1, "maximum": 100000 }
+      }
+    },
+    "local_provenance": {
+      "description": "Allowed only inside ignored local state; never a public diagnostic.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relative_locator",
+        "size_bytes",
+        "modified_ns",
+        "integrity_sha256"
+      ],
+      "properties": {
+        "relative_locator": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "pattern": "^(?!/)(?![\\s\\S]*:)(?![\\s\\S]*(?:^|/)\\.\\.(?:/|(?![\\s\\S])))(?![\\s\\S]*\\\\)[^\\u0000-\\u001F\\u007F\\u0085\\u2028\\u2029]+(?![\\s\\S])"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4194304
+        },
+        "modified_ns": { "type": "integer", "minimum": 0 },
+        "integrity_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subjects",
+        "grades",
+        "learner_groups",
+        "document_types",
+        "archive_policy",
+        "basis"
+      ],
+      "properties": {
+        "subjects": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": { "enum": ["mathematics", "physics"] }
+        },
+        "grades": {
+          "type": "array",
+          "maxItems": 9,
+          "uniqueItems": true,
+          "items": { "type": "integer", "minimum": 5, "maximum": 13 }
+        },
+        "learner_groups": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 80 }
+        },
+        "document_types": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+          }
+        },
+        "archive_policy": { "enum": ["exclude", "deprioritize"] },
+        "basis": { "const": "configured" }
+      }
+    },
+    "feature_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "basis", "confidence"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+        },
+        "basis": {
+          "enum": ["body_pattern", "operator_derived", "structure_derived"]
+        },
+        "confidence": { "enum": ["medium", "high"] }
+      }
+    },
+    "feature_array": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/feature_candidate" }
+    },
+    "features": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "taxonomy_version",
+        "status",
+        "topic_ids",
+        "task_families",
+        "learning_actions",
+        "response_forms",
+        "solution_forms",
+        "reasoning_structures",
+        "number_profiles",
+        "quantity_profiles",
+        "context_profiles",
+        "representations",
+        "progression_profiles",
+        "complexity_bands"
+      ],
+      "properties": {
+        "taxonomy_version": { "type": "integer", "const": 1 },
+        "status": {
+          "enum": ["classified", "unknown", "ambiguous", "review_required"]
+        },
+        "topic_ids": { "$ref": "#/$defs/feature_array" },
+        "task_families": { "$ref": "#/$defs/feature_array" },
+        "learning_actions": { "$ref": "#/$defs/feature_array" },
+        "response_forms": { "$ref": "#/$defs/feature_array" },
+        "solution_forms": { "$ref": "#/$defs/feature_array" },
+        "reasoning_structures": { "$ref": "#/$defs/feature_array" },
+        "number_profiles": { "$ref": "#/$defs/feature_array" },
+        "quantity_profiles": { "$ref": "#/$defs/feature_array" },
+        "context_profiles": { "$ref": "#/$defs/feature_array" },
+        "representations": { "$ref": "#/$defs/feature_array" },
+        "progression_profiles": { "$ref": "#/$defs/feature_array" },
+        "complexity_bands": { "$ref": "#/$defs/feature_array" }
+      }
+    },
+    "technical": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["encoding", "parse_status", "line_count", "command_count"],
+      "properties": {
+        "encoding": {
+          "enum": ["utf-8", "utf-8-sig", "windows-1252", "iso-8859-1"]
+        },
+        "parse_status": { "enum": ["parsed", "parsed_with_warnings"] },
+        "line_count": { "type": "integer", "minimum": 1, "maximum": 100000 },
+        "command_count": { "type": "integer", "minimum": 0, "maximum": 25000 }
+      }
+    },
+    "heading_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["section", "subsection", "subsubsection", "paragraph"],
+      "properties": {
+        "section": { "type": "integer", "minimum": 0, "maximum": 5000 },
+        "subsection": { "type": "integer", "minimum": 0, "maximum": 5000 },
+        "subsubsection": { "type": "integer", "minimum": 0, "maximum": 5000 },
+        "paragraph": { "type": "integer", "minimum": 0, "maximum": 5000 }
+      }
+    },
+    "structure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "heading_counts",
+        "heading_count",
+        "task_count",
+        "solution_count",
+        "list_count",
+        "item_count",
+        "verbatim_block_count",
+        "macro_definition_count"
+      ],
+      "properties": {
+        "heading_counts": { "$ref": "#/$defs/heading_counts" },
+        "heading_count": { "type": "integer", "minimum": 0, "maximum": 20000 },
+        "task_count": { "type": "integer", "minimum": 0, "maximum": 5000 },
+        "solution_count": { "type": "integer", "minimum": 0, "maximum": 5000 },
+        "list_count": { "type": "integer", "minimum": 0, "maximum": 5000 },
+        "item_count": { "type": "integer", "minimum": 0, "maximum": 25000 },
+        "verbatim_block_count": { "type": "integer", "minimum": 0, "maximum": 5000 },
+        "macro_definition_count": { "type": "integer", "minimum": 0, "maximum": 5000 }
+      }
+    },
+    "operator_id": {
+      "enum": [
+        "angeben", "auffuellen", "auswaehlen", "begründen", "berechnen",
+        "beschreiben", "bestimmen", "beurteilen", "bewerten", "darstellen",
+        "entscheiden", "ergaenzen", "erklaeren", "ermitteln", "erstellen",
+        "formulieren", "interpretieren", "konstruieren", "loesen", "markieren",
+        "nennen", "pruefen", "skizzieren", "untersuchen", "vergleichen",
+        "zeigen", "zeichnen", "zuordnen"
+      ]
+    },
+    "operator_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operator_id", "basis", "confidence", "line", "conflict_status"],
+      "properties": {
+        "operator_id": { "$ref": "#/$defs/operator_id" },
+        "basis": { "const": "body_pattern" },
+        "confidence": { "enum": ["medium"] },
+        "line": { "type": "integer", "minimum": 1, "maximum": 100000 },
+        "conflict_status": { "enum": ["none", "conflict"] }
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id", "ordinal", "kind", "line_span", "subtask_count",
+        "operator_candidates", "response_shape", "solution_presence",
+        "solution_shape", "solution_assignment"
+      ],
+      "properties": {
+        "task_id": { "$ref": "#/$defs/task_id" },
+        "ordinal": { "type": "integer", "minimum": 1, "maximum": 5000 },
+        "kind": { "enum": ["environment", "command"] },
+        "line_span": { "$ref": "#/$defs/line_span" },
+        "subtask_count": { "type": "integer", "minimum": 0, "maximum": 25000 },
+        "operator_candidates": {
+          "type": "array",
+          "maxItems": 28,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/operator_candidate" }
+        },
+        "response_shape": { "enum": ["unknown", "multi-part"] },
+        "solution_presence": { "enum": ["absent", "present", "ambiguous"] },
+        "solution_shape": { "enum": ["unknown", "environment", "command"] },
+        "solution_assignment": { "enum": ["unassigned", "assigned", "ambiguous"] }
+      }
+    },
+    "solution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["solution_id", "ordinal", "kind", "line_span", "assignment_status"],
+      "properties": {
+        "solution_id": { "$ref": "#/$defs/solution_id" },
+        "ordinal": { "type": "integer", "minimum": 1, "maximum": 5000 },
+        "kind": { "enum": ["environment", "command"] },
+        "line_span": { "$ref": "#/$defs/line_span" },
+        "assignment_status": { "enum": ["assigned", "unassigned", "ambiguous"] },
+        "task_id": { "$ref": "#/$defs/task_id" }
+      }
+    },
+    "reference_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "literal_relative", "absolute", "traversal", "dynamic", "pipe", "malformed"
+      ],
+      "properties": {
+        "literal_relative": { "type": "integer", "minimum": 0, "maximum": 25000 },
+        "absolute": { "type": "integer", "minimum": 0, "maximum": 25000 },
+        "traversal": { "type": "integer", "minimum": 0, "maximum": 25000 },
+        "dynamic": { "type": "integer", "minimum": 0, "maximum": 25000 },
+        "pipe": { "type": "integer", "minimum": 0, "maximum": 25000 },
+        "malformed": { "type": "integer", "minimum": 0, "maximum": 25000 }
+      }
+    },
+    "warning_code": {
+      "enum": [
+        "legacy_encoding", "unclosed_verbatim", "unbalanced_braces",
+        "unbalanced_brackets", "unbalanced_environment",
+        "malformed_macro_definition", "malformed_task_block",
+        "malformed_solution_block", "ambiguous_solution_assignment",
+        "warning_limit_reached"
+      ]
+    },
+    "risk_code": {
+      "enum": [
+        "shell_escape", "file_io", "lua_execution", "dynamic_tex",
+        "macro_definition", "external_program", "external_resource",
+        "pipe_input", "absolute_reference", "reference_traversal",
+        "dynamic_reference", "malformed_reference", "risk_limit_reached"
+      ]
+    }
+  }
+}

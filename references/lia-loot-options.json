@@ -1,10 +1,10 @@
 {
-  "schema_version": 6,
+  "schema_version": 7,
   "source": {
     "source_id": "ghrepo:mint-the-gap/lia-loot",
     "path": "README.md",
-    "reviewed_revision": "a32641928d2ff2b2d6f891c0555e05c5e2402247",
-    "readme_sha256": "52fd9fe9e010c944fbec0b4611e979af4171be30e59421c556e48bb9f2ecd730",
+    "reviewed_revision": "5e5255cfa94c494fee1fd67b1b66f77baaad918c",
+    "readme_sha256": "b1589f8fd07a76e2b1e3fb4828b3cb0374fb93af33a6396eb389529944202e6a",
     "usage_context": "task-content"
   },
   "emission_policy": {
@@ -50,7 +50,19 @@
       "LootPortal_",
       "LootVersteckt_",
       "LootSchloss_",
-      "LootGeheimfolie_"
+      "LootGeheimfolie_",
+      "LootTaschenlampe_",
+      "LootShop_",
+      "LootBonus_",
+      "LootAxt_",
+      "LootNebel_",
+      "LootNebelStart_",
+      "LootNebelEnd_",
+      "LootKiste_",
+      "LootGeschenk_",
+      "LootKatze_",
+      "LootFutter_",
+      "LootReservefolie_"
     ]
   },
   "unsupported_public_apis": [
@@ -336,6 +348,34 @@
       "singleton_kind": "magnifier",
       "independent_of_action_tool": true
     },
+    "Taschenlampe": {
+      "syntax": "@Taschenlampe([collectible_options...])",
+      "option_group": "singleton_finder",
+      "singleton_kind": "flashlight",
+      "reveals": "fog",
+      "independent_of_action_tool": true
+    },
+    "Shop": {
+      "syntax": "@Shop(article=price[; article=price...])",
+      "option_group": "shop",
+      "one_purchase_per_concrete_offer_and_tab": true,
+      "requires_resources_for_prices": true
+    },
+    "Atlaskarte": {
+      "syntax": "@Atlaskarte([collectible_options...])",
+      "option_group": "singleton_finder",
+      "singleton_kind": "atlas"
+    },
+    "Perk": {
+      "syntax": "@Perk(perk; [collectible_options...])",
+      "option_group": "perk"
+    },
+    "Axt": {
+      "syntax": "@Axt([collectible_options...])",
+      "option_group": "singleton_finder",
+      "singleton_kind": "axe",
+      "opens": "crate"
+    },
     "Schaufel": {
       "syntax": "@Schaufel([collectible_options...])",
       "option_group": "singleton_finder",
@@ -408,6 +448,41 @@
       "security_boundary": false,
       "collectible_options_allowed": false
     },
+    "Nebel": {
+      "syntax": "@Nebel(single_line_content)",
+      "concealment": "fog",
+      "security_boundary": false,
+      "requires": "Taschenlampe"
+    },
+    "NebelStart": {
+      "syntax": "@NebelStart",
+      "option_group": "fog_container",
+      "closing_macro": "NebelEnd"
+    },
+    "NebelEnd": {
+      "syntax": "@NebelEnd",
+      "closes": "NebelStart"
+    },
+    "Kiste": {
+      "syntax": "@Kiste(item_or_backtick_protected_macro)",
+      "option_group": "item_wrapper",
+      "requires": "Axt",
+      "base_hits": 8
+    },
+    "Geschenk": {
+      "syntax": "@Geschenk(item_or_backtick_protected_macro)",
+      "option_group": "item_wrapper"
+    },
+    "Katze": {
+      "syntax": "@Katze([fur_color;] [collectible_options...])",
+      "option_group": "cat",
+      "fur_colors": ["orange", "grau", "schwarz", "weiss", "dreifarbig"]
+    },
+    "Futter": {
+      "syntax": "@Futter(item_or_backtick_protected_macro)",
+      "option_group": "item_wrapper",
+      "requires": "collected_cat_before_consumption"
+    },
     "Schloss": {
       "syntax": "@Schloss(target, color[; anchor])",
       "target_arity": 1,
@@ -420,6 +495,13 @@
       "arity": 0,
       "placement": "standalone_on_secret_slide",
       "security_boundary": false
+    },
+    "Reservefolie": {
+      "syntax": "@Reservefolie(positive_integer_energy_reward)",
+      "arity": 1,
+      "maximum_per_course": 1,
+      "requires_energy_resource_parameter": true,
+      "placement": "standalone_on_reserve_slide"
     }
   },
   "public_macro_names_including_aliases": [
@@ -442,6 +524,11 @@
     "Puzzleteil",
     "Puzzletor",
     "Lupe",
+    "Taschenlampe",
+    "Shop",
+    "Atlaskarte",
+    "Perk",
+    "Axt",
     "Schaufel",
     "Giesskanne",
     "Erdhaufen",
@@ -458,8 +545,16 @@
     "Einbahnportal",
     "Unsichtbar",
     "Zauberstaub",
+    "Nebel",
+    "NebelStart",
+    "NebelEnd",
+    "Kiste",
+    "Geschenk",
+    "Katze",
+    "Futter",
     "Schloss",
-    "Geheimfolie"
+    "Geheimfolie",
+    "Reservefolie"
   ],
   "option_groups": {
     "chest": {
@@ -507,12 +602,43 @@
       "all_matching_pieces_must_precede_gate": true
     },
     "singleton_finder": {
-      "applies_to": ["Lupe", "Schaufel", "Giesskanne"],
+      "applies_to": ["Lupe", "Taschenlampe", "Atlaskarte", "Axt", "Schaufel", "Giesskanne"],
       "shared_collectible_options": true,
       "item_concealment": "zero_or_one",
       "direct_layers": "zero_or_more_ordered",
       "unknown_option": "fail_closed",
       "ownership": "one_collected_state_per_tool_kind"
+    },
+    "shop": {
+      "offer_separator": "semicolon",
+      "offer_form": "article=price",
+      "combined_price_separator": "+",
+      "price_resources": ["gold", "diamant", "diamanten", "energie"],
+      "percentage_perk_range": [1, 500],
+      "resource_articles_require_resources": true,
+      "energy_articles_require_energy_parameter": true
+    },
+    "perk": {
+      "first_argument": "documented_perk_id",
+      "shared_collectible_options": true,
+      "percentage_range": [1, 500],
+      "percentage_perks_stack": true
+    },
+    "item_wrapper": {
+      "payload": "exactly_one_public_collectible_macro",
+      "nested_parentheses_require_backticks": true,
+      "interactive_ranges_and_puzzle_gates_forbidden": true
+    },
+    "cat": {
+      "fur_color": "zero_or_one_documented_color",
+      "shared_collectible_options": true,
+      "one_collected_state_per_color": true
+    },
+    "fog_container": {
+      "opening_macro": "NebelStart",
+      "closing_macro": "NebelEnd",
+      "range_rules": true,
+      "requires": "Taschenlampe"
     },
     "reveal_container": {
       "applies_to": ["Erdhaufen", "Pflanze"],
@@ -551,12 +677,17 @@
       "Schluessel",
       "Puzzleteil",
       "Lupe",
+      "Taschenlampe",
+      "Atlaskarte",
+      "Perk",
+      "Axt",
+      "Katze",
       "Schaufel",
       "Giesskanne",
       "Erdhaufen",
       "Pflanze"
     ],
-    "does_not_apply_to": ["Puzzletor", "Portal", "Einwegportal", "Einbahnportal", "Schloss", "Unsichtbar", "Zauberstaub"],
+    "does_not_apply_to": ["Puzzletor", "Portal", "Einwegportal", "Einbahnportal", "Schloss", "Unsichtbar", "Zauberstaub", "Nebel", "NebelStart", "NebelEnd", "Shop", "Kiste", "Geschenk", "Futter", "Reservefolie"],
     "anchor": {
       "canonical": "anker",
       "accepted_aliases": ["nur auf folie", "nur-auf-folie", "folie", "only on slide", "only-on-slide", "slide only", "slide-only"],
@@ -619,6 +750,12 @@
       "accepted_aliases": {"solid": "solid", "verdeckt": "solid", "dust": "dust"},
       "maximum_occurrences": 1,
       "duplicate_or_conflict": "fail_closed"
+    },
+    "fog": {
+      "canonical": "nebel",
+      "accepted_aliases": ["dunkel", "dunkelheit", "fog", "darkness"],
+      "requires": "Taschenlampe",
+      "independent_of_item_concealment_and_direct_layers": true
     },
     "direct_layers": {
       "applies_to": ["Schatztruhe", "Diamanttruhe", "Diamantentruhe", "Energiekiste", "Energietruhe", "Schluessel", "Puzzleteil", "Lupe", "Schaufel", "Giesskanne"],

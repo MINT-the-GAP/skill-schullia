@@ -41,6 +41,59 @@ Copilot-Inline-Vervollständigungen sind keine Agent-Ausführung und laden den
 Skill nicht vollständig. Verwende dafür Copilot Chat im Agent Mode, die CLI oder
 eine andere skillfähige Copilot-Oberfläche.
 
+## Nutzung in Browser-LLM-Oberflächen
+
+Ein eingefügter Link installiert oder aktiviert keinen Agent Skill. Eine
+Browser-LLM kann `schullia-knowledge` nur eingeschränkt verwenden, wenn sie die
+verlinkte `SKILL.md` und die für die konkrete Anfrage benötigten Referenzen
+tatsächlich öffnen kann.
+
+| Umgebung | Kanonische Anweisungen und Referenzen | Lokaler Korpus und Prüfskripte |
+| --- | --- | --- |
+| Installierter, werkzeugfähiger Agent | liest `SKILL.md` und geroutete lokale Dateien | verfügbar, sofern Datei-, Shell- und Python-Zugriff bestehen |
+| Browser-LLM mit URL-Zugriff | liest öffentliche Dateien gezielt über ihre URLs | gewöhnlich nicht verfügbar; fehlende Prüfungen müssen genannt werden |
+| Reines Chatmodell ohne URL- oder Dateizugriff | kann verlinkte Inhalte nicht selbst laden | nicht verfügbar |
+
+Verwende für den schnellen Einstieg den
+[kopierbaren Browser-Startprompt](assets/browser-bootstrap-prompt.md) oder dessen
+[Raw-Version](https://raw.githubusercontent.com/MINT-the-GAP/skill-schullia/main/assets/browser-bootstrap-prompt.md)
+und ergänze dort die eigentliche SchulLia-Anfrage. Für eigene Repository-,
+Branch- oder Metadatenvorgaben steht zusätzlich das vollständige
+[Browser-Autorenpaket](assets/browser-authoring-pack.md) als
+[Raw-Version](https://raw.githubusercontent.com/MINT-the-GAP/skill-schullia/main/assets/browser-authoring-pack.md)
+bereit. Es enthält den parametrischen Hauptprompt, den selektiven Ladeplan und
+vier kurze Anwendungsrezepte. Beide Dateien verweisen auf die kanonische
+[SKILL.md](https://raw.githubusercontent.com/MINT-the-GAP/skill-schullia/main/SKILL.md)
+und sind keine zweite Skillkopie.
+
+Browserausgaben verwenden für vollständige Wochenaufgaben `weekly` und sonst
+`course`. Ohne ausdrückliche Bitte um einen Einfügeausschnitt entsteht ein
+vollständiges LiaScript-Dokument mit Hauptkopf und allen benötigten
+Direktimporten; das gilt auch für eine einzelne eigenständig nutzbare Aufgabe,
+die als Ein-Aufgaben-Kurs ausgegeben wird. Nur ein eindeutig verlangtes Fragment
+bleibt headerlos.
+
+Kann die Oberfläche keine URLs öffnen, stelle ihr die vollständige `SKILL.md`
+und danach nur die von deren Routing verlangten Referenzdateien als Anhänge oder
+eingefügten Text bereit. Ohne lokalen Datei-, Shell- und Python-Zugriff sind
+insbesondere die lokale Korpussuche, die Aktualisierung des Korpus und
+`scripts/validate_lia.py` nicht ausführbar. Eine so erzeugte Browserausgabe muss
+daher in einem eingeschränkten Prüf-Witness aufführen, welche Quellen gelesen,
+welche Prüfungen tatsächlich ausgeführt und welche lokalen Prüfungen nicht
+durchgeführt wurden.
+
+Für eine nachvollziehbare manuelle Abnahme steht das
+[anbieterneutrale Browser-End-to-End-Testpaket](assets/browser-e2e-test-pack.md)
+bereit. Es trennt die Erreichbarkeit öffentlicher URLs, lokale
+Validatorergebnisse und einen tatsächlich durchgeführten Browser-LLM-Lauf. Die
+Ergebnistabelle ist bewusst nicht vorab ausgefüllt.
+
+Für Skillpflege und Freigabeentscheidungen verbindet die
+[Verhaltensabnahme](references/authoring-acceptance.md) fünf lokale
+Vorwärtsfälle mit unabhängiger Autoren-/Bewertungsrolle, strikter Validierung
+und dem getrennten Browsergate. Sie ist kein zusätzlicher Stilführer und wird
+bei gewöhnlichen Autorenanfragen nicht geladen.
+
 ## Voraussetzungen
 
 - Python 3.10 oder neuer, ausschließlich mit Standardbibliothek
@@ -213,8 +266,14 @@ CLAUDE.md / GEMINI.md            dünne Imports für Anbieter-Kontextdateien
 .github/copilot-instructions.md  knapper Copilot-Einstieg
 agents/openai.yaml               optionale Codex-Oberflächenmetadaten
 references/                      Taxonomien, Quellen und Fachreferenzen
+references/authoring-acceptance.md  Verhaltensabnahme und Freigabegates
+references/syntax-contract.json    maschinenlesbarer Syntax- und Templatevertrag
+references/template-electro.md     geprüfte lia-electro-API und Importfolge
 scripts/                         Synchronisierung, Suche und Validierung
-assets/                          wiederverwendbare LiaScript-Vorlage
+assets/                          Vorlagen und anbieterneutrale Browser-Einstiege
+assets/browser-authoring-pack.md  parametrischer Hauptprompt und URL-Ladeplan
+assets/browser-bootstrap-prompt.md  kopierbarer Einstieg für Browser-LLMs
+assets/browser-e2e-test-pack.md  manuelle, anbieterneutrale Browser-Abnahme
 corpus/                          generiert und nicht in Git eingecheckt
 ```
 
@@ -226,7 +285,12 @@ Die Anbieterdateien duplizieren den Skill nicht. `SKILL.md`, `references/`,
 ```text
 python scripts/test_parser.py
 python scripts/test_sync.py
+python scripts/test_validate_lia.py
+python scripts/test_template_inventory.py
+python scripts/template_inventory.py --check
 python skills/schullia-gamification/scripts/test_map_course.py
+python skills/schullia-gamification/scripts/test_profile_weekly_courses.py
+python skills/schullia-gamification/scripts/profile_weekly_courses.py --check
 python scripts/validate_corpus.py
 python scripts/validate_corpus.py --deep
 ```

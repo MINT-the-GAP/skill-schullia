@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schullia/local-orientation-config.schema.json",
+  "title": "SchulLia local orientation configuration",
+  "description": "Provider-neutral contract for an optional, unversioned orientation-only source configuration.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "enabled",
+    "usage_context",
+    "state_directory",
+    "sources"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "usage_context": {
+      "const": "orientation-only"
+    },
+    "state_directory": {
+      "type": "string",
+      "const": ".schullia-local/state",
+      "description": "Repository-relative, ignored location reserved for future local state."
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "enabled": {
+            "const": true
+          }
+        },
+        "required": ["enabled"]
+      },
+      "then": {
+        "properties": {
+          "sources": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "relative_rule": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "description": "A relative POSIX-style path or glob. Runtime validation rejects roots, traversal and NUL characters."
+    },
+    "risk_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allow_exams",
+        "allow_third_party",
+        "allow_administrative",
+        "allow_personal_data"
+      ],
+      "properties": {
+        "allow_exams": {
+          "const": false
+        },
+        "allow_third_party": {
+          "const": false
+        },
+        "allow_administrative": {
+          "const": false
+        },
+        "allow_personal_data": {
+          "const": false
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "root",
+        "include",
+        "exclude",
+        "allowed_extensions",
+        "subjects",
+        "archive_policy",
+        "risk_policy"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+        },
+        "root": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "description": "Absolute local source root; its value belongs only in an ignored configuration."
+        },
+        "include": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/relative_rule"
+          }
+        },
+        "exclude": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/relative_rule"
+          }
+        },
+        "allowed_extensions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "const": ".tex"
+          }
+        },
+        "subjects": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "mathematics",
+              "physics"
+            ]
+          }
+        },
+        "grades": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 5,
+            "maximum": 13
+          }
+        },
+        "learner_groups": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          }
+        },
+        "document_types": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+          }
+        },
+        "archive_policy": {
+          "enum": [
+            "exclude",
+            "deprioritize"
+          ]
+        },
+        "risk_policy": {
+          "$ref": "#/$defs/risk_policy"
+        }
+      }
+    }
+  }
+}

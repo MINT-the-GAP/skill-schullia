@@ -1,0 +1,87 @@
+{
+  "taxonomy_version": 1,
+  "dimensions": {
+    "topic_ids": {
+      "arithmetic": {"subjects": ["mathematics"], "terms": ["grundrechenart", "summe", "differenz", "produkt", "quotient"]},
+      "fractions-percentages": {"subjects": ["mathematics"], "terms": ["bruch", "brüche", "prozent", "prozentsatz", "grundwert"], "commands": ["\\frac"]},
+      "algebra-equations": {"subjects": ["mathematics"], "terms": ["gleichung", "gleichungssystem", "term", "variable", "umformen"]},
+      "functions-graphs": {"subjects": ["mathematics"], "terms": ["funktion", "funktionsgraph", "nullstelle", "steigung", "ordinatenachse", "abszissenachse"]},
+      "geometry": {"subjects": ["mathematics"], "terms": ["dreieck", "viereck", "kreis", "fläche", "umfang", "volumen", "winkel"]},
+      "probability-statistics": {"subjects": ["mathematics"], "terms": ["wahrscheinlichkeit", "zufall", "häufigkeit", "mittelwert", "median", "statistik"]},
+      "mechanics": {"subjects": ["physics"], "terms": ["bewegung", "geschwindigkeit", "beschleunigung", "kraft", "gewichtskraft", "impuls"]},
+      "energy": {"subjects": ["physics"], "terms": ["energie", "energieumwandlung", "energieübertragung", "leistung", "arbeit"]},
+      "electricity": {"subjects": ["physics"], "terms": ["stromstärke", "spannung", "widerstand", "stromkreis", "elektrisch"]},
+      "optics": {"subjects": ["physics"], "terms": ["licht", "linse", "spiegel", "brechung", "reflexion"]},
+      "thermodynamics": {"subjects": ["physics"], "terms": ["temperatur", "wärme", "wärmeleitung", "aggregatzustand"]},
+      "waves-acoustics": {"subjects": ["physics"], "terms": ["welle", "frequenz", "schwingung", "schall", "amplitude"]}
+    },
+    "task_families": {
+      "calculation": {"terms": ["berechne", "ermittle", "bestimme"], "operators": ["berechnen", "ermitteln", "bestimmen", "loesen"]},
+      "comparison": {"terms": ["vergleiche", "gegenüber"], "operators": ["vergleichen", "bewerten", "beurteilen"]},
+      "construction": {"terms": ["konstruiere", "zeichne", "skizziere"], "operators": ["konstruieren", "zeichnen", "skizzieren"]},
+      "explanation": {"terms": ["begründe", "erkläre", "beschreibe"], "operators": ["begründen", "erklaeren", "beschreiben", "zeigen"]},
+      "investigation": {"terms": ["untersuche", "prüfe", "experiment"], "operators": ["untersuchen", "pruefen"]},
+      "data-interpretation": {"terms": ["interpretiere", "werte aus", "diagramm", "tabelle"], "operators": ["interpretieren", "darstellen"]},
+      "selection-assignment": {"terms": ["wähle", "ordne zu", "markiere"], "operators": ["auswaehlen", "zuordnen", "markieren"]}
+    },
+    "learning_actions": {
+      "compute-determine": {"operators": ["berechnen", "bestimmen", "ermitteln", "loesen"]},
+      "explain-reason": {"operators": ["begründen", "erklaeren", "zeigen"]},
+      "describe-represent": {"operators": ["beschreiben", "darstellen", "skizzieren", "zeichnen"]},
+      "compare-evaluate": {"operators": ["vergleichen", "beurteilen", "bewerten", "pruefen"]},
+      "construct-investigate": {"operators": ["konstruieren", "untersuchen"]},
+      "select-complete": {"operators": ["auswaehlen", "zuordnen", "markieren", "ergaenzen", "auffuellen"]}
+    },
+    "response_forms": {
+      "single-part": {"detectors": ["single-part"]},
+      "multi-part": {"detectors": ["multi-part"]}
+    },
+    "solution_forms": {
+      "no-solution-block": {"detectors": ["solution-none"]},
+      "assigned-solution-block": {"detectors": ["solution-assigned"]},
+      "ambiguous-solution-block": {"detectors": ["solution-ambiguous"]}
+    },
+    "reasoning_structures": {
+      "calculation-path": {"operators": ["berechnen", "ermitteln", "bestimmen", "loesen"]},
+      "explanatory-reasoning": {"operators": ["begründen", "erklaeren", "zeigen"]},
+      "comparative-judgement": {"operators": ["vergleichen", "beurteilen", "bewerten"]},
+      "investigative-check": {"operators": ["untersuchen", "pruefen"]}
+    },
+    "number_profiles": {
+      "integer": {"detectors": ["integer"]},
+      "decimal": {"detectors": ["decimal"]},
+      "fraction": {"commands": ["\\frac"], "detectors": ["fraction"]},
+      "percentage": {"terms": ["prozent"], "commands": ["\\%"], "detectors": ["percentage"]},
+      "scientific-notation": {"detectors": ["scientific"]},
+      "symbolic": {"detectors": ["symbolic"]}
+    },
+    "quantity_profiles": {
+      "unit-bearing": {"terms": ["einheit", "meter", "sekunde", "newton", "volt", "ampere", "joule", "watt"], "commands": ["\\mathrm", "\\unit", "\\si"], "detectors": ["unit-bearing"]}
+    },
+    "context_profiles": {
+      "abstract": {"terms": ["term", "gleichung", "funktion", "variable"]},
+      "everyday": {"terms": ["alltag", "einkauf", "fahrt", "haushalt", "sport"]},
+      "experimental": {"subjects": ["physics"], "terms": ["experiment", "versuch", "messung", "messreihe"]},
+      "technical": {"terms": ["maschine", "motor", "schaltung", "gerät", "technik"]},
+      "data-based": {"terms": ["daten", "messwerte", "diagramm", "tabelle"]}
+    },
+    "representations": {
+      "table": {"terms": ["tabelle"], "commands": ["\\begin{tabular", "\\begin{array"]},
+      "diagram": {"terms": ["diagramm"]},
+      "coordinate-system": {"subjects": ["mathematics", "physics"], "terms": ["koordinatensystem", "abszissenachse", "ordinatenachse"]},
+      "graph": {"terms": ["graph", "funktionsgraph"], "commands": ["\\begin{tikzpicture", "\\begin{axis"]},
+      "sketch": {"terms": ["skizze", "skizziere"], "operators": ["skizzieren"]}
+    },
+    "progression_profiles": {
+      "single-task": {"detectors": ["progression-single"]},
+      "compact-sequence": {"detectors": ["progression-compact"]},
+      "multi-stage": {"detectors": ["progression-multi-stage"]},
+      "mixed-representation": {"detectors": ["progression-mixed-representation"]}
+    },
+    "complexity_bands": {
+      "structural-low": {"detectors": ["structural-low"]},
+      "structural-medium": {"detectors": ["structural-medium"]},
+      "structural-high": {"detectors": ["structural-high"]}
+    }
+  }
+}

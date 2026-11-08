@@ -8,12 +8,12 @@ Die Importform lautet `import: https://raw.githubusercontent.com/<Organisation>/
 | --- | --- | --- |
 | MINT-the-GAP/lia-globalquiz | `ea2e0b5608e8d0c08ddde859900474174e3e02e5` | `@global`, `@globalforced`, `@Global.version` |
 | MINT-the-GAP/lia-timer | `4fde4c52cab2e1ea49e36b22d50d1cf4844e249b` | Quiz-Kommentarattribute, keine Kursmakros |
-| MINT-the-GAP/lia-resetter | `dddf761f80c4f287b3652477f4dfab8e5a505589` | `@resetter`, `@ResetterRekonstruktion`, `@ResetterReconstruction`, `@Resetter.version` |
-| MINT-the-GAP/lia-freeze-v2 | `3b95abcae8aa74dbc21d4e137eead6f3d0112abc` | `@Abgabe`, `@Auswertung`, `@ADetails`, `@Exam` |
-| MINT-the-GAP/lia-board-mode | `5d86616d641fe9a9cc3ef03e6d5b5ffdc7fa1682` | `@autoscrolling`, Modusattribute, `horizontal-quiz` |
-| MINT-the-GAP/lia-DynFlex | `9dc4712e384224102cfdee998f6ea15ca4a268bc` | HTML-Klassen und Containerattribute, keine Kursmakros |
-| MINT-the-GAP/lia-annotation | `8534829d82997522359bda9f3d684212a585947c` | Toolbar und Integrations-API, keine Kursmakros |
-| MINT-the-GAP/lia-navigation | `065c05a7180318d5c9056a4033596b5de8f85fd7` | automatisches Inhaltsverzeichnis, keine Kursmakros |
+| MINT-the-GAP/lia-resetter | `15cd02359cccd42aa8e48c232332be9c076115ce` | `@resetter`, `@ResetterRekonstruktion`, `@ResetterReconstruction`, `@Resetter.version` |
+| MINT-the-GAP/lia-freeze-v2 | `2a54e085d3cb14ea4b5f62b6685a5e4ea2a01236` | `@Abgabe`, `@Auswertung`, `@ADetails`, `@Exam` |
+| MINT-the-GAP/lia-board-mode | `012f1565c41a0411f63f35b9ddf8db1ecab44847` | `@autoscrolling`, `data-lia-only`, `horizontal-quiz`, Autorennotizen und importgesteuerte Tafelbedienung |
+| MINT-the-GAP/lia-DynFlex | `7e0b6f82810551b9499e68752b9cbf2edfc72b5b` | HTML-Klassen und Containerattribute, keine Kursmakros |
+| MINT-the-GAP/lia-annotation | `0cad0d59c6a2192e753b296dd7ce667ad777c070` | Toolbar und Integrations-API, keine Kursmakros |
+| MINT-the-GAP/lia-navigation | `488ff6d670f9bd5a2291411a884c118adc72a3e3` | automatisches Inhaltsverzeichnis, keine Kursmakros |
 | LiaTemplates/ABCjs | `385c4c55d2a2858aea6c78d199ecebeb99457719` | `@ABCJS.render`, `@ABCJS.renderWith`, `@ABCJS.eval`, `@ABCJS.evalWith` |
 | LiaTemplates/AVR8js | `eb1d615e66eabb87f418551a59af4ec77925809c` | `@AVR8js.sketch`, `@AVR8js.control`, `@AVR8js.project`, `@AVR8js.asm` |
 
@@ -70,7 +70,7 @@ Bei Coordinate stellt der Reset auch Boardausschnitt, Größe, Makroobjekte, DGS
 
 Die eigenen Rekonstruktionsnamen brauchen das Präfix `Resetter`; `@Rekonstruktion` / `@Reconstruction` gehören zu lia-coordinate. Der alte Resetter-Tag `1.0.0` enthält noch kollidierende Namen; für diese API den oben geprüften Commit verwenden. Kachel und Coordinate jeweils aus genau **einer** Variante importieren, nicht gleichzeitig aus `main` und `Proposal`. Die README beschreibt Geometriequizze auf `Proposal`; vor Branchwahl den tatsächlich gepinnten Coordinate-Stand anhand seiner eigenen Referenz prüfen. Benötigte Fachtemplates und JSXGraph direkt importieren. Interne Makros mit abschließendem `_` nicht von Hand aufrufen.
 
-Belege: MINT-the-GAP/lia-resetter, [README.md, Zeilen 21–104](https://github.com/MINT-the-GAP/lia-resetter/blob/dddf761f80c4f287b3652477f4dfab8e5a505589/README.md#L21-L104) (Definitionen), [Zeilen 126–253](https://github.com/MINT-the-GAP/lia-resetter/blob/dddf761f80c4f287b3652477f4dfab8e5a505589/README.md#L126-L253) (Migration, Importe, Grenzen), [Zeilen 539–558](https://github.com/MINT-the-GAP/lia-resetter/blob/dddf761f80c4f287b3652477f4dfab8e5a505589/README.md#L539-L558) (Rekonstruktion) und [Zeilen 610–634](https://github.com/MINT-the-GAP/lia-resetter/blob/dddf761f80c4f287b3652477f4dfab8e5a505589/README.md#L610-L634) (Platzierung).
+Belege: MINT-the-GAP/lia-resetter, [README.md, Zeilen 21–104](https://github.com/MINT-the-GAP/lia-resetter/blob/15cd02359cccd42aa8e48c232332be9c076115ce/README.md#L21-L104) (Definitionen), [Zeilen 126–253](https://github.com/MINT-the-GAP/lia-resetter/blob/15cd02359cccd42aa8e48c232332be9c076115ce/README.md#L126-L253) (Migration, Importe, Grenzen), [Zeilen 539–558](https://github.com/MINT-the-GAP/lia-resetter/blob/15cd02359cccd42aa8e48c232332be9c076115ce/README.md#L539-L558) (Rekonstruktion) und [Zeilen 610–634](https://github.com/MINT-the-GAP/lia-resetter/blob/15cd02359cccd42aa8e48c232332be9c076115ce/README.md#L610-L634) (Platzierung).
 
 ## lia-freeze-v2: Punkte, Abgabe, Auswertung und Prüfung
 
@@ -92,22 +92,54 @@ Zusätzliche, im Quellparser belegte ADetails-Schreibweisen: Punkteschlüssel `p
 
 Der PDF-Export besucht und rendert alle Folien, wandelt Canvas-Inhalte für den Druck um und hängt die Auswertung mit aktuellen Lehrkraftkorrekturen an. Abgabe- und Bewertungsmarker gehören nach ihren Quizzen, nicht in die generierte native Buttonzeile. Die Demo-Imports sind kein allgemeines Kompatibilitätsversprechen für jede Kombination; alle tatsächlich verwendeten Fachtemplates direkt importieren und ihre Zustandsrestauration berücksichtigen.
 
-Belege: MINT-the-GAP/lia-freeze-v2, [README.md, Zeilen 103–249](https://github.com/MINT-the-GAP/lia-freeze-v2/blob/3b95abcae8aa74dbc21d4e137eead6f3d0112abc/README.md#L103-L249) (öffentliche Makros), [Zeilen 251–274](https://github.com/MINT-the-GAP/lia-freeze-v2/blob/3b95abcae8aa74dbc21d4e137eead6f3d0112abc/README.md#L251-L274) (DOM- und Resetter-Wechselwirkung), [Zeilen 370–374](https://github.com/MINT-the-GAP/lia-freeze-v2/blob/3b95abcae8aa74dbc21d4e137eead6f3d0112abc/README.md#L370-L374) (`1=BE`) und [src/adetails-dom.ts, Zeilen 133–204](https://github.com/MINT-the-GAP/lia-freeze-v2/blob/3b95abcae8aa74dbc21d4e137eead6f3d0112abc/src/adetails-dom.ts#L133-L204) (erweiterte Punkt- und Tagoptionen, statisch geprüft).
+Belege: MINT-the-GAP/lia-freeze-v2, [README.md, Zeilen 103–249](https://github.com/MINT-the-GAP/lia-freeze-v2/blob/2a54e085d3cb14ea4b5f62b6685a5e4ea2a01236/README.md#L103-L249) (öffentliche Makros), [Zeilen 251–274](https://github.com/MINT-the-GAP/lia-freeze-v2/blob/2a54e085d3cb14ea4b5f62b6685a5e4ea2a01236/README.md#L251-L274) (DOM- und Resetter-Wechselwirkung), [Zeilen 370–374](https://github.com/MINT-the-GAP/lia-freeze-v2/blob/2a54e085d3cb14ea4b5f62b6685a5e4ea2a01236/README.md#L370-L374) (`1=BE`) und [src/adetails-dom.ts, Zeilen 133–204](https://github.com/MINT-the-GAP/lia-freeze-v2/blob/2a54e085d3cb14ea4b5f62b6685a5e4ea2a01236/src/adetails-dom.ts#L133-L204) (erweiterte Punkt- und Tagoptionen, statisch geprüft).
 
 ## lia-board-mode: Tafelbedienung und modusspezifischer Inhalt
+
+Direkter Import für auszuliefernde Kurse:
+
+```text
+import: https://raw.githubusercontent.com/MINT-the-GAP/lia-board-mode/main/README.md
+```
+
+`main` ist der dokumentierte Default-Branch. Der geprüfte Snapshot liegt bei
+Commit `012f1565c41a0411f63f35b9ddf8db1ecab44847`. Die README nennt keine
+externe Template- oder Bibliotheksabhängigkeit; der Import aktiviert die
+Laufzeitfunktionen unmittelbar. SchulLia verwendet ihn deshalb als einmalige
+Basis jedes neuen vollständigen `course`- und `weekly`-Kurses. Der Import
+erzwingt weder ein `mode:`-Feld noch einen `@autoscrolling`-Aufruf.
 
 | Oberfläche | Optionen / Verhalten |
 | --- | --- |
 | `@autoscrolling(off)` / `@autoscrolling(on)` | Auf dieser und folgenden Folien gültig bis zum nächsten Schalter. Vor dem ersten Aufruf `on`; jeder andere Wert als `off` gilt als `on`. |
 | `<div data-lia-only="…">` | `slides`, `presentation`, `textbook` für modusspezifische Blöcke. |
 | `<!-- horizontal-quiz -->` | Unmittelbar vor Single-/Multiple-Choice. Horizontal bei ausreichender Breite, bis 760 px Standardlayout. |
+| `§:- ... -:§` | Blendet Autorennotizen nach dem LiaScript-Parsing in allen drei Kursmodi aus; kein Schutz vertraulicher Daten und kein Deaktivieren enthaltener Makros oder Skripte. |
 | AA-Schriftsteuerung | Präsentationsmodus: 14–48 px, gespeichert; automatische Ausgangsanhebung auf 18/24/32 px gemäß Basisfont. |
-| Breite / Werkzeugleisten | Rund 98,5 % Breite in Presentation und Slides; Header und TTS-Fußbereich einklappbar. |
+| Breite / Werkzeugleisten | Rund 98,5 % Breite in Presentation und Slides; Header-Werkzeugleiste zunächst ausgeklappt, Header und TTS-Fußbereich einklappbar. |
 | Presenter | `PageDown` vor, `PageUp` zurück, `.` / `B` Schwarzbild, `Escape` hebt Schwarzbild auf; automatisch aktiv. |
+| Rückwärtsnavigation | Öffnet die vorige Folie am letzten Animationsschritt; Inhaltsverzeichnissprünge beginnen weiterhin bei Schritt null. |
+| LiaScript-2.5.0-Kompatibilität | Begrenzt auf den dokumentierten Parserfehler bei späteren horizontalen Auswahlquizzen nach `@Auswertung(Send)`; verändert weder Autorendatei noch gespeicherte Quelle. |
 
-Bei projizierten Kursen Schrift, Platzangebot, horizontale Auswahl und Autoscrolling zusammen berücksichtigen. Direkte, alleinstehende `@autoscrolling`-Schalter werden aus einer zugänglichen HTTP(S)-Kursquelle positionsbezogen gelesen und wirken dadurch auch nach Alt-L-Neuladen oder beim direkten Öffnen einer späteren, noch nie gerenderten Folie. Für Uploads, dynamisch erzeugte Schalter oder nicht zuordenbare Quellen bleibt `persistent: true` der Rückfall. Rückwärtsnavigation öffnet die vorige Folie bei ihrem letzten Animationsschritt; dadurch können an Schritte gebundene Skripte, Medien oder Narration erneut laufen. Inhaltsverzeichnissprünge behalten den normalen Einstieg bei Schritt null. `§:- ... -:§` blendet Autorennotizen nur in der gerenderten Anzeige aus; es deaktiviert keine darin enthaltenen Makros oder Skripte und schützt keine vertraulichen Daten. Bei modusgebundenen Pflichtinhalten muss der benötigte Modus zugänglich sein.
+Bei projizierten Kursen Schrift, Platzangebot, horizontale Auswahl und
+Autoscrolling zusammen berücksichtigen. Direkte, alleinstehende
+`@autoscrolling`-Schalter werden aus einer zugänglichen HTTP(S)-Kursquelle
+positionsbezogen gelesen und wirken dadurch auch nach Alt-L-Neuladen oder beim
+direkten Öffnen einer späteren, noch nie gerenderten Folie. Für Uploads,
+dynamisch erzeugte Schalter oder nicht zuordenbare Quellen bleibt
+`persistent: true` der Rückfall. Bei der Rückwärtsnavigation können an
+Animationsschritte gebundene Skripte, Medien oder Narration erneut laufen. Bei
+modusgebundenen Pflichtinhalten muss der benötigte Modus zugänglich sein.
 
-Belege: MINT-the-GAP/lia-board-mode, [README.md, Zeilen 43–77](https://github.com/MINT-the-GAP/lia-board-mode/blob/5d86616d641fe9a9cc3ef03e6d5b5ffdc7fa1682/README.md#L43-L77), [Zeilen 93–141](https://github.com/MINT-the-GAP/lia-board-mode/blob/5d86616d641fe9a9cc3ef03e6d5b5ffdc7fa1682/README.md#L93-L141) und [Zeilen 154–180](https://github.com/MINT-the-GAP/lia-board-mode/blob/5d86616d641fe9a9cc3ef03e6d5b5ffdc7fa1682/README.md#L154-L180).
+Belege: MINT-the-GAP/lia-board-mode,
+[README.md, Zeilen 31–59](https://github.com/MINT-the-GAP/lia-board-mode/blob/012f1565c41a0411f63f35b9ddf8db1ecab44847/README.md#L31-L59)
+(Import und automatische Funktionen),
+[Zeilen 61–123](https://github.com/MINT-the-GAP/lia-board-mode/blob/012f1565c41a0411f63f35b9ddf8db1ecab44847/README.md#L61-L123)
+(Autorennotizen und Modusinhalte),
+[Zeilen 125–186](https://github.com/MINT-the-GAP/lia-board-mode/blob/012f1565c41a0411f63f35b9ddf8db1ecab44847/README.md#L125-L186)
+(Autoscrolling, Presenter und Implementierung) sowie
+[Zeilen 188–234](https://github.com/MINT-the-GAP/lia-board-mode/blob/012f1565c41a0411f63f35b9ddf8db1ecab44847/README.md#L188-L234)
+(horizontale Quizze und LiaScript-2.5.0-Kompatibilität).
 
 ## lia-DynFlex: flexible Mehrspaltenlayouts
 
@@ -124,7 +156,7 @@ Ein `<section class="dynFlex">` oder `<div class="dynFlex">` enthält `<div clas
 
 Vergleichsdarstellungen, Material neben Aufgaben und parallele Teilaufgaben als konkrete Layoutoptionen vorbereiten. Leerzeilen zwischen Quizblöcken erhalten getrennte Prüfbuttons; die Spaltenhülle erzeugt keine zusätzliche fachliche Quizart. Bei höchstens 420 px Viewportbreite **oder** höchstens 599 px Containerbreite wechselt das Layout auf eine Spalte und blendet Resize-Griffe aus. Gespeicherte oder explizite Breiten bleiben erhalten und gelten nach dem Verbreitern wieder. Mit Resetter gelten dessen Abschnittsgrenzen weiterhin; ein `flex-child` ersetzt keine erforderliche neue `##`-Folie.
 
-Belege: MINT-the-GAP/lia-DynFlex, [README.md, Zeilen 37–64](https://github.com/MINT-the-GAP/lia-DynFlex/blob/9dc4712e384224102cfdee998f6ea15ca4a268bc/README.md#L37-L64), [Zeilen 114–147](https://github.com/MINT-the-GAP/lia-DynFlex/blob/9dc4712e384224102cfdee998f6ea15ca4a268bc/README.md#L114-L147), [Zeilen 181–250](https://github.com/MINT-the-GAP/lia-DynFlex/blob/9dc4712e384224102cfdee998f6ea15ca4a268bc/README.md#L181-L250) und [src/flex.ts, Zeilen 130–135](https://github.com/MINT-the-GAP/lia-DynFlex/blob/9dc4712e384224102cfdee998f6ea15ca4a268bc/src/flex.ts#L130-L135).
+Belege: MINT-the-GAP/lia-DynFlex, [README.md, Zeilen 37–64](https://github.com/MINT-the-GAP/lia-DynFlex/blob/7e0b6f82810551b9499e68752b9cbf2edfc72b5b/README.md#L37-L64), [Zeilen 114–147](https://github.com/MINT-the-GAP/lia-DynFlex/blob/7e0b6f82810551b9499e68752b9cbf2edfc72b5b/README.md#L114-L147), [Zeilen 181–250](https://github.com/MINT-the-GAP/lia-DynFlex/blob/7e0b6f82810551b9499e68752b9cbf2edfc72b5b/README.md#L181-L250) und [src/flex.ts, Zeilen 130–135](https://github.com/MINT-the-GAP/lia-DynFlex/blob/7e0b6f82810551b9499e68752b9cbf2edfc72b5b/src/flex.ts#L130-L135).
 
 ## lia-annotation: handschriftliche Tafelarbeit
 
@@ -134,13 +166,13 @@ Bei Rechenwegen und Tafelbesprechungen die Annotation früh mitdenken. Für OCR-
 
 Die dokumentierte Integrations-API unter `window.__LIA_ANNOTATION__` umfasst `setVisible(bool)`, `toggleVisible()`, `exportState()`, `importState(state)`, `exportFreezeState()`, `importFreezeState(state)`, `hasFreezeData()`, `setReadOnly(true|false|null)`, `clearSlide()` und `clearAllSlides()`. `null` beim Schreibschutz bedeutet automatische Erkennung. Zusätzlich exportiert der geprüfte Quellcode `isOcrAvailable`, `recognizeLatestAnnotationText`, `submitOcrTextToNearestQuiz`, `transferToNearestQuiz`, `startDgsPlacementMode`, `refresh`, `getStore` und `getSlideKey`. Das sind Integrationshooks, keine weiteren Kursmakros; gewöhnliche Kursgenerierung nutzt den Import und die Toolbar.
 
-Belege: MINT-the-GAP/lia-annotation, [README.md, Zeilen 56–103](https://github.com/MINT-the-GAP/lia-annotation/blob/8534829d82997522359bda9f3d684212a585947c/README.md#L56-L103), [Zeilen 119–162](https://github.com/MINT-the-GAP/lia-annotation/blob/8534829d82997522359bda9f3d684212a585947c/README.md#L119-L162) und [src/api.ts, Zeilen 978–1004](https://github.com/MINT-the-GAP/lia-annotation/blob/8534829d82997522359bda9f3d684212a585947c/src/api.ts#L978-L1004).
+Belege: MINT-the-GAP/lia-annotation, [README.md, Zeilen 56–103](https://github.com/MINT-the-GAP/lia-annotation/blob/0cad0d59c6a2192e753b296dd7ce667ad777c070/README.md#L56-L103), [Zeilen 119–162](https://github.com/MINT-the-GAP/lia-annotation/blob/0cad0d59c6a2192e753b296dd7ce667ad777c070/README.md#L119-L162) und [src/api.ts, Zeilen 978–1004](https://github.com/MINT-the-GAP/lia-annotation/blob/0cad0d59c6a2192e753b296dd7ce667ad777c070/src/api.ts#L978-L1004).
 
 ## lia-navigation: gegliedertes Inhaltsverzeichnis
 
 Der Import aktiviert einen ein-/ausklappbaren hierarchischen Navigationsbaum mit Lesezeichen, Hervorhebung der aktuellen Folie, Ebenengestaltung und gespeichertem Zustand. Die gepinnte README definiert keine öffentlichen Kursmakros oder Autor-Konfigurationsattribute. Für längere, gegliederte Kurse mitdenken; die Überschriftenhierarchie bleibt die strukturelle Grundlage. Keine `@navigation(...)`-Optionen erfinden und aus diesem Template keine Portal-, Geheimfolien- oder Zugangssperren-API ableiten.
 
-Beleg: MINT-the-GAP/lia-navigation, [README.md, Zeilen 1–44](https://github.com/MINT-the-GAP/lia-navigation/blob/065c05a7180318d5c9056a4033596b5de8f85fd7/README.md#L1-L44).
+Beleg: MINT-the-GAP/lia-navigation, [README.md, Zeilen 1–44](https://github.com/MINT-the-GAP/lia-navigation/blob/488ff6d670f9bd5a2291411a884c118adc72a3e3/README.md#L1-L44).
 
 ## ABCjs: Musik anzeigen, hören und bearbeiten
 

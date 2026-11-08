@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schullia/local-orientation-acceptance.schema.json",
+  "title": "Sanitized local-orientation acceptance witness",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "acceptance_version",
+    "usage_context",
+    "case_id",
+    "scope",
+    "subject",
+    "availability_state",
+    "release_status",
+    "reason_code",
+    "filter_dimensions",
+    "local_search_performed",
+    "orientation_profile_prepared",
+    "local_orientation_used",
+    "applied_feature_ids",
+    "completed_counterchecks",
+    "anti_copy_status",
+    "technical_validator_status",
+    "subject_review_status",
+    "evaluator_status",
+    "sources_unchanged",
+    "non_leak_confirmed",
+    "no_private_content_output",
+    "no_private_content_versioned"
+  ],
+  "properties": {
+    "acceptance_version": {"type": "integer", "const": 1},
+    "usage_context": {"type": "string", "const": "orientation-only"},
+    "case_id": {"type": "string", "enum": ["L1", "L3"]},
+    "scope": {"type": "string", "enum": ["public_only", "both"]},
+    "subject": {"type": "string", "enum": ["mathematics", "physics"]},
+    "availability_state": {
+      "type": "string",
+      "enum": [
+        "lokal verfügbar",
+        "lokal nicht konfiguriert",
+        "lokal nicht erreichbar",
+        "lokal wegen Sicherheitsprüfung ausgeschlossen"
+      ]
+    },
+    "release_status": {
+      "type": "string",
+      "enum": ["freigegeben", "nicht_freigegeben"]
+    },
+    "reason_code": {
+      "type": "string",
+      "enum": [
+        "acceptance_pass",
+        "acceptance_public_only_pass",
+        "acceptance_input_invalid",
+        "acceptance_public_evidence_failed",
+        "acceptance_subject_review_failed",
+        "acceptance_evaluator_failed",
+        "acceptance_technical_validation_failed",
+        "acceptance_private_content_boundary",
+        "acceptance_sources_changed",
+        "acceptance_guidance_unavailable",
+        "acceptance_feature_unverified",
+        "acceptance_anti_copy_blocked",
+        "acceptance_leak_blocked",
+        "acceptance_application_rejected",
+        "acceptance_operational_error"
+      ]
+    },
+    "filter_dimensions": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "complexity_band",
+          "context_profile",
+          "grade",
+          "learning_action",
+          "max_tasks",
+          "min_subtasks",
+          "min_tasks",
+          "number_profile",
+          "operator",
+          "representation",
+          "response_form",
+          "solution_form",
+          "subject",
+          "task_family",
+          "topic_id"
+        ]
+      }
+    },
+    "local_search_performed": {"type": "boolean"},
+    "orientation_profile_prepared": {"type": "boolean"},
+    "local_orientation_used": {"type": "boolean"},
+    "applied_feature_ids": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z_]*:[a-z0-9][a-z0-9-]{0,63}$",
+        "maxLength": 96
+      }
+    },
+    "completed_counterchecks": {
+      "type": "array",
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "no_private_content_used",
+          "public_evidence",
+          "subject_review",
+          "technical_validation"
+        ]
+      }
+    },
+    "anti_copy_status": {
+      "type": "string",
+      "enum": [
+        "anti_copy_pass",
+        "anti_copy_risk",
+        "anti_copy_inconclusive"
+      ]
+    },
+    "technical_validator_status": {
+      "type": "string",
+      "enum": ["bestanden", "fehlgeschlagen", "blockiert", "unbelegt"]
+    },
+    "subject_review_status": {
+      "type": "string",
+      "enum": ["bestanden", "Warnung", "fehlgeschlagen", "blockiert", "unbelegt"]
+    },
+    "evaluator_status": {
+      "type": "string",
+      "enum": ["bestanden", "Warnung", "fehlgeschlagen", "blockiert", "unbelegt"]
+    },
+    "sources_unchanged": {"type": "boolean"},
+    "non_leak_confirmed": {"type": "boolean"},
+    "no_private_content_output": {"type": "boolean"},
+    "no_private_content_versioned": {"type": "boolean"}
+  }
+}

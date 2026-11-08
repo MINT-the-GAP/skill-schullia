@@ -158,35 +158,50 @@ def inventory(corpus: Path, catalog: dict, reference_root: Path) -> tuple[list, 
     return output, issues
 
 
-def main() -> int:
+def select_inventory(rows: list[dict], issues: list[str],
+                     source: str | None) -> tuple[list[dict], list[str]]:
+    if not source:
+        return rows, issues
+    needle = source.casefold()
+    selected = [row for row in rows if needle in
+                (row['source_id'] + ' ' + row['repo']).casefold()]
+    source_ids = {row['source_id'] for row in selected}
+    selected_issues = []
+    for issue in issues:
+        source_id, separator, _ = issue.partition(': ')
+        if not separator or source_id in source_ids:
+            selected_issues.append(issue)
+    return selected, selected_issues
+
+
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--corpus", type=Path, default=ROOT / "corpus")
     parser.add_argument("--catalog", type=Path, default=ROOT / "references/template-catalog.json")
     parser.add_argument("--source", help="Case-insensitive repository or source-id substring")
     parser.add_argument("--json", action="store_true", help="Include declarations and section locations")
     parser.add_argument("--check", action="store_true", help="Exit 1 on missing/stale review coverage")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     try:
         rows, issues = inventory(args.corpus, read_json(args.catalog), args.catalog.parent)
     except (OSError, ValueError, KeyError, TypeError) as exc:
         print(f"Cannot inspect template corpus: {exc}", file=sys.stderr)
         return 2
-    selected = [row for row in rows if not args.source or args.source.casefold() in
-                (row["source_id"] + " " + row["repo"]).casefold()]
+    selected, selected_issues = select_inventory(rows, issues, args.source)
     if args.source and not selected:
         print(f"No template matches: {args.source}", file=sys.stderr)
         return 2
     if args.json:
-        print(json.dumps({"templates": selected, "issues": issues}, ensure_ascii=False, indent=2))
+        print(json.dumps({"templates": selected, "issues": selected_issues}, ensure_ascii=False, indent=2))
     else:
         for row in selected:
             count = len(row.get("header_declarations", []))
             print(f"{row['repo']}: {count} header declarations; "
                   f"{row['review_status']}; {row['reference'] or 'no reference'}")
-        print(f"Templates: {len(rows)}, review issues: {len(issues)}")
-        for issue in issues:
+        print(f"Templates: {len(selected)}, review issues: {len(selected_issues)}")
+        for issue in selected_issues:
             print(f"REVIEW {issue}")
-    return 1 if args.check and issues else 0
+    return 1 if args.check and selected_issues else 0
 
 
 if __name__ == "__main__":

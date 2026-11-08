@@ -11,8 +11,8 @@ python scripts/search_knowledge.py search Gamification --type document --source 
 ```
 
 Diese Referenz und [lia-loot-options.json](lia-loot-options.json) wurden gegen
-Revision `a32641928d2ff2b2d6f891c0555e05c5e2402247` und den README-SHA-256
-`08087ab78b6183d6ba1f0ea83437f36bdd2ea452d11658c778502abe336978f1`
+Revision `5e5255cfa94c494fee1fd67b1b66f77baaad918c` und den README-SHA-256
+`b1589f8fd07a76e2b1e3fb4828b3cb0374fb93af33a6396eb389529944202e6a`
 geprüft. Weicht der aktuelle Snapshot ab, lies README, Quellcode und Tests erneut
 und aktualisiere beide Referenzen, bevor du neue Syntax behauptest.
 
@@ -102,6 +102,11 @@ sind kein Grund, uneinheitliche Syntax zu erzeugen.
 | `@Puzzleteil` | `@Puzzleteil(farbe; nummer; [fundoptionen...])` | Farbe und Nummer 1 bis 16 sind Pflicht; kein Oberflächenziel |
 | `@Puzzletor` | `@Puzzletor(farbe; [[matrix]][; anker])` | rechteckige Permutation 1 bis N, höchstens 16 Slots; ohne `anker` Navigationstor |
 | `@Lupe` | `@Lupe([fundoptionen...])` | kursweiter Gesammelt-Zustand |
+| `@Taschenlampe` | `@Taschenlampe([fundoptionen...])` | kursweiter Lichtkegel zum Freigeben von Nebel |
+| `@Shop` | `@Shop(artikel=preis[; artikel=preis...])` | einmal kaufbare belegte Angebote; Preise aus Gold, Diamanten und Energie |
+| `@Atlaskarte` | `@Atlaskarte([fundoptionen...])` | findbare Fortschrittsübersicht |
+| `@Perk` | `@Perk(perk; [fundoptionen...])` | findbare belegte Verbesserung; Prozentwerte 1 bis 500 |
+| `@Axt` | `@Axt([fundoptionen...])` | kursweites Aktionswerkzeug für `@Kiste` |
 | `@Schaufel` | `@Schaufel([fundoptionen...])` | einmaliges Aktionswerkzeug für Erde |
 | `@Giesskanne` | `@Giesskanne([fundoptionen...])` | einmaliges Aktionswerkzeug für Pflanzen |
 | `@Erdhaufen` … `@EndeErdhaufen` | öffnendes Makro optional mit Fundoptionen | blockweiser Inhalt wird durch Schaufeln freigegeben |
@@ -110,11 +115,18 @@ sind kein Grund, uneinheitliche Syntax zu erzeugen.
 | `@Pflanze.inline` | `@Pflanze.inline(inhalt[, fundoptionen])` | ungepaarte einzeilige Pflanzenfreigabe; Alias `@Blume.inline` |
 | `@Unsichtbar` | `@Unsichtbar(einzeiliger Inhalt)` | vollständig verdeckt, nur im Lupenkreis bedienbar |
 | `@Zauberstaub` | `@Zauberstaub(einzeiliger Inhalt)` | schwach funkelnd verdeckt |
+| `@Nebel` | `@Nebel(einzeiliger Inhalt)` | nur im Lichtkegel bedienbar; keine Zugriffssicherheit |
+| `@NebelStart` … `@NebelEnd` | beide allein auf eigener Zeile | blockweiser, LIFO-geschlossener Nebelbereich |
+| `@Kiste` | `@Kiste(item)` | genau ein Funditem; Makro mit eigenen Klammern in Backticks; benötigt Axt |
+| `@Geschenk` | `@Geschenk(item)` | genau ein bis zum Öffnen inaktives Funditem |
+| `@Katze` | `@Katze([fellfarbe;] [fundoptionen...])` | einmaliger Pixelbegleiter je Fellfarbe |
+| `@Futter` | `@Futter(item)` | genau ein Funditem, das nach Katzenfund verfüttert wird |
 | `@Portal` | `@Portal(foliennummer[; hinundher|einweg])` | Default: Zweiwegportal |
 | `@Einwegportal` | `@Einwegportal(foliennummer)` | Kurzform für Einwegmodus |
 | `@Einbahnportal` | `@Einbahnportal(foliennummer)` | Alias von `@Einwegportal` |
 | `@Schloss` | `@Schloss(ziel, farbe[; anker])` | genau ein Ziel und eine explizite Farbe |
 | `@Geheimfolie` | ohne Argument, allein auf der Folie | verbirgt die Folie vor ToC und normaler Navigation |
+| `@Reservefolie` | `@Reservefolie(positive ganze Energie)` | genau eine verborgene Energie-Notfallfolie bei aktiviertem Energiebestand |
 
 Die vollständigen Optionsgruppen, Aliasse und Kombinationsregeln stehen
 maschinenlesbar in [lia-loot-options.json](lia-loot-options.json). Erzeuge
@@ -240,6 +252,56 @@ Ohne `anker` beginnt er bei vorab erkannten globalen Funden mit der
 Quellkatalogisierung, bei lokalen Funden mit dem ersten Rendern; mit `anker`
 beim ersten Betreten der Quellfolie. Nach Ablauf bleibt nur noch die jeweilige
 Umweltbedingung als Sichtbarkeitsgate.
+
+### Shop, Atlas, Perks und zusätzliche Werkzeuge
+
+`@Shop` enthält ausschließlich Angebote der Form `artikel=preis`, getrennt
+durch Semikola. Ein Preis kombiniert `gold`, `diamant`/`diamanten` und
+`energie` bei Bedarf mit `+`. Ressourcenangebote tragen ihre positive Menge
+nach einem Bindestrich. Verwende nur die in der aktuellen README belegten
+Artikel: Schaufel, Gießkanne, Lupe, Taschenlampe, die drei Axtstufen,
+Atlaskarte und Atlasfreischaltungen, Ressourcenmengen, vorhandene gültige
+Puzzleteile, Prozent-Perks und Katzenhalsbänder. Prozentwerte sind positive
+ganze Zahlen von 1 bis 500. Jedes konkrete Angebot ist pro Browser-Tab nur
+einmal kaufbar. Ressourcenpreise benötigen `@Ressourcen`; Energieangebote
+zusätzlich dessen dritten Wert.
+
+`@Atlaskarte` ist dieselbe Fortschrittsübersicht wie das gleichnamige
+Shopangebot. `@Perk` akzeptiert als erstes Feld ausschließlich einen belegten
+Perkbezeichner und danach gemeinsame Fundoptionen. Prozent-Perks addieren sich;
+bei Axtstufen gilt nur die beste Stufe. Atlasfreischaltungen dürfen vor der
+Karte gesammelt werden und werden beim späteren Kartenfund sichtbar.
+
+`@Taschenlampe` ist wie die Lupe ein kursweites Singleton-Werkzeug. `@Nebel`
+verdeckt einzeiligen Inhalt, `@NebelStart` und `@NebelEnd` umschließen einen
+beliebigen Block auf derselben Folie und Ebene. Blockbereiche schließen LIFO.
+Die Fundoption `nebel` und ihre dokumentierten Aliasse sind von
+`unsichtbar`/`zauberstaub`, Umweltbedingungen und direkten Schichten
+unabhängig. Ein Pflichtobjekt im Nebel benötigt eine vorher erreichbare
+Taschenlampe. Nebel ist keine Zugriffssicherheit.
+
+`@Axt` öffnet `@Kiste(item)`. Die Steinaxt benötigt acht Hiebe; Eisenaxt vier,
+Goldaxt zwei und Diamantaxt einen. `@Geschenk(item)` erzeugt das enthaltene
+Funditem erst beim Öffnen. `@Futter(item)` wird zunächst gesammelt und nach
+Aktivierung durch Klick auf eine bereits gefundene `@Katze` verbraucht; das
+enthaltene Funditem wird dann automatisch gesammelt. Bei Kiste, Geschenk und
+Futter steht genau ein öffentliches Funditem im Argument. Besitzt dessen
+Makroaufruf eigene Klammern, wird der vollständige Aufruf in Backticks gesetzt.
+Interaktive Bereiche, Shops und Puzzletore sind keine zulässigen Payloads.
+
+`@Katze` unterstützt die dokumentierten Fellfarben `orange`, `grau`,
+`schwarz`, `weiss` und `dreifarbig` sowie gemeinsame Fundoptionen. Jede Farbe
+ist ein eigener Fund. Halsbandfarben verwenden die zwölf kanonischen
+Schlüssel-/Puzzlefarben.
+
+`@Reservefolie(N)` steht genau einmal auf einer eigenen, ausschließlich durch
+den Übergang von positiver Energie auf null geöffneten Notfallfolie. `N` ist
+eine positive ganze Zahl. Korrekt gelöste native Quizze auf dieser Folie
+vergeben jeweils `N` Energie ohne Prüfkosten; Reservequizze zählen weder zum
+normalen Kursabschluss noch zum Aufgaben-Meister. Die Funktion benötigt den
+dritten Wert von `@Ressourcen`. Der Witness darf eine Reservefolie nicht als
+Ersatz für die reguläre Fehlerreserve einplanen und muss ihren Rückweg zur
+gemerkten Ausgangsfolie prüfen.
 
 ### Direkte Erd- und Pflanzenschichten
 

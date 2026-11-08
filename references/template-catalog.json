@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "reviewed_at": "2026-09-26",
+  "reviewed_at": "2026-11-07",
   "scope": "All synchronized MINT-the-GAP/lia-* repositories and configured template-reference sources; not the entire LiaTemplates organization.",
   "review_basis": "Current synchronized, commit-pinned README plus statically inspected implementation where documented in the linked reference; changed revisions were compared and their public behavior was reconciled on 2026-09-26.",
   "templates": [
@@ -28,8 +28,8 @@
     {
       "source_id": "ghfile:liatemplates/jsxgraph:README.md",
       "repo": "JSXGraph",
-      "reviewed_revision": "f426725ff10580b5ebdcc3230a4ca31c415faadb",
-      "readme_sha256": "ef85dbc0fa7d284328d8a89afe6a93715e9436ced0211eee9a858eff6a1f73c2",
+      "reviewed_revision": "d0dfa3c096d25012fccbfe99d3fcacb09aa1714e",
+      "readme_sha256": "ca03455956ae6f03942d09537b961c444d6bd801ef57201690e3bcfabf1aa1d9",
       "reference": "template-math.md"
     },
     {
@@ -42,43 +42,50 @@
     {
       "source_id": "ghrepo:mint-the-gap/lia-annotation",
       "repo": "lia-annotation",
-      "reviewed_revision": "8534829d82997522359bda9f3d684212a585947c",
-      "readme_sha256": "a4e09a56ef290c565aefb20ec29ab82025aa3c952c394b7aaf2b2c2817e37fd0",
+      "reviewed_revision": "0cad0d59c6a2192e753b296dd7ce667ad777c070",
+      "readme_sha256": "31aadcc144e339cceebfa951c6048e8365a417d985663aab26ed02f399771ffa",
       "reference": "template-course.md"
     },
     {
       "source_id": "ghrepo:mint-the-gap/lia-board-mode",
       "repo": "lia-board-mode",
-      "reviewed_revision": "5d86616d641fe9a9cc3ef03e6d5b5ffdc7fa1682",
-      "readme_sha256": "6147bb3674aa728bcad60763ee606deb06747beea745726335ecafede8a3b280",
+      "reviewed_revision": "012f1565c41a0411f63f35b9ddf8db1ecab44847",
+      "readme_sha256": "87f91320a83320f8ddc167a4b558ba078419ba192de725915b8f97d93bf772b4",
       "reference": "template-course.md"
     },
     {
       "source_id": "ghrepo:mint-the-gap/lia-canvas-ocr",
       "repo": "lia-canvas-ocr",
-      "reviewed_revision": "167982ed0804e57b12316c5b54ec9d97807d629e",
+      "reviewed_revision": "5816d225b3ecd889c038382f7b1c634e597986fd",
       "readme_sha256": "690537bdca8f99f27b535bad3cb8833c8917e0b747a728a2eb5e30f4e7657b0b",
       "reference": "template-math.md"
     },
     {
       "source_id": "ghrepo:mint-the-gap/lia-coordinate",
       "repo": "lia-coordinate",
-      "reviewed_revision": "a4d24ee6c7c8b64f9379876f0c3d143e2229d7ff",
-      "readme_sha256": "7a401971c5f276c20faebbdd926587ac91e03928de16d3b90a6a748b65ad0610",
+      "reviewed_revision": "c30f8f55d0f50d175ebfb03b6b9d04b4afc60514",
+      "readme_sha256": "d9c62c6d5695a74f8bf276c52fd8b5e59707ea7cb705ecf078965ee0c1c867e0",
       "reference": "template-math.md"
     },
     {
       "source_id": "ghrepo:mint-the-gap/lia-dynflex",
       "repo": "lia-DynFlex",
-      "reviewed_revision": "9dc4712e384224102cfdee998f6ea15ca4a268bc",
-      "readme_sha256": "a3fa6af92e85bf47691def52fefae52788b8dbd0ace2c4497c4990784515fdf8",
+      "reviewed_revision": "7e0b6f82810551b9499e68752b9cbf2edfc72b5b",
+      "readme_sha256": "78120c08d95b9ce9cae331d7b52bf04d3dd610743106f7509af4f9e3bdba9ba4",
       "reference": "template-course.md"
+    },
+    {
+      "source_id": "ghrepo:mint-the-gap/lia-electro",
+      "repo": "lia-electro",
+      "reviewed_revision": "02937818345dd3bb139afa3df275401301199c1e",
+      "readme_sha256": "d758253cb1987a71cf4e8f2dd7b422f61298914b5290fc9ac9e5bbaa5269237a",
+      "reference": "template-electro.md"
     },
     {
       "source_id": "ghrepo:mint-the-gap/lia-freeze-v2",
       "repo": "lia-freeze-v2",
-      "reviewed_revision": "3b95abcae8aa74dbc21d4e137eead6f3d0112abc",
-      "readme_sha256": "b5084285cf228747ac236d3825f787dff70fc9eaf7aa1cfb1dd1889afce2cbc7",
+      "reviewed_revision": "2a54e085d3cb14ea4b5f62b6685a5e4ea2a01236",
+      "readme_sha256": "a33b0c12c31e8b95bedb42649786bdb8d8adb37dd38d9b6ecc80c4ced91fae04",
       "reference": "template-course.md"
     },
     {
@@ -91,28 +98,28 @@
     {
       "source_id": "ghrepo:mint-the-gap/lia-kachel",
       "repo": "lia-kachel",
-      "reviewed_revision": "15b84fba845e783d05d3b77c5cb1f76401146bee",
-      "readme_sha256": "fe8f37274075c7546c600da90d75955e600c772e938388d5ee0b57bcb461da02",
+      "reviewed_revision": "7b74fa7e8ab2814e1c3728bfac3cddcb0c14651d",
+      "readme_sha256": "1722a785e72d617c1530d1d19abd8ea9b74e16a31f1585947ba78db5191044ca",
       "reference": "template-language.md"
     },
     {
       "source_id": "ghrepo:mint-the-gap/lia-llm",
       "repo": "lia-llm",
-      "reviewed_revision": "684914a814468ddbe2fcc47f2eeea74cf62af54f",
-      "readme_sha256": "8736bd657fc908cb3d1fc1c0888772dbaef4fa4d2a6e0639c6eebad04a2096dd",
+      "reviewed_revision": "4d6e6c99ae6d7540ad6c2144be8f7a5613666492",
+      "readme_sha256": "e641c53ae8aaa6893a07f440ec2a30bd7c654f6eb203abc78c0b4f5e083a43ac",
       "reference": "template-language.md"
     },
     {
       "source_id": "ghrepo:mint-the-gap/lia-loot",
       "repo": "lia-loot",
-      "reviewed_revision": "a32641928d2ff2b2d6f891c0555e05c5e2402247",
-      "readme_sha256": "52fd9fe9e010c944fbec0b4611e979af4171be30e59421c556e48bb9f2ecd730",
+      "reviewed_revision": "5e5255cfa94c494fee1fd67b1b66f77baaad918c",
+      "readme_sha256": "b1589f8fd07a76e2b1e3fb4828b3cb0374fb93af33a6396eb389529944202e6a",
       "reference": "lia-loot.md"
     },
     {
       "source_id": "ghrepo:mint-the-gap/lia-marker",
       "repo": "lia-marker",
-      "reviewed_revision": "80fe9b1e0b07ee18242f35003bff3660d37da707",
+      "reviewed_revision": "9d6cd2efe1dd919515c2253ac631abcb394a55f1",
       "readme_sha256": "1c0601fd054876d595523057c238b8352a312444c2ef6f85259e0dc67128a2f5",
       "reference": "template-language.md"
     },
@@ -126,15 +133,15 @@
     {
       "source_id": "ghrepo:mint-the-gap/lia-mathpath",
       "repo": "lia-mathpath",
-      "reviewed_revision": "62548fa72170a7be67e3ad448a366598da1b14b1",
-      "readme_sha256": "8429b86c08cf5eec81ffa29e23b7c9089d828b9fd46656cd2a4a65aebc57c590",
+      "reviewed_revision": "8174690d85cb35e982d785caea78d4176da24141",
+      "readme_sha256": "9d8c445c19d7d97e7a683018283c8013c5abfd8c370354d340ffc16f477a22eb",
       "reference": "template-math.md"
     },
     {
       "source_id": "ghrepo:mint-the-gap/lia-navigation",
       "repo": "lia-navigation",
-      "reviewed_revision": "065c05a7180318d5c9056a4033596b5de8f85fd7",
-      "readme_sha256": "9d4c72f85c8fa80d65078bb21d00e0bb375d77a81b6729b6ca6e6f06390fa5d9",
+      "reviewed_revision": "488ff6d670f9bd5a2291411a884c118adc72a3e3",
+      "readme_sha256": "e73889d5e77297f13ee4701f178009497c18756c3c4b13ec358efdc360aae677",
       "reference": "template-course.md"
     },
     {
@@ -154,8 +161,8 @@
     {
       "source_id": "ghrepo:mint-the-gap/lia-resetter",
       "repo": "lia-resetter",
-      "reviewed_revision": "dddf761f80c4f287b3652477f4dfab8e5a505589",
-      "readme_sha256": "a13d2c02e71663f9e28f47a2e78c1761a00d05dbc5e7f6adde6a346fdc03a549",
+      "reviewed_revision": "15cd02359cccd42aa8e48c232332be9c076115ce",
+      "readme_sha256": "ab15efbcf4adb4f26418d285e72eac742eda24d0fee50afae204f330a3fdbf79",
       "reference": "template-course.md"
     },
     {

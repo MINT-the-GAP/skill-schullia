@@ -9,6 +9,13 @@ fachlich sinnvolle, reichhaltige erste Fassung mit ausdrücklich konfigurierten
 Zusatzoptionen: Der Nutzer soll passende Funktionen entfernen können, statt
 sie erst nachfordern zu müssen.
 
+`lia-board-mode` ist als importgesteuerte Basis das einzige Template, das jeder
+neue vollständige `course`- und `weekly`-Kurs direkt importiert. Beim Profil
+`weekly` kommen `lia-freeze-v2` und danach `lia-mathpath` als feste
+Profilimporte hinzu. Alle anderen Templates dieser Matrix bleiben vom
+tatsächlichen Kursbedarf beziehungsweise von einer verwendeten Funktion
+abhängig; `lia-loot` bleibt nachgelagert.
+
 Für jedes gewählte Template prüfe öffentliche Makros, Varianten, Argumente,
 optionale Parameter, Defaults, native Quizattribute und Abhängigkeiten.
 Berücksichtige zu einer Aufgabenfamilie auch Rückmeldung, Lösung, Wiederholung,
@@ -31,7 +38,7 @@ Die nachgelagerte lia-loot-Route mit ihrem Klärungsgate bleibt separat.
 
 ## Einsatzmatrix aller geprüften Templates
 
-Stand: 23 Templates im synchronisierten Quellenumfang, einschließlich der fünf
+Stand: 24 Templates im synchronisierten Quellenumfang, einschließlich der fünf
 konfigurierten LiaTemplates. Das ist keine Behauptung über sämtliche weltweit
 verfügbaren LiaTemplates. Revisionen und README-Prüfsummen stehen im
 [Prüfkatalog](template-catalog.json). Die Detailreferenzen enthalten die
@@ -46,6 +53,7 @@ verfügbaren LiaTemplates. Revisionen und README-Prüfsummen stehen im
 | Aussprache, Vorlesen, gesprochene Antworten | `Speech-Recognition-Quiz`: `@SpeechRecognition`, Sprache, Sollphrase und Transkriptfeedback | [Sprache](template-language.md) |
 | Handschrift, Rechenwege, Skizzen und OCR | `lia-canvas-ocr`: Zeichenflächen, OCR, Rechenwegprüfung und Zeilenrückmeldung | [Mathematik](template-math.md) |
 | Koordinaten, Punkte, Formen, Konstruktionen | `lia-coordinate`: System, Zeichenwerkzeuge, Quizvarianten, Toleranzen, Feedback und kombinierte Prüfungen | [Mathematik](template-math.md) |
+| Gleichstrom-Schaltpläne zeichnen, ergänzen und prüfen | `lia-electro`: Editor, Komponenten- und Kabelmakros, Exportprofil und Ergänzungsquiz; direkter JSXGraph- und Coordinate-Import erforderlich | [Elektrotechnik](template-electro.md) |
 | Brüche, Flächenanteile, Strichlisten | `lia-Mathe`: Kreis-/Rechteckquiz, Anzeigevarianten, `@Strichliste` und `@liaQuizC` | [Mathematik](template-math.md) |
 | Erklärungen und Begriffsunterstützung | `lia-mathpath`: Explain-Themen, Glossar, Tooltips und Kontext aus `@ADetails` | [Mathematik](template-math.md) |
 | Flächen legen, Polyominos, Hundertertafel | `lia-pentominos`: freie Darstellung und Quiz, Steintypen, Zahlen und Transformationen | [Mathematik](template-math.md) |
@@ -53,7 +61,7 @@ verfügbaren LiaTemplates. Revisionen und README-Prüfsummen stehen im
 | Dynamische Geometrie und mathematische Visualisierung | `JSXGraph`: `@JSX.*`, Board-Konfiguration und Einbettung | [Mathematik](template-math.md) |
 | Nebeneinander angeordnete Material-/Aufgabenflächen | `lia-DynFlex`: Container, Größen und Interaktionsvarianten | [Kurs](template-course.md) |
 | Schreiben und Markieren in Präsentationen | `lia-annotation`: importgesteuerte Zeichenleiste und Konfiguration | [Kurs](template-course.md) |
-| Tafelansicht und Lesbarkeit | `lia-board-mode`: breite Ansicht, Schriftgröße und Anzeigeoptionen | [Kurs](template-course.md) |
+| Basis vollständiger Kurse; Tafelansicht und Lesbarkeit | `lia-board-mode`: importgesteuerte breite Ansicht, Schriftgröße und Anzeigeoptionen; `@autoscrolling` nur bei Bedarf | [Kurs](template-course.md) |
 | Navigation in längeren Kursen | `lia-navigation`: Inhaltsverzeichnis, Lesezeichen und aufgeklappte Ebenen | [Kurs](template-course.md) |
 | Einheitliche Quizvorgaben | `lia-globalquiz`: `@global`, lokale Ausnahmen; Parserattribute weiterhin lokal schreiben | [Kurs](template-course.md) |
 | Wiederholen und Rücksetzen einzelner Aufgaben | `lia-resetter`: Resetvarianten, Rekonstruktion und Grenzen pro Abschnitt | [Kurs](template-course.md) |
@@ -91,8 +99,11 @@ an; bei ganzen Sätzen sind Rechtschreibung und Satzbau bereits aktiviert.
 Prüfe den einmaligen Hauptkopf jedes gewählten Templates: öffentliche Makros,
 importgesteuerte Effekte sowie benötigte Bibliotheken und Styles. Füge
 benötigte direkte Template-Imports hinzu; verlasse dich nicht auf transitive
-Imports. Behalte vorhandene Importreihenfolge bei und verwende keine
-Bibliotheken oder Varianten ohne passenden Aufruf bzw. benötigten Effekt.
+Imports. Setze `lia-board-mode` in neuen vollständigen Kursen als einmaligen
+Basisimport; der Import allein verlangt weder `mode:` noch
+`@autoscrolling`. Behalte in vorhandenen Kursen die bestehende
+Importreihenfolge bei und verwende darüber hinaus keine Bibliotheken oder
+Varianten ohne passenden Aufruf beziehungsweise benötigten Effekt.
 
 Vergleiche native Attribute, lokale Optionen und globale Vorgaben nach der
 jeweiligen Prioritätsregel. Kontrolliere insbesondere LLM-Kriterien gegenüber

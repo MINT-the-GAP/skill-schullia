@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schullia/local-orientation-guidance.schema.json",
+  "description": "Strict public-safe projection of an ephemeral local orientation guidance result.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "guidance_version",
+    "availability_state",
+    "reason_code",
+    "filter_dimensions",
+    "features",
+    "local_search_performed",
+    "orientation_profile_prepared",
+    "local_orientation_used",
+    "applied_feature_ids",
+    "completed_counterchecks",
+    "non_leak_confirmed",
+    "usage_context"
+  ],
+  "properties": {
+    "guidance_version": { "type": "integer", "const": 1 },
+    "availability_state": {
+      "enum": [
+        "lokal verf\u00fcgbar",
+        "lokal nicht konfiguriert",
+        "lokal nicht erreichbar",
+        "lokal wegen Sicherheitspr\u00fcfung ausgeschlossen"
+      ]
+    },
+    "reason_code": {
+      "enum": [
+        "guidance_ready",
+        "guidance_applied",
+        "guidance_not_requested",
+        "guidance_local_unavailable",
+        "guidance_search_not_performed",
+        "guidance_no_candidates",
+        "guidance_diversity_required",
+        "guidance_no_shared_features",
+        "guidance_metadata_invalid",
+        "guidance_operational_error"
+      ]
+    },
+    "filter_dimensions": {
+      "type": "array",
+      "maxItems": 23,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "subject", "grade", "learner_group", "document_type", "operator",
+          "solution_presence", "solution_assignment", "response_shape",
+          "suitability", "has_warnings", "min_subtasks", "min_tasks",
+          "max_tasks", "modified_after_ns", "topic_id", "task_family",
+          "learning_action", "response_form", "solution_form",
+          "number_profile", "context_profile", "representation",
+          "complexity_band"
+        ]
+      }
+    },
+    "features": { "$ref": "#/$defs/features" },
+    "local_search_performed": { "type": "boolean" },
+    "orientation_profile_prepared": { "type": "boolean" },
+    "local_orientation_used": { "type": "boolean" },
+    "applied_feature_ids": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z_]{0,31}:[a-z0-9][a-z0-9-]{0,63}$"
+      }
+    },
+    "completed_counterchecks": {
+      "type": "array",
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "public_evidence",
+          "subject_review",
+          "technical_validation",
+          "no_private_content_used"
+        ]
+      }
+    },
+    "non_leak_confirmed": { "type": "boolean" },
+    "usage_context": { "const": "orientation-only" }
+  },
+  "$defs": {
+    "feature_ids": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+      }
+    },
+    "features": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "topic_ids", "task_families", "learning_actions", "response_forms",
+        "solution_forms", "reasoning_structures", "number_profiles",
+        "quantity_profiles", "context_profiles", "representations",
+        "progression_profiles", "complexity_bands"
+      ],
+      "properties": {
+        "topic_ids": { "$ref": "#/$defs/feature_ids" },
+        "task_families": { "$ref": "#/$defs/feature_ids" },
+        "learning_actions": { "$ref": "#/$defs/feature_ids" },
+        "response_forms": { "$ref": "#/$defs/feature_ids" },
+        "solution_forms": { "$ref": "#/$defs/feature_ids" },
+        "reasoning_structures": { "$ref": "#/$defs/feature_ids" },
+        "number_profiles": { "$ref": "#/$defs/feature_ids" },
+        "quantity_profiles": { "$ref": "#/$defs/feature_ids" },
+        "context_profiles": { "$ref": "#/$defs/feature_ids" },
+        "representations": { "$ref": "#/$defs/feature_ids" },
+        "progression_profiles": { "$ref": "#/$defs/feature_ids" },
+        "complexity_bands": { "$ref": "#/$defs/feature_ids" }
+      }
+    }
+  }
+}

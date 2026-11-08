@@ -16,10 +16,10 @@ Implementierungsdateien. Lokale Dateien liegen unter
 
 | Template / Repository | Corpus-Ordner | Revision | öffentliche API |
 | --- | --- | --- | --- |
-| MINT-the-GAP/lia-llm | `ghrepo-mint-the-gap-lia-llm-0b36ccd3a7` | `684914a814468ddbe2fcc47f2eeea74cf62af54f` | [README.md:25–26, 447–998](https://github.com/MINT-the-GAP/lia-llm/blob/684914a814468ddbe2fcc47f2eeea74cf62af54f/README.md#L447-L998) |
+| MINT-the-GAP/lia-llm | `ghrepo-mint-the-gap-lia-llm-0b36ccd3a7` | `4d6e6c99ae6d7540ad6c2144be8f7a5613666492` | [README.md:25–26, 447–998](https://github.com/MINT-the-GAP/lia-llm/blob/4d6e6c99ae6d7540ad6c2144be8f7a5613666492/README.md#L447-L998) |
 | MINT-the-GAP/lia-orthography | `ghrepo-mint-the-gap-lia-orthography-3651bf66a5` | `edfca9a9b3fa075a2e977fb3589209508be14bbd` | [README.md:11–78, 106–205](https://github.com/MINT-the-GAP/lia-orthography/blob/edfca9a9b3fa075a2e977fb3589209508be14bbd/README.md#L106-L205) |
-| MINT-the-GAP/lia-kachel | `ghrepo-mint-the-gap-lia-kachel-f45fe69aad` | `15b84fba845e783d05d3b77c5cb1f76401146bee` | [README.md:11–39, 103–311](https://github.com/MINT-the-GAP/lia-kachel/blob/15b84fba845e783d05d3b77c5cb1f76401146bee/README.md#L103-L311) |
-| MINT-the-GAP/lia-marker | `ghrepo-mint-the-gap-lia-marker-a240ea587f` | `80fe9b1e0b07ee18242f35003bff3660d37da707` | [README.md:11–27, 104–212](https://github.com/MINT-the-GAP/lia-marker/blob/80fe9b1e0b07ee18242f35003bff3660d37da707/README.md#L104-L212) |
+| MINT-the-GAP/lia-kachel | `ghrepo-mint-the-gap-lia-kachel-f45fe69aad` | `7b74fa7e8ab2814e1c3728bfac3cddcb0c14651d` | [README.md:11–39, 103–311](https://github.com/MINT-the-GAP/lia-kachel/blob/7b74fa7e8ab2814e1c3728bfac3cddcb0c14651d/README.md#L103-L311) |
+| MINT-the-GAP/lia-marker | `ghrepo-mint-the-gap-lia-marker-a240ea587f` | `9d6cd2efe1dd919515c2253ac631abcb394a55f1` | [README.md:11–27, 104–212](https://github.com/MINT-the-GAP/lia-marker/blob/9d6cd2efe1dd919515c2253ac631abcb394a55f1/README.md#L104-L212) |
 | LiaTemplates/Speech-Recognition-Quiz | `ghfile-liatemplates-speech-recognition-quiz-readme-md-560d9ed8c4` | `0edc1ecdd6688af34521133000a795986203cd46` | [README.md:10–86, 118–203](https://github.com/LiaTemplates/Speech-Recognition-Quiz/blob/0edc1ecdd6688af34521133000a795986203cd46/README.md#L118-L203) |
 
 Der Abgleich erfolgte statisch gegen die vollständig gelesenen READMEs und die
@@ -100,9 +100,9 @@ Gewichtskraft sind dagegen fachlich zu prüfen.
 | `maxthinkingtime` | `0s`, `5s`, `10s`, `15s`, `20s`, `30s`; adaptiver Default `15s` | Im ausführlichen Quality-Profil `15s` explizit machen; `0s` deaktiviert optionalen Einzelrecheck und Thinking. Dies begrenzt nicht Ladezeit oder gesamte Prüfung. |
 | `maxthinkingtokens` | `low=256`, `medium=512`, `high=768`, `ultra=1024`, `extreme=2048`; adaptiver Default `medium` | Im ausführlichen Quality-Profil `medium` explizit machen. Keine freie Tokenzahl im Makro; `extreme` nicht als Schulstandard. |
 
-Beleg: [README.md:458–505](https://github.com/MINT-the-GAP/lia-llm/blob/684914a814468ddbe2fcc47f2eeea74cf62af54f/README.md#L458-L505),
-[Optionsparser src/macro-options.ts:23–238](https://github.com/MINT-the-GAP/lia-llm/blob/684914a814468ddbe2fcc47f2eeea74cf62af54f/src/macro-options.ts#L23-L238),
-[Thinking-Werte src/thinking-config.ts:1–79](https://github.com/MINT-the-GAP/lia-llm/blob/684914a814468ddbe2fcc47f2eeea74cf62af54f/src/thinking-config.ts#L1-L79).
+Beleg: [README.md:458–505](https://github.com/MINT-the-GAP/lia-llm/blob/4d6e6c99ae6d7540ad6c2144be8f7a5613666492/README.md#L458-L505),
+[Optionsparser src/macro-options.ts:23–238](https://github.com/MINT-the-GAP/lia-llm/blob/4d6e6c99ae6d7540ad6c2144be8f7a5613666492/src/macro-options.ts#L23-L238),
+[Thinking-Werte src/thinking-config.ts:1–79](https://github.com/MINT-the-GAP/lia-llm/blob/4d6e6c99ae6d7540ad6c2144be8f7a5613666492/src/thinking-config.ts#L1-L79).
 Explizite `15s`/`medium` behalten diese Werte auch bei langen Antworten; fehlen
 sie, werden die fehlenden Dimensionen ab 160 Wörtern adaptiv auf `30s`/`ultra`
 erhöht. Der Skill setzt somit nachvollziehbare Erstellungswerte, statt diesen
@@ -129,14 +129,14 @@ Unterschied zu verschweigen.
   Felder der JavaScript-API `CriterionInput` sind keine Optionen des Makros.
   Insbesondere lassen Kriterienmarker keine individuellen Gewichte zu.
 
-Beleg: [README.md:229–267, 720–726, 830–850, 1248–1258](https://github.com/MINT-the-GAP/lia-llm/blob/684914a814468ddbe2fcc47f2eeea74cf62af54f/README.md#L229-L267),
-[src/types.ts:103–150](https://github.com/MINT-the-GAP/lia-llm/blob/684914a814468ddbe2fcc47f2eeea74cf62af54f/src/types.ts#L103-L150).
+Beleg: [README.md:229–267, 720–726, 830–850, 1248–1258](https://github.com/MINT-the-GAP/lia-llm/blob/4d6e6c99ae6d7540ad6c2144be8f7a5613666492/README.md#L229-L267),
+[src/types.ts:103–150](https://github.com/MINT-the-GAP/lia-llm/blob/4d6e6c99ae6d7540ad6c2144be8f7a5613666492/src/types.ts#L103-L150).
 
 ### Ausführlicher Standard für freie deutsche Antworten
 
 Dieses neu verfasste Beispiel ist ein vollständiger Aufgabenausschnitt. Im
 Kurskopf benötigt es den direkten Import
-`https://raw.githubusercontent.com/MINT-the-GAP/lia-llm/684914a814468ddbe2fcc47f2eeea74cf62af54f/README.md`.
+`https://raw.githubusercontent.com/MINT-the-GAP/lia-llm/4d6e6c99ae6d7540ad6c2144be8f7a5613666492/README.md`.
 Kriterien, Quote und Musterlösung bei der Übernahme fachlich anpassen.
 
 ````markdown
@@ -168,7 +168,7 @@ zwingend vorliegen, `coverage=1` wählen. `contradicted` ist unabhängig von der
 Quote ein Veto. `uncertain` zählt nicht als erfüllt; könnte die Quote nur mit
 unsicheren Aussagen erreicht werden, bleibt das Ergebnis neutral unbewertet.
 Dies ist eine gewählte didaktische Schwelle, kein vom Template erzwungener
-Standard. [README.md:643–725](https://github.com/MINT-the-GAP/lia-llm/blob/684914a814468ddbe2fcc47f2eeea74cf62af54f/README.md#L643-L725).
+Standard. [README.md:643–725](https://github.com/MINT-the-GAP/lia-llm/blob/4d6e6c99ae6d7540ad6c2144be8f7a5613666492/README.md#L643-L725).
 
 Für die ganzheitliche Operatorprüfung wird derselbe ausführliche Rahmen so
 umgestellt: erster Zahlenwert `0.66`, `operator` fachlich setzen, `coverage`
@@ -198,8 +198,8 @@ doppelten Varianten. ODER-Semantik gilt für eine vollständige Variante, nicht
 für zusammengesetzte Teilstücke. Die Parser-Aliasse `lia-llm-variant` und
 `lia-llm-variante` werden für alte Dokumente erkannt; neue Aufgaben benutzen
 `lia-llm:alternative`. Beleg:
-[src/scoring.ts:28–195](https://github.com/MINT-the-GAP/lia-llm/blob/684914a814468ddbe2fcc47f2eeea74cf62af54f/src/scoring.ts#L28-L195),
-[README.md:521–641](https://github.com/MINT-the-GAP/lia-llm/blob/684914a814468ddbe2fcc47f2eeea74cf62af54f/README.md#L521-L641).
+[src/scoring.ts:28–195](https://github.com/MINT-the-GAP/lia-llm/blob/4d6e6c99ae6d7540ad6c2144be8f7a5613666492/src/scoring.ts#L28-L195),
+[README.md:521–641](https://github.com/MINT-the-GAP/lia-llm/blob/4d6e6c99ae6d7540ad6c2144be8f7a5613666492/README.md#L521-L641).
 
 Sprachprüfung ist ein nachgelagerter eigener Klick: bei beiden Optionen heißt
 er „Sprache prüfen“. Sie ändert weder das Inhaltsurteil noch die ursprüngliche
@@ -213,7 +213,7 @@ in der Template-Oberfläche. Der spätere Sprachklick verwendet ein eigenes
 Budget, nicht `maxthinkingtime` der Inhaltsprüfung. Die README enthält in den
 allgemeinen Modellabschnitten ältere Kurzformulierungen zur impliziten
 Enginewahl; für diese Trennung sind Makrocode und dedizierter Sprachabschnitt
-maßgeblich. [README.md:314–341, 893–998](https://github.com/MINT-the-GAP/lia-llm/blob/684914a814468ddbe2fcc47f2eeea74cf62af54f/README.md#L893-L998).
+maßgeblich. [README.md:314–341, 893–998](https://github.com/MINT-the-GAP/lia-llm/blob/4d6e6c99ae6d7540ad6c2144be8f7a5613666492/README.md#L893-L998).
 
 ## lia-orthography: Korrigieren, Diktat und Zeilennummern
 
@@ -309,9 +309,9 @@ Whitespace normalisiert werden. Ein einzelnes Drop-Target benötigt begleitenden
 Fließtext, damit es als Inline-Multi-Drop gerendert wird. Bei rein bildlichen
 Kacheln liefern `alt` oder `aria-label` den Vergleichsinhalt.
 
-Belege: [README.md:120–311](https://github.com/MINT-the-GAP/lia-kachel/blob/15b84fba845e783d05d3b77c5cb1f76401146bee/README.md#L120-L311),
-[src/groups.ts:15, 156–224](https://github.com/MINT-the-GAP/lia-kachel/blob/15b84fba845e783d05d3b77c5cb1f76401146bee/src/groups.ts#L156-L224),
-[src/kachelfolge.ts:32–125](https://github.com/MINT-the-GAP/lia-kachel/blob/15b84fba845e783d05d3b77c5cb1f76401146bee/src/kachelfolge.ts#L32-L125).
+Belege: [README.md:120–311](https://github.com/MINT-the-GAP/lia-kachel/blob/7b74fa7e8ab2814e1c3728bfac3cddcb0c14651d/README.md#L120-L311),
+[src/groups.ts:15, 156–224](https://github.com/MINT-the-GAP/lia-kachel/blob/7b74fa7e8ab2814e1c3728bfac3cddcb0c14651d/src/groups.ts#L156-L224),
+[src/kachelfolge.ts:32–125](https://github.com/MINT-the-GAP/lia-kachel/blob/7b74fa7e8ab2814e1c3728bfac3cddcb0c14651d/src/kachelfolge.ts#L32-L125).
 
 Gestaltung ist von der Bewertung getrennt. Dokumentierte CSS-Variablen sind
 `--lia-kachel-radius` (12px), `--lia-kachel-background`,
@@ -322,7 +322,7 @@ Die Implementierung verwendet zusätzlich `--lia-kachel-transition-duration`
 `--lia-kachel-ghost-background` / `--lia-kachel-ghost-color` für die Drag-Vorschau.
 Diese zusätzlichen CSS-Hooks sind implementiert, aber keine dokumentierten
 Makrooptionen; keine eigenständige öffentliche Makro-API daraus erfinden.
-[styles.css:9–21, 231–249](https://github.com/MINT-the-GAP/lia-kachel/blob/15b84fba845e783d05d3b77c5cb1f76401146bee/styles.css#L9-L21).
+[styles.css:9–21, 231–249](https://github.com/MINT-the-GAP/lia-kachel/blob/7b74fa7e8ab2814e1c3728bfac3cddcb0c14651d/styles.css#L9-L21).
 
 ## lia-marker: alle Ziel- und Demonstrationsmakros
 
@@ -339,14 +339,14 @@ Expansion vorkommenden `@1` bis `@9` sind Weiterleitungs-/Reparaturdetails,
 keine Farb-, Punkte- oder Optionsparameter. Es gibt kein öffentliches
 `@marked`, keine frei wählbaren neuen Farbnamen und keinen öffentlichen
 Toleranzparameter. Die Bewertungsgrenzen sind interne Konstanten
-([src/quiz/eval.ts:9–14](https://github.com/MINT-the-GAP/lia-marker/blob/80fe9b1e0b07ee18242f35003bff3660d37da707/src/quiz/eval.ts#L9-L14)).
+([src/quiz/eval.ts:9–14](https://github.com/MINT-the-GAP/lia-marker/blob/9d6cd2efe1dd919515c2253ac631abcb394a55f1/src/quiz/eval.ts#L9-L14)).
 
 Standardmäßig eine klare Farblegende im Aufgabenwortlaut und eine erklärende
 Lösung direkt nach `</div>` einsetzen. Der durch gleich lange Sternzeilen
 begrenzte Lösungsblock bleibt bei fehlgeschlagenem Check verborgen und erscheint
 nach Erfolg oder Auflösen. Demonstrationsmarkierungen nicht als bereits gelöste
 Quizziele behandeln. öffentliche Signaturen und Lösungssyntax:
-[README.md:11–27, 104–212](https://github.com/MINT-the-GAP/lia-marker/blob/80fe9b1e0b07ee18242f35003bff3660d37da707/README.md#L104-L212).
+[README.md:11–27, 104–212](https://github.com/MINT-the-GAP/lia-marker/blob/9d6cd2efe1dd919515c2253ac631abcb394a55f1/README.md#L104-L212).
 
 ```markdown
 Markiere das Subjekt rot und das Prädikat blau.
@@ -367,7 +367,7 @@ sowie Ganzzahlen als Versuchsschwellen (intern Betrag; `0` bedeutet hier sofort
 sichtbar). Nutze die eindeutigen Formen `on`, `off` oder positive Ganzzahlen.
 Dies ist nicht derselbe `0`-Fallback wie in lia-orthography. Keine erfundene
 Semikolonkonfiguration an `@TextmarkerQuiz` anhängen.
-[src/quiz/metadata.ts:11–32, 72–115](https://github.com/MINT-the-GAP/lia-marker/blob/80fe9b1e0b07ee18242f35003bff3660d37da707/src/quiz/metadata.ts#L11-L115).
+[src/quiz/metadata.ts:11–32, 72–115](https://github.com/MINT-the-GAP/lia-marker/blob/9d6cd2efe1dd919515c2253ac631abcb394a55f1/src/quiz/metadata.ts#L11-L115).
 
 Der Quizkommentar darf vor der Aufgabenbeschriftung oder unmittelbar vor
 `<div class="markerquiz">` stehen. Native Hinweise folgen **nach** `</div>`
@@ -382,7 +382,7 @@ der Oberfläche; es sind keine zusätzlichen Makros. Der Worterklärmodus fragt
 Wiktionary für das ausgewählte Wort ab. Deutsch, Englisch, Spanisch, Französisch,
 Russisch und Latein sowie heuristisch Tschechisch/Polnisch sind im Snapshot
 beschrieben. Kein öffentliches Sprachen- oder API-Key-Makro erfinden.
-[README.md:59–102](https://github.com/MINT-the-GAP/lia-marker/blob/80fe9b1e0b07ee18242f35003bff3660d37da707/README.md#L59-L102).
+[README.md:59–102](https://github.com/MINT-the-GAP/lia-marker/blob/9d6cd2efe1dd919515c2253ac631abcb394a55f1/README.md#L59-L102).
 
 ## Speech-Recognition-Quiz: drei öffentliche Makros
 

@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
+import re
 import sqlite3
 import tempfile
 
@@ -58,11 +59,497 @@ def test_index_freshness_uses_content_hashes() -> None:
         assert not update.index_is_current(corpus)
 
 
+def test_authoring_style_contract() -> None:
+    skill = (ROOT / 'SKILL.md').read_text(encoding='utf-8')
+    task_route = skill.split(
+        '### Aufgabe erstellen oder überarbeiten', 1
+    )[1].split('### Kurs mit lia-loot gamifizieren', 1)[0]
+    style_path = ROOT / 'references' / 'authoring-style.md'
+    assert style_path.exists()
+    assert '(references/authoring-style.md)' in task_route
+    assert '(references/authoring-style.md)' in skill.split(
+        '## Referenzen', 1
+    )[1]
+
+    style = style_path.read_text(encoding='utf-8')
+    headings = {
+        line.removeprefix('## ').strip()
+        for line in style.splitlines()
+        if line.startswith('## ')
+    }
+    assert {
+        'Geltungsbereich',
+        'Regelklassen und Vorrang',
+        'Stil einer Einzelaufgabe',
+        'Stil vollständiger Kurse und Wochenaufgaben',
+        'Sprache und Ton',
+        'Template-Auswahl als Gestaltungsentscheidung',
+        'Messbare Stilmerkmale',
+        'Anti-Patterns',
+        'Kuratierte Belege',
+    }.issubset(headings)
+    rule_classes = {
+        'Verbindliche Regel',
+        'Bevorzugter Autorenstandard',
+        'Akzeptable Variante',
+        'Beobachtetes Bestandsmuster',
+        'Anti-Pattern',
+    }
+    assert all(rule_class in style for rule_class in rule_classes)
+    assert (
+        '| Merkmal | Regelklasse | Prüfmethode | zulässige Variation | Korpusbeleg |'
+        in style
+    )
+    assert '[Ausgabevertrag](authoring-contract.md)' in style
+    assert '[Template-Auswahl](template-options.md)' in style
+
+    contract = (ROOT / 'references' / 'authoring-contract.md').read_text(
+        encoding='utf-8'
+    )
+    assert '# Aufgabe 1 ## Teil a)' in contract
+    assert '**a)**' in contract
+    options = (ROOT / 'references' / 'template-options.md').read_text(
+        encoding='utf-8'
+    )
+    assert 'tatsächlichen Kursbedarf' in options
+    assert 'lia-board-mode` ist' in options
+
+    distinctive_sections = {
+        'Regelklassen und Vorrang',
+        'Messbare Stilmerkmale',
+        'Kuratierte Belege',
+    }
+    provider_paths = (
+        ROOT / 'CLAUDE.md',
+        ROOT / 'GEMINI.md',
+        ROOT / '.github' / 'copilot-instructions.md',
+    )
+    for provider_path in provider_paths:
+        provider = provider_path.read_text(encoding='utf-8')
+        assert distinctive_sections.isdisjoint(provider.splitlines())
+
+
+def test_task_archetype_contract() -> None:
+    path = ROOT / 'references' / 'task-archetypes.md'
+    assert path.exists()
+    skill = (ROOT / 'SKILL.md').read_text(encoding='utf-8')
+    route = skill.partition('Aufgabe erstellen oder')[2]
+    route = route.partition('Kurs mit lia-loot gamifizieren')[0]
+    assert '(references/task-archetypes.md)' in route
+    assert '(references/task-archetypes.md)' in skill.partition(
+        '## Referenzen'
+    )[2]
+    text = path.read_text(encoding='utf-8')
+    headings = [
+        line for line in text.splitlines() if line.startswith('## `AR-')
+    ]
+    ids = [heading.split('`', 2)[1] for heading in headings]
+    expected = {
+        'AR-NATIVE-CHECK', 'AR-CAS-CALC', 'AR-UNIT',
+        'AR-ESTIMATE-TOLERANCE', 'AR-MULTIPART-FLEX', 'AR-OPEN-REASON',
+        'AR-ORTHOGRAPHY', 'AR-TEXT-MARK', 'AR-ASSIGN-ORDER',
+        'AR-COORDINATE', 'AR-VISUAL-MATH',
+    }
+    assert set(ids) == expected
+    assert len(ids) == len(set(ids))
+    labels = (
+        '**Lernhandlung:**', '**Antwortform:**', '### Auswahl',
+        '### Umsetzung und Importe', '### Aufgabenrhythmus', '### Varianten',
+        '### Grenzen und Anti-Patterns', '### Belege', '**Wählen:**',
+        '**Nicht wählen:**', '**Native Alternative:**',
+    )
+    for index, heading in enumerate(headings):
+        end = headings[index + 1] if index + 1 < len(headings) else (
+            '## Abschlussprüfung der Archetypenwahl'
+        )
+        section = text[text.index(heading):text.index(end)]
+        assert all(label in section for label in labels)
+        assert 'https://github.com/MINT-the-GAP/' in section
+    for reference in (
+        '[Ausgabevertrag](authoring-contract.md)',
+        '[SchulLia-Hausstil](authoring-style.md)',
+        '[Template-Auswahl](template-options.md)',
+    ):
+        assert reference in text
+    assert 'kein zusätzliches Funktionstemplate' in text
+    assert 'Gamification bleibt ein getrennter' in text
+    style = (ROOT / 'references' / 'authoring-style.md').read_text(
+        encoding='utf-8'
+    )
+    assert '[Aufgabenarchetypen-Katalog](task-archetypes.md)' in style
+    for provider_path in (
+        ROOT / 'CLAUDE.md',
+        ROOT / 'GEMINI.md',
+        ROOT / '.github' / 'copilot-instructions.md',
+    ):
+        provider = provider_path.read_text(encoding='utf-8')
+        assert 'AR-NATIVE-CHECK' not in provider
+
+
+def test_course_composition_profile_contract() -> None:
+    path = ROOT / 'references' / 'course-composition-profiles.md'
+    assert path.exists()
+    text = path.read_text(encoding='utf-8')
+    skill = (ROOT / 'SKILL.md').read_text(encoding='utf-8')
+    route = skill.partition('Aufgabe erstellen oder')[2]
+    route = route.partition('Kurs mit lia-loot gamifizieren')[0]
+    assert '(references/course-composition-profiles.md)' in route
+    assert '(references/course-composition-profiles.md)' in skill.partition(
+        '## Referenzen'
+    )[2]
+
+    headings = [
+        line for line in text.splitlines() if line.startswith('## `CP-')
+    ]
+    ids = [heading.split('`', 2)[1] for heading in headings]
+    expected = {
+        'CP-WEEKLY-MATH-5-6',
+        'CP-WEEKLY-GERMAN-5-6',
+        'CP-WEEKLY-MATH-9-11',
+        'CP-COURSE-SINGLE-TASK',
+        'CP-FALLBACK-COURSE',
+    }
+    assert set(ids) == expected
+    assert len(ids) == len(set(ids))
+
+    required_labels = (
+        '**Ausgabeprofil:**',
+        '**Fach-/Stufengeltung:**',
+        '**Belegstärke:**',
+        '### Auswahl- und Ausschlussbedingungen',
+        '### Evidenz und Regelklasse',
+        'Beobachtete Korpuswerte',
+        'Bevorzugter Autorenstandard',
+        '### Kursskelett',
+        '### Umfang und Dichte',
+        '### Aufgabenarchetypen und Antwortformen',
+        '### Progression und Belastung',
+        '### Hinweise, Lösungen und Bewertung',
+        '### Layout und Seitengliederung',
+        '### Template- und Importfolgen',
+        '### Varianten',
+        '### Grenzen und Anti-Patterns',
+        '### Kuratierte Vergleichskurse',
+    )
+    for index, heading in enumerate(headings):
+        end = headings[index + 1] if index + 1 < len(headings) else (
+            '## Beleglücke: kurzer thematischer Mehr-Aufgaben-Kurs'
+        )
+        section = text[text.index(heading):text.index(end)]
+        assert all(label in section for label in required_labels)
+        assert 'technikärmer' in section.casefold()
+        assert 'nativ' in section.casefold()
+
+    archetypes = (
+        ROOT / 'references' / 'task-archetypes.md'
+    ).read_text(encoding='utf-8')
+    known_archetypes = {
+        line.split('`', 2)[1]
+        for line in archetypes.splitlines()
+        if line.startswith('## `AR-')
+    }
+    used_archetypes = set(re.findall(r'`(AR-[A-Z0-9-]+)`', text))
+    assert used_archetypes
+    assert used_archetypes <= known_archetypes
+    assert 'CP-FALLBACK-COURSE' in ids
+    assert 'Nutzerauftrag und Lernziel' in text
+    assert 'kein Gamification-Import' in text
+    assert 'import: https://raw.githubusercontent.com/MINT-the-GAP/lia-loot' not in text
+
+    style = (ROOT / 'references' / 'authoring-style.md').read_text(
+        encoding='utf-8'
+    )
+    assert '[Kurskompositionsprofil](course-composition-profiles.md)' in style
+    assert '[Kurskompositionsprofil](course-composition-profiles.md)' in archetypes
+    for provider_path in (
+        ROOT / 'CLAUDE.md',
+        ROOT / 'GEMINI.md',
+        ROOT / '.github' / 'copilot-instructions.md',
+    ):
+        provider = provider_path.read_text(encoding='utf-8')
+        assert expected.isdisjoint(set(re.findall(r'CP-[A-Z0-9-]+', provider)))
+
+
+def test_browser_authoring_pack_contract() -> None:
+    pack_path = ROOT / 'assets' / 'browser-authoring-pack.md'
+    bootstrap_path = ROOT / 'assets' / 'browser-bootstrap-prompt.md'
+    e2e_path = ROOT / 'assets' / 'browser-e2e-test-pack.md'
+    assert pack_path.exists()
+    assert bootstrap_path.exists()
+    assert e2e_path.exists()
+
+    pack = pack_path.read_text(encoding='utf-8')
+    bootstrap = bootstrap_path.read_text(encoding='utf-8')
+    readme = (ROOT / 'README.md').read_text(encoding='utf-8')
+    skill = (ROOT / 'SKILL.md').read_text(encoding='utf-8')
+
+    assert '[`SKILL.md`](../SKILL.md)' in pack
+    assert 'einzige kanonische Laufzeitanweisung' in pack
+    assert '(assets/browser-authoring-pack.md)' in readme
+    assert '(assets/browser-authoring-pack.md)' in skill
+    assert 'assets/browser-authoring-pack.md' in bootstrap
+    assert (
+        'https://raw.githubusercontent.com/MINT-the-GAP/'
+        'skill-schullia/main/assets/browser-authoring-pack.md'
+        in bootstrap
+    )
+
+    main_prompt = pack.split('## Kopierbarer Hauptprompt', 1)[1].split(
+        '## Deterministischer Ladeplan', 1
+    )[0]
+    for placeholder in (
+        '{{REPOSITORY_URL}}',
+        '{{AUFTRAG}}',
+        '{{FACH_UND_JAHRGANG}}',
+        '{{AUSGABEPROFIL}}',
+        '{{AUTOR_UND_METADATEN}}',
+    ):
+        assert placeholder in main_prompt
+
+    ordered_paths = (
+        'references/authoring-contract.md',
+        'references/authoring-style.md',
+        'references/course-composition-profiles.md',
+        'references/task-archetypes.md',
+        'references/liascript-basics.md',
+        'references/quiz-structures.md',
+        'references/syntax-contract.json',
+        'references/template-options.md',
+    )
+    positions = [main_prompt.index(path) for path in ordered_paths]
+    assert positions == sorted(positions)
+
+    assert 'Standard ist ein vollständiges LiaScript-Dokument' in main_prompt
+    assert 'Verwende `task` nur' in main_prompt
+    assert 'genau einem LiaScript-Hauptkopf' in main_prompt
+    assert 'Gib den Hauptkopf immer zusammen mit dem Kurs aus' in main_prompt
+    assert '`lia-board-mode`' in main_prompt
+    assert 'genau eine H1 als Dokumenttitel' in main_prompt
+    assert '`# Abgabe` als Hauptabschnitt' in main_prompt
+    assert '`**a)**`' in main_prompt
+    assert '`# Aufgabe 1 ## Teil a)`' in main_prompt
+    assert 'Erfinde keine Makros, Optionen, Importe oder' in main_prompt
+    assert 'Validatorausführung, die nicht tatsächlich' in main_prompt
+    assert '`browser_required`' in main_prompt
+    for status in ('`verifiziert`', '`teilweise`', '`nicht verfügbar`'):
+        assert status in main_prompt
+
+    for heading in (
+        '### Einzelaufgabe als Minikurs',
+        '### Vollständiger Wochenkurs',
+        '### Ausdrücklich gewünschtes Aufgabenfragment',
+        '### Vorhandenen Kurs überarbeiten',
+    ):
+        assert heading in pack
+
+    assert (
+        'https://github.com/MINT-the-GAP/skill-schullia'
+        in pack
+    )
+    assert (
+        'https://raw.githubusercontent.com/MINT-the-GAP/'
+        'skill-schullia/main/'
+        in pack
+    )
+    for provider_name in ('ChatGPT', 'Claude', 'Gemini'):
+        assert provider_name not in pack
+    for provider_path in (
+        ROOT / 'CLAUDE.md',
+        ROOT / 'GEMINI.md',
+        ROOT / '.github' / 'copilot-instructions.md',
+    ):
+        provider = provider_path.read_text(encoding='utf-8')
+        assert '# Browser-Autorenpaket für SchulLia' not in provider
+
+    e2e = e2e_path.read_text(encoding='utf-8')
+    for case in (
+        'Test B: Einzelne Aufgabe als vollständiger Kurs',
+        'Test C: Vollständige Wochenaufgabe',
+        'Test D: Ausdrückliches Einfügefragment',
+        'Test E: Deutsch-Einzelaufgabe als vollständiger Kurs',
+        'Test F: Vorhandenen Kurs gezielt überarbeiten',
+        'Test G: Verpflichtende Referenz nicht erreichbar',
+        'Test H: Widersprüchliche Überschriftenanweisung',
+        'Test I: Gewünschtes Template ohne lesbare Detailreferenz',
+    ):
+        assert case in e2e
+
+
+def test_authoring_acceptance_contract() -> None:
+    path = ROOT / 'references' / 'authoring-acceptance.md'
+    assert path.exists()
+    text = path.read_text(encoding='utf-8')
+    skill = (ROOT / 'SKILL.md').read_text(encoding='utf-8')
+    readme = (ROOT / 'README.md').read_text(encoding='utf-8')
+
+    maintenance = skill.partition('## Aktualisieren und erweitern')[2]
+    references = skill.partition('## Referenzen')[2]
+    authoring_route = skill.partition('### Aufgabe erstellen oder')[2]
+    authoring_route = authoring_route.partition(
+        '### Kurs mit lia-loot gamifizieren'
+    )[0]
+    link = '(references/authoring-acceptance.md)'
+    assert link in maintenance
+    assert link in references
+    assert link not in authoring_route
+    assert link in readme
+
+    for reference in (
+        '[Ausgabevertrag](authoring-contract.md)',
+        '[SchulLia-Hausstil](authoring-style.md)',
+        '[Kurskompositionsprofilen](course-composition-profiles.md)',
+        '[Aufgabenarchetypen-Katalog](task-archetypes.md)',
+        '[LiaScript-Grundlage](liascript-basics.md)',
+        '[Quizstrukturen](quiz-structures.md)',
+        '[Template-Auswahl](template-options.md)',
+        '[Browser-End-to-End-Testpaket](../assets/browser-e2e-test-pack.md)',
+    ):
+        assert reference in text
+
+    for status in (
+        '`bestanden`',
+        '`Warnung`',
+        '`fehlgeschlagen`',
+        '`blockiert`',
+        '`unbelegt`',
+    ):
+        assert status in text
+    assert 'keine Gesamtpunktzahl' in text
+    assert 'keinen summierten Score' in text
+
+    for heading in (
+        '## Harte Gates',
+        '## Manuelle Qualitätsprüfung',
+        '## Unabhängige Rollen',
+        '## Lokale Vorwärtsfälle L1 bis L5',
+        '## Browser-LLM-End-to-End-Abnahme',
+        '## Ursachenklassen und Korrekturgrenze',
+        '## Getrennte Freigabeentscheidungen',
+    ):
+        assert heading in text
+    for case in range(1, 6):
+        assert f'### L{case} ' in text
+        assert f'validate_lia.py L{case}.md --profile ' in text
+    assert '--reference-shell L5-reference.md' in text
+
+    for phrase in (
+        'zwei voneinander getrennte Agenten',
+        'weder Sollantworten noch erwartete Fehler',
+        'maintenance-only Abnahmereferenz nicht',
+        'weder eine beabsichtigte Bewertung',
+        'Datei:Zeile',
+        'temporären Verzeichnis',
+        'verändern keine Repositorydatei',
+        'Ergebnistabelle des Testpakets bleibt',
+        'Paste- oder Dateitest',
+        'Für einen Test wird nichts ohne',
+        '### Installierter Skill',
+        '### Browser-/URL-only-Pfad',
+    ):
+        assert phrase in text
+
+    causes = re.findall(r'(?m)^([1-8])\. \*\*', text)
+    assert causes == [str(number) for number in range(1, 9)]
+
+    weekly_template = (
+        ROOT / 'assets' / 'schullia-weekly-course-template.md'
+    ).read_text(encoding='utf-8')
+    assert 'LernSax' not in weekly_template
+    assert 'von deiner Lehrkraft genannten Weg' in weekly_template
+    assert 'keine Stoffeigenschaft oder' in skill
+    contract = (
+        ROOT / 'references' / 'authoring-contract.md'
+    ).read_text(encoding='utf-8')
+    assert '--profile course --reference-shell ALT.md --strict' in contract
+    for provider_path in (
+        ROOT / 'CLAUDE.md',
+        ROOT / 'GEMINI.md',
+        ROOT / '.github' / 'copilot-instructions.md',
+    ):
+        provider = provider_path.read_text(encoding='utf-8')
+        assert '# Verhaltensabnahme und Autoren-Freigabegate' not in provider
+
+
+def test_operator_solution_contract() -> None:
+    skill = (ROOT / 'SKILL.md').read_text(encoding='utf-8')
+    contract = (
+        ROOT / 'references' / 'authoring-contract.md'
+    ).read_text(encoding='utf-8')
+    style = (
+        ROOT / 'references' / 'authoring-style.md'
+    ).read_text(encoding='utf-8')
+    acceptance = (
+        ROOT / 'references' / 'authoring-acceptance.md'
+    ).read_text(encoding='utf-8')
+    taxonomy = json.loads(
+        (ROOT / 'references' / 'operator-taxonomy.json').read_text(
+            encoding='utf-8'
+        )
+    )
+
+    assert '## Verbindlicher Operator- und Lösungsvertrag' in contract
+    assert 'Jede neu erstellte bewertbare Aufgabe' in contract
+    assert 'eigenständige Teilaufgabe' in contract
+    assert 'technisch gleichwertige' in contract
+    assert 'Operatorgruppe' in contract
+    assert 'keine automatische AFB-Klassifikation' in skill
+    assert 'verbindlich für neue bewertbare Aufgaben' in style
+    for code in (
+        'operator.missing',
+        'operator.mismatch',
+        'solution.missing',
+        'solution.insufficient',
+    ):
+        assert code in acceptance
+
+    assert taxonomy['policy'] == (
+        'Normalize linguistic forms only. Do not assign an '
+        'Anforderungsbereich without an explicit cited source.'
+    )
+    operators = taxonomy['operators']
+    assert len(operators) == 28
+    assert len({item['id'] for item in operators}) == 28
+    assert all(
+        set(item) == {'id', 'lemma', 'aliases', 'prompt_patterns'}
+        for item in operators
+    )
+
+    browser = (
+        ROOT / 'assets' / 'browser-authoring-pack.md'
+    ).read_text(encoding='utf-8')
+    for canonical_path in (
+        'references/authoring-contract.md',
+        'references/authoring-style.md',
+        'references/operator-taxonomy.md',
+        'references/syntax-contract.json',
+    ):
+        assert canonical_path in browser
+
+    transport_paths = (
+        ROOT / 'assets' / 'browser-bootstrap-prompt.md',
+        ROOT / 'CLAUDE.md',
+        ROOT / 'GEMINI.md',
+        ROOT / '.github' / 'copilot-instructions.md',
+    )
+    for transport_path in transport_paths:
+        transport = transport_path.read_text(encoding='utf-8')
+        assert '## Verbindlicher Operator- und Lösungsvertrag' not in transport
+        assert not all(
+            code in transport
+            for code in (
+                'operator.missing',
+                'operator.mismatch',
+                'solution.missing',
+                'solution.insufficient',
+            )
+        )
+
+
 def test_lia_loot_reference_contract() -> None:
     options_path = ROOT / "references" / "lia-loot-options.json"
     options = json.loads(options_path.read_text(encoding="utf-8"))
 
-    assert options["schema_version"] == 6
+    assert options["schema_version"] == 7
     assert set(options["macros"]) == {
         "Highscore",
         "Ressourcen",
@@ -76,6 +563,11 @@ def test_lia_loot_reference_contract() -> None:
         "Puzzleteil",
         "Puzzletor",
         "Lupe",
+        "Taschenlampe",
+        "Shop",
+        "Atlaskarte",
+        "Perk",
+        "Axt",
         "Schaufel",
         "Giesskanne",
         "Erdhaufen",
@@ -86,11 +578,19 @@ def test_lia_loot_reference_contract() -> None:
         "Pflanze.inline",
         "Unsichtbar",
         "Zauberstaub",
+        "Nebel",
+        "NebelStart",
+        "NebelEnd",
+        "Kiste",
+        "Geschenk",
+        "Katze",
+        "Futter",
         "Portal",
         "Einwegportal",
         "Einbahnportal",
         "Schloss",
         "Geheimfolie",
+        "Reservefolie",
     }
     assert set(options["macros"]["Endelootif"]["aliases"]) == {
         "EndeLootif", "endlootif", "EndLootIf",
@@ -126,6 +626,11 @@ def test_lia_loot_reference_contract() -> None:
         "Puzzleteil",
         "Puzzletor",
         "Lupe",
+        "Taschenlampe",
+        "Shop",
+        "Atlaskarte",
+        "Perk",
+        "Axt",
         "Schaufel",
         "Giesskanne",
         "Erdhaufen",
@@ -142,8 +647,16 @@ def test_lia_loot_reference_contract() -> None:
         "Einbahnportal",
         "Unsichtbar",
         "Zauberstaub",
+        "Nebel",
+        "NebelStart",
+        "NebelEnd",
+        "Kiste",
+        "Geschenk",
+        "Katze",
+        "Futter",
         "Schloss",
         "Geheimfolie",
+        "Reservefolie",
     }
     assert {
         "LootIfStart_",
@@ -154,6 +667,11 @@ def test_lia_loot_reference_contract() -> None:
         "LootRevealEnd_",
         "LootPuzzleteil_",
         "LootPuzzletor_",
+        "LootTaschenlampe_",
+        "LootShop_",
+        "LootNebelStart_",
+        "LootNebelEnd_",
+        "LootReservefolie_",
     }.issubset(options["emission_policy"]["internal_macros_forbidden"])
     assert set(options["key_colors"]) == {
         "rot", "blau", "gruen", "gelb", "lila", "orange",
@@ -210,6 +728,11 @@ def test_lia_loot_reference_contract() -> None:
         "Schluessel",
         "Puzzleteil",
         "Lupe",
+        "Taschenlampe",
+        "Atlaskarte",
+        "Perk",
+        "Axt",
+        "Katze",
         "Schaufel",
         "Giesskanne",
         "Erdhaufen",
@@ -223,6 +746,14 @@ def test_lia_loot_reference_contract() -> None:
         "Schloss",
         "Unsichtbar",
         "Zauberstaub",
+        "Nebel",
+        "NebelStart",
+        "NebelEnd",
+        "Shop",
+        "Kiste",
+        "Geschenk",
+        "Futter",
+        "Reservefolie",
     }
     environment = shared["environment"]
     assert environment["same_axis"] == "OR"
@@ -693,6 +1224,12 @@ def test_lia_loot_reference_contract() -> None:
 def main() -> int:
     test_freshness_requires_matching_configuration()
     test_index_freshness_uses_content_hashes()
+    test_authoring_style_contract()
+    test_task_archetype_contract()
+    test_course_composition_profile_contract()
+    test_browser_authoring_pack_contract()
+    test_authoring_acceptance_contract()
+    test_operator_solution_contract()
     test_lia_loot_reference_contract()
     print("Sync tests passed")
     return 0

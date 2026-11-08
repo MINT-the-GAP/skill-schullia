@@ -42,6 +42,19 @@
 Führe nach relevanten Änderungen vom Repository-Stamm aus:
 
 ```text
+python scripts/test_local_orientation_tex.py
+python scripts/test_local_orientation_includes.py
+python scripts/test_local_orientation_features.py
+python scripts/test_local_orientation_index.py
+python scripts/test_local_orientation_search.py
+python scripts/test_local_orientation_guidance.py
+python scripts/test_local_orientation_routing.py
+python scripts/test_local_orientation_activation.py
+python scripts/test_local_orientation_near_copy.py
+python scripts/test_local_orientation_acceptance.py
+python scripts/test_local_orientation_security.py
+python scripts/check_local_orientation_leaks.py
+python scripts/local_orientation_config.py --json
 python scripts/test_parser.py
 python scripts/test_sync.py
 python scripts/test_validate_lia.py

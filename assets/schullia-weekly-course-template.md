@@ -5,6 +5,7 @@ language: de
 narrator: Deutsch Female
 mode: Presentation
 
+import: https://raw.githubusercontent.com/MINT-the-GAP/lia-board-mode/main/README.md
 import: https://raw.githubusercontent.com/MINT-the-GAP/lia-freeze-v2/main/README.md
 import: https://raw.githubusercontent.com/MINT-the-GAP/lia-mathpath/refs/heads/master/README.md
 
@@ -16,7 +17,7 @@ comment: Dies ist die Wochenaufgabe {{WEEK}} für die {{GRADE}}. Klasse im Fach 
 
 > Hier findest du die Wochenaufgaben für die {{WEEK}}. Woche. Damit kannst du bereits gelerntes Wissen wiederholen und den aktuellen Unterrichtsstoff üben. Bearbeite die Aufgaben Schritt für Schritt, trage deine Lösungen ein und vergleiche sie anschließend mit den Musterlösungen. Arbeite möglichst ohne andere Apps. Du kannst den Kurs auf dem Handy, Tablet oder Laptop öffnen und jederzeit neu starten. <p align=right>– {{AUTHOR}}</p>
 
-> <h3>Dieses Aufgabenset kann abgegeben werden. Richte dich dabei nach deiner Lehrkraft. Am Ende kannst du den Kurs einfrieren und den entstandenen Link über LernSax versenden.</h3>
+> <h3>Dieses Aufgabenset kann abgegeben werden. Richte dich dabei nach deiner Lehrkraft. Am Ende kannst du den Kurs einfrieren und den entstandenen Link auf dem von deiner Lehrkraft genannten Weg übermitteln.</h3>
 
 ## Aufgabe 1: {{TASK_1_TITLE}}
 
@@ -56,7 +57,7 @@ Wie war der Anspruch der {{SUBJECT}}aufgaben für dich?
 
 # Abgabe
 
-> <h3>Kontrolliere noch einmal, ob du alle Aufgaben bearbeitet hast. Friere dann den Kurs ein und sende den entstandenen Link über LernSax an deine Lehrkraft.</h3>
+> <h3>Kontrolliere noch einmal, ob du alle Aufgaben bearbeitet hast. Friere dann den Kurs ein und übermittle den entstandenen Link auf dem von deiner Lehrkraft genannten Weg.</h3>
 
 @Abgabe
 

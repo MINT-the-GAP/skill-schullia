@@ -43,23 +43,23 @@ Lokale Dateien liegen unter `corpus/sources/<source-dir>/files/`.
 
 | Kürzel | Repository / Revision | source-dir |
 |---|---|---|
-| OCR | `MINT-the-GAP/lia-canvas-ocr`, `167982ed0804e57b12316c5b54ec9d97807d629e` | `ghrepo-mint-the-gap-lia-canvas-ocr-b602498873` |
-| KO | `MINT-the-GAP/lia-coordinate`, `a4d24ee6c7c8b64f9379876f0c3d143e2229d7ff` | `ghrepo-mint-the-gap-lia-coordinate-ad5f35c719` |
+| OCR | `MINT-the-GAP/lia-canvas-ocr`, `5816d225b3ecd889c038382f7b1c634e597986fd` | `ghrepo-mint-the-gap-lia-canvas-ocr-b602498873` |
+| KO | `MINT-the-GAP/lia-coordinate`, `c30f8f55d0f50d175ebfb03b6b9d04b4afc60514` | `ghrepo-mint-the-gap-lia-coordinate-ad5f35c719` |
 | MA | `MINT-the-GAP/lia-Mathe`, `9f6048a438b649f1575609a4020dc63c09f93baf` | `ghrepo-mint-the-gap-lia-mathe-1df98115ce` |
-| MP | `MINT-the-GAP/lia-mathpath`, `62548fa72170a7be67e3ad448a366598da1b14b1` | `ghrepo-mint-the-gap-lia-mathpath-011889c391` |
+| MP | `MINT-the-GAP/lia-mathpath`, `8174690d85cb35e982d785caea78d4176da24141` | `ghrepo-mint-the-gap-lia-mathpath-011889c391` |
 | PE | `MINT-the-GAP/lia-pentominos`, `33d7df37fdf3e2b0ee3d7a4543f3584ef0be025c` | `ghrepo-mint-the-gap-lia-pentominos-08098ff96a` |
 | AL | `LiaTemplates/Algebrite`, `b5a675525d0be71e3cc37476a7fba065e9590f62` | `ghfile-liatemplates-algebrite-readme-md-deee131a9c` |
-| JX | `LiaTemplates/JSXGraph`, `f426725ff10580b5ebdcc3230a4ca31c415faadb` | `ghfile-liatemplates-jsxgraph-readme-md-b608304eab` |
+| JX | `LiaTemplates/JSXGraph`, `d0dfa3c096d25012fccbfe99d3fcacb09aa1714e` | `ghfile-liatemplates-jsxgraph-readme-md-b608304eab` |
 
 | Kürzel | Direkter Import | Weitere direkte Imports |
 |---|---|---|
-| OCR | `https://raw.githubusercontent.com/MINT-the-GAP/lia-canvas-ocr/167982ed0804e57b12316c5b54ec9d97807d629e/README.md` | Algebrite davor |
-| KO | `https://raw.githubusercontent.com/MINT-the-GAP/lia-coordinate/a4d24ee6c7c8b64f9379876f0c3d143e2229d7ff/README.md` | JSXGraph davor; Ausnahme rein statischer Import |
+| OCR | `https://raw.githubusercontent.com/MINT-the-GAP/lia-canvas-ocr/5816d225b3ecd889c038382f7b1c634e597986fd/README.md` | Algebrite davor |
+| KO | `https://raw.githubusercontent.com/MINT-the-GAP/lia-coordinate/c30f8f55d0f50d175ebfb03b6b9d04b4afc60514/README.md` | JSXGraph davor; Ausnahme rein statischer Import |
 | MA | `https://raw.githubusercontent.com/MINT-the-GAP/lia-Mathe/9f6048a438b649f1575609a4020dc63c09f93baf/README.md` | Algebrite bei CAS-Prüfung |
-| MP | `https://raw.githubusercontent.com/MINT-the-GAP/lia-mathpath/62548fa72170a7be67e3ad448a366598da1b14b1/README.md` | FreezeREADME vor MathPath nur für automatischen `@ADetails`-Kontext |
+| MP | `https://raw.githubusercontent.com/MINT-the-GAP/lia-mathpath/8174690d85cb35e982d785caea78d4176da24141/README.md` | FreezeREADME vor MathPath nur für automatischen `@ADetails`-Kontext |
 | PE | `https://raw.githubusercontent.com/MINT-the-GAP/lia-pentominos/33d7df37fdf3e2b0ee3d7a4543f3584ef0be025c/README.md` | JSXGraph, lia-coordinate, Pentominos in dieser Reihenfolge |
 | AL | `https://raw.githubusercontent.com/LiaTemplates/Algebrite/b5a675525d0be71e3cc37476a7fba065e9590f62/README.md` | Keine zusätzlichen Kursmakros |
-| JX | `https://raw.githubusercontent.com/LiaTemplates/JSXGraph/f426725ff10580b5ebdcc3230a4ca31c415faadb/README.md` | Keine zusätzlichen Kursmakros |
+| JX | `https://raw.githubusercontent.com/LiaTemplates/JSXGraph/d0dfa3c096d25012fccbfe99d3fcacb09aa1714e/README.md` | Keine zusätzlichen Kursmakros |
 
 Importbelege: OCR `README.md:81–91,195,372–378`; KO `README.md:341–354`;
 MA `README.md:345–369`; MP `README.md:44–63`; PE `README.md:149–187`;
